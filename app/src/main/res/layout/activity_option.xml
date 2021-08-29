@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OptionActivity"
-    android:background="@color/white_darker">
+    android:background="@color/gray">
 
 
     <TextView
         android:id="@+id/txtHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white_darker"
         android:layout_marginTop="20dp"
         android:text="@string/creator"
         android:textStyle="bold"
@@ -46,6 +47,7 @@
             android:id="@+id/switchDarkMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/txtDarkMode"
@@ -57,6 +59,7 @@
             android:id="@+id/txtDarkMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white_darker"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="40dp"
@@ -69,6 +72,7 @@
             android:id="@+id/txtFontSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white_darker"
             android:layout_marginStart="24dp"
             android:text="Font size"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -79,6 +83,7 @@
             android:id="@+id/txtColorSkin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white_darker"
             android:layout_marginStart="24dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="24dp"
@@ -100,9 +105,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/txtSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white_darker"
             android:text="Normal"
             app:layout_constraintBottom_toBottomOf="@+id/txtFontSize"
             app:layout_constraintEnd_toEndOf="parent"
@@ -119,6 +125,7 @@
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white_darker"
         android:layout_marginBottom="20dp"
         android:text="@string/version"
         android:textStyle="bold"

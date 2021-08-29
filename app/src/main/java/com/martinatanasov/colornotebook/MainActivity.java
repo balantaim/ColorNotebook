@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,7 +31,13 @@ public class MainActivity extends AppCompatActivity {
 
     MyDatabaseHelper myDB;
     ArrayList<String> book_id, book_title, book_author, book_pages;
-    @SuppressLint("WrongConstant")
+
+    public static final String SHARED_PREF = "sharedPref";
+    public static final String THEME = "theme";
+    public static final String TXT_SIZE = "txtSize";
+    public static final String SWITCH_DARK_MODE = "switchDarkMode";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Load skin resource
@@ -39,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Day and Night modes
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        getDelegate().applyDayNight();
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+//        getDelegate().applyDayNight();
 
         super.onCreate(savedInstanceState);
 
@@ -143,6 +149,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void skinTheme(){
-        setTheme(R.style.Theme_DarkColorNotebook);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+//        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
+        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            getDelegate().applyDayNight();
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            getDelegate().applyDayNight();
+        }
+
+        int theme = sharedPreferences.getInt(THEME, 0);
+        switch (theme){
+            case 0:
+                setTheme(R.style.Theme_DefaultColorNotebook);
+                break;
+            case 1:
+                setTheme(R.style.Theme_BlueColorNotebook);
+                break;
+            case 2:
+                setTheme(R.style.Theme_DarkColorNotebook);
+                break;
+            default:
+                setTheme(R.style.Theme_DefaultColorNotebook);
+                break;
+        }
     }
 }
