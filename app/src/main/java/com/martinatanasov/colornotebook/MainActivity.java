@@ -161,9 +161,6 @@ public class MainActivity extends AppCompatActivity {
 
         int theme = sharedPreferences.getInt(THEME, 0);
         switch (theme){
-            case 0:
-                setTheme(R.style.Theme_DefaultColorNotebook);
-                break;
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;

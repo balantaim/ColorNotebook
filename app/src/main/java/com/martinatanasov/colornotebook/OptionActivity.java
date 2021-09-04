@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,12 +50,14 @@ public class OptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
 
-        //back arrow change icon
-//        if(swOnOff){
-//            switchDarkMode.setChecked(true);
-//        }
+
+        //Change Back arrow button
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
+
+        //Change actionBar Background color dynamic
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#201E1E"));
+        actionBar.setBackgroundDrawable(colorDrawable);
 
         switchDarkMode=findViewById(R.id.switchDarkMode);
         txtSize=findViewById(R.id.txtSize);
@@ -127,9 +131,6 @@ public class OptionActivity extends AppCompatActivity {
     private void skinTheme(){
 //        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         switch (theme){
-            case 0:
-                setTheme(R.style.Theme_DefaultColorNotebook);
-                break;
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;

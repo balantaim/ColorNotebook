@@ -2,7 +2,9 @@ package com.martinatanasov.colornotebook;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +15,15 @@ public class AddActivity extends AppCompatActivity {
     EditText bookTitle, bookAuthor, pagesInput;
     Button btnAdd;
 
+    public static final String SHARED_PREF = "sharedPref";
+    public static final String THEME = "theme";
+    public static final String TXT_SIZE = "txtSize";
+    public static final String SWITCH_DARK_MODE = "switchDarkMode";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Load skin resource
+        skinTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
@@ -64,6 +73,31 @@ public class AddActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void skinTheme(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+//        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
+        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            getDelegate().applyDayNight();
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            getDelegate().applyDayNight();
+        }
+
+        int theme = sharedPreferences.getInt(THEME, 0);
+        switch (theme){
+            case 1:
+                setTheme(R.style.Theme_BlueColorNotebook);
+                break;
+            case 2:
+                setTheme(R.style.Theme_DarkColorNotebook);
+                break;
+            default:
+                setTheme(R.style.Theme_DefaultColorNotebook);
+                break;
+        }
     }
 
 }

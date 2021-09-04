@@ -2,10 +2,16 @@ package com.martinatanasov.colornotebook;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,8 +23,16 @@ public class UpdateActivity extends AppCompatActivity {
     Button btnUpdate, btnDelete;
     String id, title, author, pages;
 
+    public static final String SHARED_PREF = "sharedPref";
+    public static final String THEME = "theme";
+    public static final String TXT_SIZE = "txtSize";
+    public static final String SWITCH_DARK_MODE = "switchDarkMode";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Load skin resource
+        skinTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
 
@@ -100,5 +114,33 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void skinTheme(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+//        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
+
+
+        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            getDelegate().applyDayNight();
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            getDelegate().applyDayNight();
+        }
+
+        int theme = sharedPreferences.getInt(THEME, 0);
+        switch (theme){
+            case 1:
+                setTheme(R.style.Theme_BlueColorNotebook);
+                break;
+            case 2:
+                setTheme(R.style.Theme_DarkColorNotebook);
+                break;
+            default:
+                setTheme(R.style.Theme_DefaultColorNotebook);
+                break;
+        }
     }
 }
