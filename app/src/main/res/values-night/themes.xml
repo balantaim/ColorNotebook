@@ -14,27 +14,29 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/gray</item>
         <item name="badgeStyle">@color/gray</item>
+        <item name="customColorValue">@color/white</item>
     </style>
 
     <style name="Theme.BlueColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_700</item>
-        <item name="colorPrimaryVariant">@color/blue_500</item>
+        <item name="colorPrimary">@color/blue_300</item>
+        <item name="colorPrimaryVariant">@color/blue_300</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/blue_700</item>
-        <item name="colorOnSecondary">@color/blue_700</item>
+        <item name="colorSecondaryVariant">@color/blue_300</item>
+        <item name="colorOnSecondary">@color/blue_300</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/gray</item>
-        <item name="badgeStyle">@color/gray</item>
+        <item name="android:windowBackground">@color/purple_900</item>
+        <item name="badgeStyle">@color/purple_900</item>
+        <item name="customColorValue">@color/white</item>
     </style>
 
     <style name="Theme.DarkColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/gray</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -46,6 +48,7 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/black</item>
         <item name="badgeStyle">@color/gray</item>
+        <item name="customColorValue">@color/black</item>
 
     </style>
 </resources>

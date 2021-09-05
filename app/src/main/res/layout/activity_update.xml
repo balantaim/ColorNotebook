@@ -51,9 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Update"
+            android:textStyle="bold"
             android:layout_marginBottom="32dp"
             android:background="@color/design_default_color_secondary_variant"
-            android:textColor="@color/white" />
+            android:textColor="?attr/customColorValue"/>
 
         <Button
             android:id="@+id/btnDelete"
