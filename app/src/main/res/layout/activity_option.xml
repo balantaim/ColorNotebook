@@ -30,8 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtHeader">
 
-
-
         <Spinner
             android:id="@+id/spinnerSkins"
             android:layout_width="wrap_content"
@@ -53,7 +51,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/txtDarkMode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/txtDarkMode" />
+            app:layout_constraintTop_toTopOf="@+id/txtDarkMode"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
             android:id="@+id/txtDarkMode"
