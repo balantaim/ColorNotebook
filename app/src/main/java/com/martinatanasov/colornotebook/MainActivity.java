@@ -150,14 +150,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-//        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
+
         if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            getDelegate().applyDayNight();
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            getDelegate().applyDayNight();
         }
+        getDelegate().applyDayNight();
 
         int theme = sharedPreferences.getInt(THEME, 0);
         switch (theme){

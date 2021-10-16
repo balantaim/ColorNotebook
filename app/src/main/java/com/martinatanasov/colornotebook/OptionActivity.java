@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -21,6 +22,7 @@ public class OptionActivity extends AppCompatActivity {
     private Switch switchDarkMode;
     private TextView txtSize;
     private Spinner spinner;
+    private Button btnApply;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -37,15 +39,9 @@ public class OptionActivity extends AppCompatActivity {
 
 
 //        saveOptions();
-//
+
         loadOptions();
         skinTheme();
-//        updateViews();
-//        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
-//            setTheme(R.style.Theme_DarkColorNotebook);
-//        } else {
-//            setTheme(R.style.Theme_DefaultColorNotebook);
-//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
@@ -62,6 +58,7 @@ public class OptionActivity extends AppCompatActivity {
         switchDarkMode=findViewById(R.id.switchDarkMode);
         txtSize=findViewById(R.id.txtSize);
         spinner=findViewById(R.id.spinnerSkins);
+        btnApply=findViewById(R.id.btnApply);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         switchDarkMode.setChecked(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false));
@@ -96,6 +93,15 @@ public class OptionActivity extends AppCompatActivity {
             }
         });
 
+        btnApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OptionActivity.this, OptionActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     private void saveOptions(){
@@ -122,14 +128,17 @@ public class OptionActivity extends AppCompatActivity {
 
     }
 
-    public void updateViews(){
-        //switchDarkMode.setChecked(swOnOff);
-        //spinner.setOnItemSelectedListener(color);
-
-    }
-
     private void skinTheme(){
-//        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+
+        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            getDelegate().applyDayNight();
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            getDelegate().applyDayNight();
+        }
+
         switch (theme){
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);

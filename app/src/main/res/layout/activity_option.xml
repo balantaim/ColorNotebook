@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OptionActivity"
-    android:background="@color/gray">
+    android:background="?attr/colorOnSecondary">
 
 
     <TextView
         android:id="@+id/txtHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white_darker"
+        android:textColor="?attr/colorOnPrimary"
         android:layout_marginTop="20dp"
         android:text="@string/creator"
         android:textStyle="bold"
@@ -58,11 +58,11 @@
             android:id="@+id/txtDarkMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white_darker"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginBottom="44dp"
             android:text="Force dark mode"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintBottom_toTopOf="@+id/txtFontSize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -71,7 +71,7 @@
             android:id="@+id/txtFontSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white_darker"
+            android:textColor="?attr/colorOnPrimary"
             android:layout_marginStart="24dp"
             android:text="Font size"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -82,11 +82,11 @@
             android:id="@+id/txtColorSkin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white_darker"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginBottom="44dp"
             android:text="Skin color"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtFontSize" />
@@ -95,7 +95,6 @@
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="186dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,14 +106,26 @@
             android:id="@+id/txtSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white_darker"
+            android:textColor="?attr/colorOnPrimary"
             android:text="Normal"
             app:layout_constraintBottom_toBottomOf="@+id/txtFontSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@+id/txtFontSize" />
 
-
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="42dp"
+            android:text="Try changes"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:enabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtColorSkin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,7 +135,7 @@
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white_darker"
+        android:textColor="?attr/colorOnPrimary"
         android:layout_marginBottom="20dp"
         android:text="@string/version"
         android:textStyle="bold"
@@ -132,7 +143,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
