@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -29,16 +30,10 @@ public class OptionActivity extends AppCompatActivity {
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
 
-    private String color;
     private int theme;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-//        saveOptions();
 
         loadOptions();
         skinTheme();
@@ -96,23 +91,10 @@ public class OptionActivity extends AppCompatActivity {
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OptionActivity.this, OptionActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(OptionActivity.this, OptionActivity.class));
                 finish();
             }
         });
-
-    }
-
-    private void saveOptions(){
-        //initiate SPref
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        //SPref injection
-        editor.putBoolean(SWITCH_DARK_MODE, switchDarkMode.isChecked());
-
-        editor.apply();
 
     }
 
@@ -129,15 +111,15 @@ public class OptionActivity extends AppCompatActivity {
     }
 
     private void skinTheme(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-
-        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            getDelegate().applyDayNight();
-        }else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            getDelegate().applyDayNight();
-        }
+//        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+//
+//        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//            getDelegate().applyDayNight();
+//        }else{
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+//            getDelegate().applyDayNight();
+//        }
 
         switch (theme){
             case 1:
