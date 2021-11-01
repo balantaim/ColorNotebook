@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class AddActivity extends AppCompatActivity {
     EditText bookTitle, bookAuthor, pagesInput;
-    Button btnAdd;
+    Button btnAdd, btnAddLocation;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -34,6 +34,8 @@ public class AddActivity extends AppCompatActivity {
         bookAuthor=findViewById(R.id.bookAuthor);
         pagesInput=findViewById(R.id.pagesInput);
         btnAdd=findViewById(R.id.btnAdd);
+        btnAddLocation=findViewById(R.id.btnAddLocation);
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

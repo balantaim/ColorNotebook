@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/color_1_light.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/color_2_light.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/color_3_light.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_add.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_delete.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_location.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_settings.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_add.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />

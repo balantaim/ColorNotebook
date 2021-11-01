@@ -1,9 +1,7 @@
 package com.martinatanasov.colornotebook;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,18 +45,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.txtBookId.setText(String.valueOf(txtBookId.get(position)));
-        holder.txtBookAuthor.setText(String.valueOf(txtBookAuthor.get(position)));
-        holder.txtBookTitle.setText(String.valueOf(txtBookTitle.get(position)));
-        holder.txtPages.setText(String.valueOf(txtPages.get(position)));
+        holder.txtBookId.setText(String.valueOf(txtBookId.get(holder.getAdapterPosition())));
+        holder.txtBookAuthor.setText(String.valueOf(txtBookAuthor.get(holder.getAdapterPosition())));
+        holder.txtBookTitle.setText(String.valueOf(txtBookTitle.get(holder.getAdapterPosition())));
+        holder.txtPages.setText(String.valueOf(txtPages.get(holder.getAdapterPosition())));
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(txtBookId.get(position)));
-                intent.putExtra("author", String.valueOf(txtBookAuthor.get(position)));
-                intent.putExtra("title", String.valueOf(txtBookTitle.get(position)));
-                intent.putExtra("pages", String.valueOf(txtPages.get(position)));
+                intent.putExtra("id", String.valueOf(txtBookId.get(holder.getAdapterPosition())));
+                intent.putExtra("author", String.valueOf(txtBookAuthor.get(holder.getAdapterPosition())));
+                intent.putExtra("title", String.valueOf(txtBookTitle.get(holder.getAdapterPosition())));
+                intent.putExtra("pages", String.valueOf(txtPages.get(holder.getAdapterPosition())));
                 activity.startActivityForResult(intent, 1);
             }
         });

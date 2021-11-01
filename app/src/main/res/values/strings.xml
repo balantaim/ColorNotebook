@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Color Notebook</string>
     <string name="version">v1.0.0</string>
-    <string name="creator">Rainbow Infinium</string>
+    <string name="creator">Created by Rainbow Infinium</string>
 
     <string-array name="skin_array">
         <item>Default</item>

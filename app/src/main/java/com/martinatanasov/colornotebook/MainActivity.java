@@ -1,12 +1,5 @@
 package com.martinatanasov.colornotebook;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,11 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
 
     RecyclerView recyclerView;
     FloatingActionButton add_button;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         skinTheme();
         setContentView(R.layout.activity_main);
 
-        //Day and Night modes
+//        Day and Night modes
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 //        getDelegate().applyDayNight();
 
@@ -72,8 +74,13 @@ public class MainActivity extends AppCompatActivity {
         storeDataInArrays();
 
         customAdapter= new CustomAdapter(MainActivity.this, this, book_id, book_title, book_author, book_pages);
+
+        //SimpleCallback - Drag and Drop function
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
     }
 
     //Update date after move from UpdateAct to MainAct
@@ -148,6 +155,23 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+
+    //Drag and Drop Items
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            book_id.remove(viewHolder.getAdapterPosition());
+            customAdapter.notifyDataSetChanged();
+        }
+    };
+
+    //Load Theme Setting
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 

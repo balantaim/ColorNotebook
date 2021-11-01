@@ -20,7 +20,7 @@ import android.widget.Toast;
 public class UpdateActivity extends AppCompatActivity {
 
     TextView bookTitle, bookAuthor, pagesInput;
-    Button btnUpdate, btnDelete;
+    Button btnUpdate, btnDelete, btnAddLocation;
     String id, title, author, pages;
 
     public static final String SHARED_PREF = "sharedPref";
@@ -44,6 +44,7 @@ public class UpdateActivity extends AppCompatActivity {
         pagesInput =findViewById(R.id.pagesInput2);
         btnUpdate =findViewById(R.id.btnUpdate);
         btnDelete =findViewById(R.id.btnDelete);
+        btnAddLocation =findViewById(R.id.btnAddLocation);
 
         //First before update DB
         getAndSetIntentData();
