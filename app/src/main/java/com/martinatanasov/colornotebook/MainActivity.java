@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     RecyclerView recyclerView;
-    FloatingActionButton add_button;
+    FloatingActionButton add_button, map_button;
     CustomAdapter customAdapter;
 
     MyDatabaseHelper myDB;
@@ -52,16 +52,22 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-
-
-
         recyclerView= findViewById(R.id.recyclerView);
+        map_button=findViewById(R.id.map_button);
         add_button=findViewById(R.id.add_button);
+
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        map_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapActivity.class));
             }
         });
 
@@ -142,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -155,9 +160,8 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-
     //Drag and Drop Items
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -165,11 +169,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+          long id = viewHolder.getBindingAdapterPosition();
+          String idS = String.valueOf(id);
 
-            book_id.remove(viewHolder.getAdapterPosition());
+
+            MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
+
+            myDB.deleteDataOnOneRow(idS);
+//            txtBookId
+
+            book_id.remove(viewHolder.getAbsoluteAdapterPosition());
             customAdapter.notifyDataSetChanged();
         }
     };
+
 
     //Load Theme Setting
     private void skinTheme(){
