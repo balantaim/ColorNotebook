@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddActivity"
-    android:background="?attr/badgeStyle">
+    android:background="?attr/badgeStyle"
+    tools:context=".AddActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +35,9 @@
                 android:ems="10"
                 android:hint="Book Title"
                 android:inputType="textPersonName"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
             <EditText
                 android:id="@+id/bookAuthor2"
@@ -45,7 +47,9 @@
                 android:ems="10"
                 android:hint="Book Author"
                 android:inputType="textPersonName"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
             <EditText
                 android:id="@+id/pagesInput2"
@@ -55,46 +59,48 @@
                 android:ems="10"
                 android:hint="Number of Pages"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
             <Button
                 android:id="@+id/btnAddLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                android:background="@color/design_default_color_secondary_variant"
+                android:background="@drawable/btn_custom"
+                android:minHeight="50dp"
                 android:text="Location"
+                android:textAllCaps="false"
                 android:textColor="?attr/customColorValue"
-                android:textStyle="bold"
                 android:textSize="20sp"
-                android:textAllCaps="false" />
+                android:textStyle="bold"/>
 
             <Button
                 android:id="@+id/btnUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:background="@color/design_default_color_secondary_variant"
+                android:background="@drawable/btn_custom"
+                android:minHeight="50dp"
                 android:text="Update"
+                android:textAllCaps="false"
                 android:textColor="?attr/customColorValue"
-                android:textStyle="bold" />
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:background="@color/design_default_color_secondary_variant"
+                android:background="@drawable/btn_delete"
+                android:minHeight="52dp"
                 android:text="Delete"
+                android:textAllCaps="false"
                 android:textColor="@color/red"
-                android:textStyle="bold" />
-
-
+                android:textSize="20sp"
+                android:textStyle="bold"/>
         </LinearLayout>
-
     </ScrollView>
 
 

@@ -32,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
     CustomAdapter customAdapter;
 
     MyDatabaseHelper myDB;
-    ArrayList<String> book_id, book_title, book_author, book_pages;
+    ArrayList<String> book_id;
+    ArrayList<String> book_title;
+    ArrayList<String> book_author;
+    ArrayList<String> book_pages;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-          long id = viewHolder.getBindingAdapterPosition();
+          long id = viewHolder.getAbsoluteAdapterPosition();
           String idS = String.valueOf(id);
 
 
@@ -179,9 +182,13 @@ public class MainActivity extends AppCompatActivity {
 //            txtBookId
 
             book_id.remove(viewHolder.getAbsoluteAdapterPosition());
+            String delItem = String.valueOf(book_id);
+//            swipeDeleteItem(delItem);
             customAdapter.notifyDataSetChanged();
         }
     };
+
+
 
 
     //Load Theme Setting
@@ -207,5 +214,10 @@ public class MainActivity extends AppCompatActivity {
                 setTheme(R.style.Theme_DefaultColorNotebook);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
     }
 }

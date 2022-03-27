@@ -8,21 +8,24 @@
     tools:context=".SecondFragment"
     android:background="?attr/colorPrimaryVariant">
 
-    <TextView
-        android:id="@+id/textview_second"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_second_fragment"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_tut2"
+        app:layout_constraintBottom_toTopOf="@+id/btnNext"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnPrevious"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnPrevious"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="100dp"
+        android:minHeight="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginBottom="50dp"
         android:text="@string/previous"
@@ -33,6 +36,8 @@
         android:id="@+id/btnNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="100dp"
+        android:minHeight="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
         android:text="@string/next"

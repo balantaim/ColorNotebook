@@ -1,10 +1,7 @@
 package com.martinatanasov.colornotebook;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -109,4 +106,16 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_NAME);
         db.deleteDatabase(new File(db.getPath()));
     }
+
+//    public boolean swipeDeleteItem(String delItem){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String queryString = ("DELETE FROM " + TABLE_NAME + "WHERE " + COLUMN_ID + " = " + delItem);
+//        Cursor cursor = db.rawQuery(queryString, null);
+//
+//        if(cursor.moveToFirst()){
+//            return true;
+//        }else{
+//            return false;
+//        }
+//    }
 }

@@ -3,17 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1695" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/btn_custom.xml" value="0.1975" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/btn_delete.xml" value="0.277" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/color_1_light.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/color_2_light.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/color_3_light.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_add.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_delete.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_krita_logo.xml" value="0.3025" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1695" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_location.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_logo.xml" value="0.149" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_settings.xml" value="0.3828125" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_tut1.xml" value="0.3025" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_tut2.xml" value="0.3025" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_tut3.xml" value="0.3025" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/ic_update.xml" value="0.149" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/drawable/rounded_bg.xml" value="0.3828125" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_add.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_map.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_map.xml" value="0.4666666666666667" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_option.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_tutorial.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/activity_update.xml" value="0.36666666666666664" />
@@ -25,6 +35,8 @@
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/fragment_third.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/layout/my_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/menu/my_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Users/Balantaim/AndroidStudioProjects/ColorNotebook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.296" />
       </map>
     </option>
   </component>
