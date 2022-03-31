@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.martinatanasov.colornotebook">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,13 +17,16 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/Theme.DefaultColorNotebook"/>
         <activity
             android:name=".MapActivity"
             android:exported="false"
             android:label="@string/title_activity_map"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DefaultColorNotebook.NoActionBar" />
+            android:theme="@style/Theme.DefaultColorNotebook"
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -33,20 +37,25 @@
             android:exported="true"
             android:label="Options"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".UpdateActivity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".AddActivity"
             android:label="Add Book"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".TutorialActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/Theme.Tutorial">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

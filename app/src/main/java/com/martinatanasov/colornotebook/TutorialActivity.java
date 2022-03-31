@@ -1,6 +1,7 @@
 package com.martinatanasov.colornotebook;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -16,8 +17,10 @@ public class TutorialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        //hide Status Bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //set Theme NoActionBar default colors
-        setTheme(R.style.Theme_Tutorial);
+        //setTheme(R.style.Theme_Tutorial);
         setContentView(R.layout.activity_tutorial);
 
         viewPager2=findViewById(R.id.viewPager);
