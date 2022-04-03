@@ -29,7 +29,7 @@ public class OptionActivity extends AppCompatActivity {
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
 
-    private int theme;
+    private static int theme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

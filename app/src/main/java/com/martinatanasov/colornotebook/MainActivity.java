@@ -1,11 +1,13 @@
 package com.martinatanasov.colornotebook;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +23,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
+    private static final String TAG = "MainActivity";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
 
 
     @Override
@@ -57,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 //        getDelegate().applyDayNight();
 
         super.onCreate(savedInstanceState);
+
+        if(isServicesOK()){
+            Toast.makeText(this, "Services Running!", Toast.LENGTH_SHORT).show();
+        }
 
         recyclerView= findViewById(R.id.recyclerView);
         map_button=findViewById(R.id.map_button);
@@ -93,6 +103,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
+    }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: Check services");
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        if(available== ConnectionResult.SUCCESS){
+            Log.d(TAG, "isServicesOK: Services are OK");
+            return true;
+        }else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            Log.d(TAG, "isServicesOK: There is a problem but it ");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Log.d(TAG, "isServicesOK: There is problem with Google map services");
+        }
+        return false;
     }
 
     //Update date after move from UpdateAct to MainAct

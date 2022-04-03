@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
-
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/google_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
@@ -21,20 +20,20 @@
         app:layout_constraintVertical_bias="1.0"
         tools:context=".MapActivity" />
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="2dp"
-        android:background="@drawable/rounded_bg"
-        android:elevation="5dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="Search here"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <SearchView-->
+<!--        android:id="@+id/searchView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="6dp"-->
+<!--        android:layout_marginStart="2dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="2dp"-->
+<!--        android:background="@drawable/rounded_bg"-->
+<!--        android:elevation="5dp"-->
+<!--        android:iconifiedByDefault="false"-->
+<!--        android:queryHint="Search here"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

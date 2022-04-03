@@ -19,7 +19,7 @@ public class UpdateActivity extends AppCompatActivity {
 
     TextView bookTitle, bookAuthor, pagesInput;
     Button btnUpdate, btnDelete, btnAddLocation;
-    String id, title, author, pages;
+    static String id, title, author, pages;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
