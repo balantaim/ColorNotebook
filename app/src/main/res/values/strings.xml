@@ -2,8 +2,6 @@
     <string name="app_name">Color Events</string>
     <string name="version">v1.0.0</string>
     <string name="creator">Created by Rainbow Infinium</string>
-    <string name="map_key"
-        translatable="true">AIzaSyBHh1PuOR_L9NlkRrkvYJ448G8SHZuSbz4</string>
 
     <string-array name="skin_array">
         <item>Teal</item>
@@ -19,7 +17,7 @@
     <string name="previous">Previous</string>
     <string name="done">Done</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_first_fragment">Hello first fragment.</string>
     <string name="hello_second_fragment">Hello second fragment.</string>
     <string name="hello_third_fragment">Hello third fragment.</string>
 

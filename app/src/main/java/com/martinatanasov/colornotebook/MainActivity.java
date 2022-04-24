@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if(isServicesOK()){
-            Toast.makeText(this, "Services Running!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onCreate: Services Running!");
+//            Toast.makeText(this, "Services Running!", Toast.LENGTH_SHORT).show();
         }
 
         recyclerView= findViewById(R.id.recyclerView);
@@ -216,9 +217,6 @@ public class MainActivity extends AppCompatActivity {
             customAdapter.notifyDataSetChanged();
         }
     };
-
-
-
 
     //Load Theme Setting
     private void skinTheme(){
