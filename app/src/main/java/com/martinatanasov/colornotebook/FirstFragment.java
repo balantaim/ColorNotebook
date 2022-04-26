@@ -21,8 +21,8 @@ public class FirstFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static String mParam1;
+    private static String mParam2;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -52,8 +52,6 @@ public class FirstFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
-
         }
     }
 

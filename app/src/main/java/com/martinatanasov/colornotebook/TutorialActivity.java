@@ -9,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 public class TutorialActivity extends AppCompatActivity {
 
-
     ViewPager2 viewPager2;
     IntroAdapter introAdapter;
 

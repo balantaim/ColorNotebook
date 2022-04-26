@@ -28,7 +28,6 @@ public class OptionActivity extends AppCompatActivity {
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
-
     private static int theme;
 
     @Override
@@ -41,7 +40,6 @@ public class OptionActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
-
 
         //Change Back arrow button
         ActionBar actionBar = getSupportActionBar();
@@ -108,7 +106,6 @@ public class OptionActivity extends AppCompatActivity {
         sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
 
         editor.apply();
-
     }
 
     private void skinTheme(){
@@ -133,6 +130,5 @@ public class OptionActivity extends AppCompatActivity {
                 setTheme(R.style.Theme_DefaultColorNotebook);
                 break;
         }
-
     }
 }

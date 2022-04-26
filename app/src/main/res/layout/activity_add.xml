@@ -28,52 +28,43 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/bookTitle"
+            android:id="@+id/eventTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginBottom="18dp"
             android:ems="10"
-            android:hint="Book Title"
+            android:hint="@string/hintTitle"
             android:inputType="textPersonName"
             android:textSize="20sp"/>
 
         <EditText
-            android:id="@+id/bookAuthor"
+            android:id="@+id/eventLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
             android:ems="10"
-            android:hint="Book Author"
+            android:hint="@string/hintLocation"
             android:inputType="textPersonName"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:drawableEnd="@drawable/ic_location"/>
 
         <EditText
-            android:id="@+id/pagesInput"
+            android:id="@+id/eventNode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="58dp"
+            android:background="@drawable/rounded_bg"
             android:ems="10"
-            android:hint="Number of Pages"
-            android:inputType="number"
+            android:hint="@string/hintNote"
+            android:inputType="textMultiLine"
+            android:maxLines="32"
+            android:minHeight="100dp"
+            android:paddingVertical="8dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/btnAddLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="38dp"
-            android:background="@drawable/btn_delete"
-            android:minHeight="50dp"
-            android:text="Location"
-            android:textAllCaps="false"
-            android:textColor="?attr/customColorValue"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnAdd"
@@ -81,15 +72,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_delete"
             android:minHeight="50dp"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="?attr/customColorValue"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-
     </LinearLayout>
-
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

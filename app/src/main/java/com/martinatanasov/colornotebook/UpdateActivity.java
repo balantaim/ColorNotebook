@@ -17,9 +17,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    TextView bookTitle, bookAuthor, pagesInput;
-    Button btnUpdate, btnDelete, btnAddLocation;
-    static String id, title, author, pages;
+    TextView eventTitle, eventLocation, eventInput;
+    Button btnUpdate, btnDelete;
+    static String id, title, location, input;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -39,12 +39,11 @@ public class UpdateActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
 
-        bookTitle =findViewById(R.id.bookTitle2);
-        bookAuthor =findViewById(R.id.bookAuthor2);
-        pagesInput =findViewById(R.id.pagesInput2);
+        eventTitle =findViewById(R.id.eventTitle2);
+        eventLocation =findViewById(R.id.eventLocation2);
+        eventInput =findViewById(R.id.eventInput2);
         btnUpdate =findViewById(R.id.btnUpdate);
         btnDelete =findViewById(R.id.btnDelete);
-        btnAddLocation =findViewById(R.id.btnAddLocation);
 
         //First before update DB
         getAndSetIntentData();
@@ -59,10 +58,10 @@ public class UpdateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Update DB
                 MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
-                title = bookTitle.getText().toString().trim();
-                author = bookAuthor.getText().toString().trim();
-                pages = pagesInput.getText().toString().trim();
-                myDB.updateData(id, title, author, pages);
+                title = eventTitle.getText().toString().trim();
+                location = eventLocation.getText().toString().trim();
+                input = eventInput.getText().toString().trim();
+                myDB.updateData(id, title, location, input);
             }
         });
 
@@ -77,29 +76,28 @@ public class UpdateActivity extends AppCompatActivity {
 
     void getAndSetIntentData(){
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title")
-                && getIntent().hasExtra("author") && getIntent().hasExtra("pages")){
+                && getIntent().hasExtra("location") && getIntent().hasExtra("input")){
             // Getting data from Intent
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");
-            author = getIntent().getStringExtra("author");
-            pages = getIntent().getStringExtra("pages");
+            location = getIntent().getStringExtra("location");
+            input = getIntent().getStringExtra("input");
 
             //Setting Intent data
-            bookTitle.setText(title);
-            bookAuthor.setText(author);
-            pagesInput.setText(pages);
+            eventTitle.setText(title);
+            eventLocation.setText(location);
+            eventInput.setText(input);
 
         } else {
-            Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_noData, Toast.LENGTH_SHORT).show();
         }
-
     }
 
     void confirmDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete " + title + "?");
-        builder.setMessage("Are you sure you want to delete " + title + "?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.delete) + " " + title + "?");
+        builder.setMessage(getString(R.string.alert_dialog_message_sure_to_dell) + " " + title + "?");
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
@@ -108,7 +106,7 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

@@ -15,12 +15,38 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="done">Done</string>
-    <string name="hello_first_fragment">Hello first fragment.</string>
-    <string name="hello_second_fragment">Hello second fragment.</string>
-    <string name="hello_third_fragment">Hello third fragment.</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="location">Location</string>
+    <string name="hintTitle">Event Title</string>
+    <string name="hintLocation">Add Location</string>
+    <string name="hintNote">Add your event node</string>
+    <!--    tutorial fragments-->
+    <string name="description_first_fragment">Create and edit events</string>
+    <string name="description_second_fragment">Enter your data to the text fields</string>
+    <string name="description_third_fragment">Find location</string>
     <string name="add_item">Add item</string>
     <string name="fragThreeHeader">Add location to your event</string>
     <string name="fragTwoHeader">Create you own event</string>
     <string name="fragOneHeader">Welcome to tutorial guide</string>
+    <!--    Menu-->
+    <string name="forceDarkMode">Force dark mode</string>
+    <string name="skinColor">Skin color</string>
+    <string name="fontSize">Font size</string>
+    <!--    Alert Dialog-->
+    <string name="alert_dialog_title">Delete all</string>
+    <string name="alert_dialog_message_dell">Are you sure you want to delete all data</string>
+    <string name="alert_dialog_message_sure_to_dell">Are you sure you want to delete </string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <!--    Toast-->
+    <string name="toast_failed">Failed</string>
+    <string name="toast_no_data">There is no data</string>
+    <string name="toast_added">Added Successfully</string>
+    <string name="toast_failed_to_update">Failed to Updated</string>
+    <string name="toast_successfully_updated">Successfully Updated!</string>
+    <string name="toast_fail_to_delete">Fail to delete</string>
+    <string name="toast_successfully_deleted">Successfully deleted</string>
+    <string name="toast_noData">No Data</string>
 
 </resources>

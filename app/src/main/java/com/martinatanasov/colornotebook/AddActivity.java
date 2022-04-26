@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class AddActivity extends AppCompatActivity {
-    EditText bookTitle, bookAuthor, pagesInput;
-    Button btnAdd, btnAddLocation;
+    EditText eventTitle, eventLocation, eventInput;
+    Button btnAdd;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -33,31 +33,29 @@ public class AddActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
 
-        bookTitle=findViewById(R.id.bookTitle);
-        bookAuthor=findViewById(R.id.bookAuthor);
-        pagesInput=findViewById(R.id.pagesInput);
+        eventTitle =findViewById(R.id.eventTitle);
+        eventLocation =findViewById(R.id.eventLocation);
+        eventInput =findViewById(R.id.eventNode);
         btnAdd=findViewById(R.id.btnAdd);
-        btnAddLocation=findViewById(R.id.btnAddLocation);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!tryEmpty(bookTitle.getText().toString(), bookAuthor.getText().toString(), pagesInput.getText().toString())){
+                if(!tryEmpty(eventTitle.getText().toString(), eventLocation.getText().toString(), eventInput.getText().toString())){
                     MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
-                    myDB.addBook(bookTitle.getText().toString().trim(),
-                            bookAuthor.getText().toString().trim(),
-                            Integer.valueOf(pagesInput.getText().toString().trim()));
+                    myDB.addEvent(eventTitle.getText().toString().trim(),
+                            eventLocation.getText().toString().trim(),
+                            eventInput.getText().toString().trim());
                 }
-
             }
         });
     }
-    private boolean tryEmpty(String title, String author, String input){
-        if (title == null || author == null || input == null){
+    private boolean tryEmpty(String title, String location, String input){
+        if (title == null || location == null || input == null){
             Toast.makeText(this, "Empty Label!", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if ( (title.isEmpty() || author.isEmpty() || input.isEmpty()) ){
+        if ( (title.isEmpty() || location.isEmpty() || input.isEmpty()) ){
             Toast.makeText(this, "Empty Label!", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -68,12 +66,12 @@ public class AddActivity extends AppCompatActivity {
             }
         }
         int count2 =0;
-        for (int i = 0;i<author.length();i++){
-            if(author.charAt(i) == ' '){
+        for (int i = 0;i<input.length();i++){
+            if(input.charAt(i) == ' '){
                 count2++;
             }
         }
-        if((count1==title.length()) || (count2==author.length())){
+        if((count1==title.length()) || (count2==location.length())){
             Toast.makeText(this, "Remove spaces!", Toast.LENGTH_SHORT).show();
             return true;
         }

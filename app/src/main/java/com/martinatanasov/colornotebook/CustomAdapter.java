@@ -15,22 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
-    private Context context;
-    private ArrayList txtBookId, txtBookTitle, txtBookAuthor, txtPages;
+    private final Context context;
+    private static ArrayList txtEventId, txtEventTitle, txtEventLocation, txtNode;
     Activity activity;
+    //int position;
 
-    int position;
-
-
-    CustomAdapter(Activity activity, Context context, ArrayList BookId, ArrayList BookTitle, ArrayList BookAuthor,
-                  ArrayList Pages){
+    CustomAdapter(Activity activity, Context context, ArrayList EventId, ArrayList EventTitle, ArrayList EventLocation,
+                  ArrayList Node){
 
         this.activity=activity;
         this.context=context;
-        this.txtBookId=BookId;
-        this.txtBookTitle=BookTitle;
-        this.txtBookAuthor=BookAuthor;
-        this.txtPages=Pages;
+        this.txtEventId =EventId;
+        this.txtEventTitle =EventTitle;
+        this.txtEventLocation =EventLocation;
+        this.txtNode =Node;
     }
 
     @NonNull
@@ -45,18 +43,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.txtBookId.setText(String.valueOf(txtBookId.get(holder.getAdapterPosition())));
-        holder.txtBookAuthor.setText(String.valueOf(txtBookAuthor.get(holder.getAdapterPosition())));
-        holder.txtBookTitle.setText(String.valueOf(txtBookTitle.get(holder.getAdapterPosition())));
-        holder.txtPages.setText(String.valueOf(txtPages.get(holder.getAdapterPosition())));
+        holder.txtEventId.setText(String.valueOf(txtEventId.get(holder.getAdapterPosition())));
+        holder.txtEventLocation.setText(String.valueOf(txtEventLocation.get(holder.getAdapterPosition())));
+        holder.txtEventTitle.setText(String.valueOf(txtEventTitle.get(holder.getAdapterPosition())));
+        holder.txtNode.setText(String.valueOf(txtNode.get(holder.getAdapterPosition())));
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(txtBookId.get(holder.getAdapterPosition())));
-                intent.putExtra("author", String.valueOf(txtBookAuthor.get(holder.getAdapterPosition())));
-                intent.putExtra("title", String.valueOf(txtBookTitle.get(holder.getAdapterPosition())));
-                intent.putExtra("pages", String.valueOf(txtPages.get(holder.getAdapterPosition())));
+                intent.putExtra("id", String.valueOf(txtEventId.get(holder.getAdapterPosition())));
+                intent.putExtra("title", String.valueOf(txtEventLocation.get(holder.getAdapterPosition())));
+                intent.putExtra("location", String.valueOf(txtEventTitle.get(holder.getAdapterPosition())));
+                intent.putExtra("input", String.valueOf(txtNode.get(holder.getAdapterPosition())));
                 activity.startActivityForResult(intent, 1);
             }
         });
@@ -64,20 +62,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return txtBookId.size();
+        return txtEventId.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtBookId, txtBookTitle, txtBookAuthor, txtPages;
+        TextView txtEventId, txtEventTitle, txtEventLocation, txtNode;
         LinearLayout mainLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtBookId=itemView.findViewById(R.id.txtBookId);
-            txtBookTitle=itemView.findViewById(R.id.txtBookTitle);
-            txtBookAuthor=itemView.findViewById(R.id.txtBookAuthor);
-            txtPages=itemView.findViewById(R.id.txtPages);
+            txtEventId =itemView.findViewById(R.id.txtEventId);
+            txtEventTitle =itemView.findViewById(R.id.txtEventTitle);
+            txtEventLocation =itemView.findViewById(R.id.txtEventLocation);
+            txtNode =itemView.findViewById(R.id.txtNode);
             mainLayout=itemView.findViewById(R.id.mainLayout);
         }
     }

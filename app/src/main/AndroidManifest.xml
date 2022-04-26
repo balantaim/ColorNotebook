@@ -32,7 +32,7 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".AddActivity"
-            android:label="Add Book"
+            android:label="Add Event"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DefaultColorNotebook"

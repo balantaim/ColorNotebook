@@ -1,5 +1,6 @@
 package com.martinatanasov.colornotebook;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,17 +26,15 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-
     RecyclerView recyclerView;
     FloatingActionButton add_button;
     CustomAdapter customAdapter;
 
     MyDatabaseHelper myDB;
-    ArrayList<String> book_id;
-    ArrayList<String> book_title;
-    ArrayList<String> book_author;
-    ArrayList<String> book_pages;
-
+    public static ArrayList<String> event_id;
+    public static ArrayList<String> event_title;
+    public static ArrayList<String> event_location;
+    public static ArrayList<String> event_note;
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
@@ -68,21 +67,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         myDB = new MyDatabaseHelper(MainActivity.this);
-        book_id = new ArrayList<>();
-        book_title = new ArrayList<>();
-        book_author = new ArrayList<>();
-        book_pages = new ArrayList<>();
+        event_id = new ArrayList<>();
+        event_title = new ArrayList<>();
+        event_location = new ArrayList<>();
+        event_note = new ArrayList<>();
 
         storeDataInArrays();
-
-        customAdapter= new CustomAdapter(MainActivity.this, this, book_id, book_title, book_author, book_pages);
+        customAdapter= new CustomAdapter(MainActivity.this, this, event_id, event_title, event_location, event_note);
 
         //SimpleCallback - Drag and Drop function
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
+        //recycler view Layout
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-
     }
 
     //Update date after move from UpdateAct to MainAct
@@ -97,13 +95,13 @@ public class MainActivity extends AppCompatActivity {
     void storeDataInArrays(){
         Cursor cursor = myDB.readAllData();
         if(cursor.getCount() == 0){
-            Toast.makeText(this, "There is no data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()){
-                book_id.add(cursor.getString(0));
-                book_title.add(cursor.getString(1));
-                book_author.add(cursor.getString(2));
-                book_pages.add(cursor.getString(3));
+                event_id.add(cursor.getString(0));
+                event_title.add(cursor.getString(1));
+                event_location.add(cursor.getString(2));
+                event_note.add(cursor.getString(3));
             }
         }
     }
@@ -115,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -128,14 +127,13 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     void confirmDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete all");
-        builder.setMessage("Are you sure you want to delete all data");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle( R.string.alert_dialog_title );
+        builder.setMessage( R.string.alert_dialog_message_dell );
+        builder.setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
@@ -146,8 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton( R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -173,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
             myDB.deleteDataOnOneRow(idS);
 //            txtBookId
 
-            book_id.remove(viewHolder.getAbsoluteAdapterPosition());
-            String delItem = String.valueOf(book_id);
+            event_id.remove(viewHolder.getAbsoluteAdapterPosition());
+            String delItem = String.valueOf(event_id);
 //            swipeDeleteItem(delItem);
             customAdapter.notifyDataSetChanged();
         }
