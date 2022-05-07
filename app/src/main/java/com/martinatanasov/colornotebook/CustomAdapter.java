@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private final Context context;
     private static ArrayList txtEventId, txtEventTitle, txtEventLocation, txtNode;
+    private static final String TAG = "CustomAdapter";
     Activity activity;
     //int position;
 
@@ -43,18 +44,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.txtEventId.setText(String.valueOf(txtEventId.get(holder.getAdapterPosition())));
-        holder.txtEventLocation.setText(String.valueOf(txtEventLocation.get(holder.getAdapterPosition())));
-        holder.txtEventTitle.setText(String.valueOf(txtEventTitle.get(holder.getAdapterPosition())));
-        holder.txtNode.setText(String.valueOf(txtNode.get(holder.getAdapterPosition())));
+        holder.txtEventId.setText(String.valueOf(txtEventId.get(holder.getBindingAdapterPosition())));
+        holder.txtEventTitle.setText(String.valueOf(txtEventTitle.get(holder.getBindingAdapterPosition())));
+        holder.txtEventLocation.setText(String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
+        holder.txtNode.setText(String.valueOf(txtNode.get(holder.getBindingAdapterPosition())));
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(txtEventId.get(holder.getAdapterPosition())));
-                intent.putExtra("title", String.valueOf(txtEventLocation.get(holder.getAdapterPosition())));
-                intent.putExtra("location", String.valueOf(txtEventTitle.get(holder.getAdapterPosition())));
-                intent.putExtra("input", String.valueOf(txtNode.get(holder.getAdapterPosition())));
+                intent.putExtra("id", String.valueOf(txtEventId.get(holder.getBindingAdapterPosition())));
+                intent.putExtra("title", String.valueOf(txtEventTitle.get(holder.getBindingAdapterPosition())));
+                intent.putExtra("location", String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
+                intent.putExtra("input", String.valueOf(txtNode.get(holder.getBindingAdapterPosition())));
                 activity.startActivityForResult(intent, 1);
             }
         });

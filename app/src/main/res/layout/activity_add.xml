@@ -32,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
+            android:backgroundTint="?attr/colorPrimary"
             android:ems="10"
             android:hint="@string/hintTitle"
             android:inputType="textPersonName"
@@ -42,13 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:drawableEnd="@drawable/ic_location"
             android:ems="10"
             android:hint="@string/hintLocation"
             android:inputType="textPersonName"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textSize="20sp"
-            android:drawableEnd="@drawable/ic_location"/>
+            android:textSize="20sp"/>
 
         <EditText
             android:id="@+id/eventNode"
@@ -57,9 +59,10 @@
             android:layout_marginBottom="58dp"
             android:background="@drawable/rounded_bg"
             android:ems="10"
+            android:gravity="top"
             android:hint="@string/hintNote"
             android:inputType="textMultiLine"
-            android:maxLines="32"
+            android:singleLine="false"
             android:minHeight="100dp"
             android:paddingVertical="8dp"
             android:paddingStart="8dp"

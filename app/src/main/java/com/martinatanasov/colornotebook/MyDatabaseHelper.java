@@ -11,14 +11,14 @@ import androidx.annotation.Nullable;
 
 class MyDatabaseHelper extends SQLiteOpenHelper {
 
-    private Context context;
+    private final Context context;
     private final static String DATABASE_NAME = "ColorEventsLibrary.db";
     private final static int DATABASE_VERSION = 1;
     private final static String TABLE_NAME = "my_library";
     private final static String COLUMN_ID = "_id";
     private final static String COLUMN_TITLE = "event_title";
-    private final static String COLUMN_EVENT = "event_node";
     private final static String COLUMN_LOCATION = "event_location";
+    private final static String COLUMN_EVENT = "event_node";
 
     MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -30,8 +30,8 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_NAME +
                         " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_TITLE + " TEXT, " +
-                COLUMN_EVENT + " TEXT, " +
-                COLUMN_LOCATION + " INTEGER);";
+                        COLUMN_LOCATION + " TEXT, " +
+                        COLUMN_EVENT + " TEXT);";
         db.execSQL(query);
     }
 
@@ -46,8 +46,8 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_EVENT, location);
-        cv.put(COLUMN_LOCATION, input);
+        cv.put(COLUMN_LOCATION, location);
+        cv.put(COLUMN_EVENT, input);
 
         long result = db.insert(TABLE_NAME, null, cv);
         if (result == -1){
@@ -69,12 +69,12 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    void updateData(String row_id, String title, String node, String location){
+    void updateData(String row_id, String title, String location, String node){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_EVENT, node);
         cv.put(COLUMN_LOCATION, location);
+        cv.put(COLUMN_EVENT, node);
 
         long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
         if (result == -1){

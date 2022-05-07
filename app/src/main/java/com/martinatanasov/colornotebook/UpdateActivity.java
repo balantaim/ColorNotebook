@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -21,6 +22,7 @@ public class UpdateActivity extends AppCompatActivity {
     Button btnUpdate, btnDelete;
     static String id, title, location, input;
 
+    public static final String TAG = "UpdateActivity";
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
@@ -62,6 +64,8 @@ public class UpdateActivity extends AppCompatActivity {
                 location = eventLocation.getText().toString().trim();
                 input = eventInput.getText().toString().trim();
                 myDB.updateData(id, title, location, input);
+
+                Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input);
             }
         });
 
