@@ -107,7 +107,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="200dp">
+                            android:layout_height="wrap_content">
 
                             <TextView
                                 android:id="@+id/txtFrom"
@@ -123,8 +123,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
-                                android:text="time"
-                                app:layout_constraintEnd_toEndOf="parent"
+                                android:textColor="@color/black"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,52 +132,55 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
-                                android:text="date"
+                                android:textColor="@color/black"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                                 app:layout_constraintStart_toStartOf="@+id/guideline6"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/textView9"
+                                android:id="@+id/endDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="date2"
-                                app:layout_constraintBottom_toBottomOf="@+id/textView8"
+                                android:paddingBottom="16dp"
+                                android:textColor="@color/black"
+                                app:layout_constraintBottom_toBottomOf="@+id/txtTo"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                                 app:layout_constraintStart_toStartOf="@+id/guideline6"
-                                app:layout_constraintTop_toTopOf="@+id/textView8" />
+                                app:layout_constraintTop_toTopOf="@+id/txtTo" />
 
                             <TextView
-                                android:id="@+id/textView8"
+                                android:id="@+id/txtTo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="48dp"
                                 android:text="@string/to"
+                                android:paddingBottom="16dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
 
                             <TextView
+                                android:id="@+id/endTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="time2"
-                                app:layout_constraintBottom_toBottomOf="@+id/textView9"
-                                app:layout_constraintEnd_toEndOf="parent"
+                                android:paddingBottom="16dp"
+                                android:textColor="@color/black"
+                                app:layout_constraintBottom_toBottomOf="@+id/endDate"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
-                                app:layout_constraintTop_toTopOf="@+id/textView9" />
+                                app:layout_constraintTop_toTopOf="@+id/endDate" />
 
                             <androidx.constraintlayout.widget.Guideline
                                 android:id="@+id/guideline6"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:layout_constraintGuide_percent="0.14" />
+                                app:layout_constraintGuide_percent="0.12" />
 
                             <androidx.constraintlayout.widget.Guideline
                                 android:id="@+id/guideline7"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:layout_constraintGuide_percent="0.8" />
+                                app:layout_constraintGuide_percent="0.7" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

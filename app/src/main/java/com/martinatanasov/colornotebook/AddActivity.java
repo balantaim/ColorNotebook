@@ -1,13 +1,18 @@
 package com.martinatanasov.colornotebook;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -17,10 +22,12 @@ import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
+import java.util.Calendar;
+
 public class AddActivity extends AppCompatActivity {
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
-    TextView advOptions;
+    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd;
     LinearLayout expandableLayout;
     CardView cardView;
 
@@ -42,12 +49,21 @@ public class AddActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
 
         advOptions =findViewById(R.id.advOptions);
+        dateStart =findViewById(R.id.startDate);
+        dateEnd =findViewById(R.id.endDate);
+        timeStart =findViewById(R.id.startTime);
+        timeEnd =findViewById(R.id.endTime);
         cardView =findViewById(R.id.cardView);
         expandableLayout =findViewById(R.id.expandableLayout);
         eventTitle =findViewById(R.id.eventTitle);
         eventLocation =findViewById(R.id.eventLocation);
         eventInput =findViewById(R.id.eventNode);
         btnAdd=findViewById(R.id.btnAdd);
+
+        if ((dateStart.getText().toString().equals("") || dateStart == null)
+        && (dateEnd.getText().toString().equals("") || dateEnd == null)){
+            initAdvancedOptions();
+        }
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +82,106 @@ public class AddActivity extends AppCompatActivity {
                 expandView();
             }
         });
+
+        dateStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setStartDate();
+            }
+        });
+
+        timeStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setStartTime();
+            }
+        });
+
+        dateEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setEndDate();
+            }
+        });
     }
+
+    private void initAdvancedOptions(){
+        Calendar calendar = Calendar.getInstance();
+
+        int HOUR = calendar.get(Calendar.HOUR);
+        int MINUTE = calendar.get(Calendar.MINUTE);
+        boolean is24format = DateFormat.is24HourFormat(this);
+
+        CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar);
+        dateStart.setText(charSequence);
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH + 1));
+        dateEnd.setText(charSequence);
+        if (is24format){
+            timeStart.setText(Integer.toString(HOUR)+":"+Integer.toString(MINUTE));
+            timeEnd.setText(Integer.toString(HOUR)+":"+Integer.toString(MINUTE));
+        }else{
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.set(Calendar.HOUR, HOUR);
+            calendar1.set(Calendar.MINUTE, MINUTE);
+            CharSequence charSequence1= DateFormat.format("hh:mm aa", calendar1);
+            timeStart.setText(charSequence1);
+            timeEnd.setText(charSequence1);
+        }
+    }
+
+    private void setEndDate(){
+        Calendar calendar = Calendar.getInstance();
+        String data = dateEnd.getText().toString();
+        /* TODO */
+
+
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setStartDate(){
+        Calendar calendar = Calendar.getInstance();
+        int YEAR = calendar.get(Calendar.YEAR);
+        int MONTH = calendar.get(Calendar.MONTH);
+        int DATE = calendar.get(Calendar.DATE);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.set(Calendar.YEAR, year);
+                calendar1.set(Calendar.MONTH, month);
+                calendar1.set(Calendar.DATE, date);
+
+                CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar1);
+                dateStart.setText(charSequence);
+            }
+        },YEAR, MONTH, DATE);
+        datePickerDialog.show();
+    }
+
+    private void setStartTime(){
+        Calendar calendar = Calendar.getInstance();
+        int HOUR = calendar.get(Calendar.HOUR);
+        int MINUTE = calendar.get(Calendar.MINUTE);
+        boolean is24format = DateFormat.is24HourFormat(this);
+
+        TimePickerDialog timePickerDialog= new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                if (is24format){
+                    timeStart.setText(Integer.toString(hour)+":"+Integer.toString(minute));
+                }else{
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar1.set(Calendar.HOUR, hour);
+                    calendar1.set(Calendar.MINUTE, minute);
+                    CharSequence charSequence= DateFormat.format("hh:mm aa", calendar1);
+                    timeStart.setText(charSequence);
+                }
+            }
+        },HOUR, MINUTE, is24format);
+        timePickerDialog.show();
+    }
+
     private boolean tryEmpty(String title, String location, String input){
         if (title == null || location == null || input == null){
             Toast.makeText(this, "Empty Label!", Toast.LENGTH_SHORT).show();
