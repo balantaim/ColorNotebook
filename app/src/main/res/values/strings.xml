@@ -21,6 +21,9 @@
     <string name="hintTitle">Event Title</string>
     <string name="hintLocation">Add Location</string>
     <string name="hintNote">Add your event node</string>
+    <string name="advanced_options">Advanced Options</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
     <!--    tutorial fragments-->
     <string name="description_first_fragment">Create and edit events</string>
     <string name="description_second_fragment">Enter your data to the text fields</string>
@@ -48,5 +51,6 @@
     <string name="toast_fail_to_delete">Fail to delete</string>
     <string name="toast_successfully_deleted">Successfully deleted</string>
     <string name="toast_noData">No Data</string>
+
 
 </resources>

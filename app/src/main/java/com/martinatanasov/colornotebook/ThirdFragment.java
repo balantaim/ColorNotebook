@@ -1,6 +1,8 @@
 package com.martinatanasov.colornotebook;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ public class ThirdFragment extends Fragment {
 
     Button btnDone, btnPrevious;
     ViewPager2 viewPager2;
+    private static final String SHARED_PREF = "sharedPref";
+    private static final String DISABLE_TUTORIAL = "disableTutorial";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,10 +71,17 @@ public class ThirdFragment extends Fragment {
         btnPrevious=view.findViewById(R.id.btnPrevious);
         viewPager2 = getActivity().findViewById(R.id.viewPager);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        //checkBox.setChecked(sharedPreferences.getBoolean(DISABLE_TUTORIAL, false));
+
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity().getApplication(), MainActivity.class));
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(DISABLE_TUTORIAL, true);
+                editor.apply();
+                Intent intent = new Intent(getActivity().getApplication(), MainActivity.class);
+                startActivity(intent);
             }
         });
 

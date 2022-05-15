@@ -15,71 +15,189 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical"
-        android:padding="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/eventTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:ems="10"
-            android:hint="@string/hintTitle"
-            android:inputType="textPersonName"
-            android:textSize="20sp"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/eventLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:drawableEnd="@drawable/ic_location"
-            android:ems="10"
-            android:hint="@string/hintLocation"
-            android:inputType="textPersonName"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textSize="20sp"/>
+            <EditText
+                android:id="@+id/eventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:ems="10"
+                android:hint="@string/hintTitle"
+                android:inputType="textPersonName"
+                android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/eventNode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="58dp"
-            android:background="@drawable/rounded_bg"
-            android:ems="10"
-            android:gravity="top"
-            android:hint="@string/hintNote"
-            android:inputType="textMultiLine"
-            android:singleLine="false"
-            android:minHeight="100dp"
-            android:paddingVertical="8dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textSize="20sp" />
+            <EditText
+                android:id="@+id/eventLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:drawableEnd="@drawable/ic_location"
+                android:ems="10"
+                android:hint="@string/hintLocation"
+                android:inputType="textPersonName"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_delete"
-            android:minHeight="50dp"
-            android:text="@string/done"
-            android:textColor="?attr/customColorValue"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <EditText
+                android:id="@+id/eventNode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="58dp"
+                android:background="@drawable/rounded_bg"
+                android:ems="10"
+                android:gravity="top"
+                android:hint="@string/hintNote"
+                android:inputType="textMultiLine"
+                android:minHeight="100dp"
+                android:paddingVertical="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:singleLine="false"
+                android:textSize="20sp" />
 
-    </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="58dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/advOptions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_arrow_down"
+                            android:elevation="8dp"
+                            android:text="@string/advanced_options"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/expandableLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp">
+
+                            <TextView
+                                android:id="@+id/txtFrom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:text="@string/from"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/startTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:text="time"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/startDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:text="date"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date2"
+                                app:layout_constraintBottom_toBottomOf="@+id/textView8"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                                app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+                            <TextView
+                                android:id="@+id/textView8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="48dp"
+                                android:text="@string/to"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="time2"
+                                app:layout_constraintBottom_toBottomOf="@+id/textView9"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                                app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.14" />
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.8" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_delete"
+                android:minHeight="50dp"
+                android:text="@string/done"
+                android:textColor="?attr/customColorValue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

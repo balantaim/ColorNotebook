@@ -40,11 +40,16 @@ public class MainActivity extends AppCompatActivity {
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     private static final String TAG = "MainActivity";
+    private static final String DISABLE_TUTORIAL = "disableTutorial";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //hide Status Bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //Load tutorial status
+        loadTutorial();
+
         //Load skin resource
         skinTheme();
         setContentView(R.layout.activity_main);
@@ -176,6 +181,14 @@ public class MainActivity extends AppCompatActivity {
             customAdapter.notifyDataSetChanged();
         }
     };
+
+    private void loadTutorial(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        boolean checkTutorial = (sharedPreferences.getBoolean(DISABLE_TUTORIAL, false));
+        if (!checkTutorial){
+            startActivity(new Intent(MainActivity.this, TutorialActivity.class));
+        }
+    }
 
     //Load Theme Setting
     private void skinTheme(){

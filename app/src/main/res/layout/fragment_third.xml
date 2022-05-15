@@ -24,15 +24,17 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/description_third_fragment"
         android:scaleType="center"
         android:src="@drawable/ic_tut3"
         app:layout_constraintBottom_toTopOf="@+id/btnPrevious"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        android:contentDescription="@string/description_third_fragment" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/btnPrevious"

@@ -6,15 +6,23 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.cardview.widget.CardView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 public class AddActivity extends AppCompatActivity {
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
+    TextView advOptions;
+    LinearLayout expandableLayout;
+    CardView cardView;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -33,11 +41,13 @@ public class AddActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
 
+        advOptions =findViewById(R.id.advOptions);
+        cardView =findViewById(R.id.cardView);
+        expandableLayout =findViewById(R.id.expandableLayout);
         eventTitle =findViewById(R.id.eventTitle);
         eventLocation =findViewById(R.id.eventLocation);
         eventInput =findViewById(R.id.eventNode);
         btnAdd=findViewById(R.id.btnAdd);
-
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +57,13 @@ public class AddActivity extends AppCompatActivity {
                             eventLocation.getText().toString().trim(),
                             eventInput.getText().toString().trim());
                 }
+            }
+        });
+
+        advOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                expandView();
             }
         });
     }
@@ -78,6 +95,18 @@ public class AddActivity extends AppCompatActivity {
         return false;
     }
 
+    public void expandView(){
+        if (expandableLayout.getVisibility() == View.GONE){
+            TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
+            expandableLayout.setVisibility(View.VISIBLE);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+        }else{
+            TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
+            expandableLayout.setVisibility(View.GONE);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+        }
+    }
+
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 //        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
@@ -102,5 +131,4 @@ public class AddActivity extends AppCompatActivity {
                 break;
         }
     }
-
 }
