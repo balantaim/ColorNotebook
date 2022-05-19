@@ -35,11 +35,16 @@ public class AddActivity extends AppCompatActivity {
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
+    public static int YEAR=0, MONTH=0, DATE=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //hide Status Bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //Increase bottom area when the keyboard appears
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         //Load skin resource
         skinTheme();
         super.onCreate(savedInstanceState);
@@ -117,8 +122,8 @@ public class AddActivity extends AppCompatActivity {
         calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH + 1));
         dateEnd.setText(charSequence);
         if (is24format){
-            timeStart.setText(Integer.toString(HOUR)+":"+Integer.toString(MINUTE));
-            timeEnd.setText(Integer.toString(HOUR)+":"+Integer.toString(MINUTE));
+            timeStart.setText(intToTxtTime(HOUR, MINUTE));
+            timeEnd.setText(intToTxtTime(HOUR, MINUTE));
         }else{
             Calendar calendar1 = Calendar.getInstance();
             calendar1.set(Calendar.HOUR, HOUR);
@@ -129,20 +134,39 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
+    private String intToTxtTime(int h, int m){
+        String s ="";
+        if(h<10){
+            s+="0" + Integer.toString(h);
+        }else{
+            s+="" + Integer.toString(h);
+        }
+        if(m<10){
+            s+=":0" + Integer.toString(m);
+        }else{
+            s+=":" + Integer.toString(m);
+        }
+        return s;
+    }
+
     private void setEndDate(){
         Calendar calendar = Calendar.getInstance();
         String data = dateEnd.getText().toString();
         /* TODO */
-
 
         Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
     }
 
     private void setStartDate(){
         Calendar calendar = Calendar.getInstance();
-        int YEAR = calendar.get(Calendar.YEAR);
-        int MONTH = calendar.get(Calendar.MONTH);
-        int DATE = calendar.get(Calendar.DATE);
+        if(YEAR>-1){
+            YEAR = calendar.get(Calendar.YEAR);
+            MONTH = calendar.get(Calendar.MONTH);
+            DATE = calendar.get(Calendar.DATE);
+        }
+//        calendar.set(Calendar.YEAR, YEAR);
+//        calendar.set(Calendar.MONTH, MONTH);
+//        calendar.set(Calendar.DATE, DATE);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -154,8 +178,15 @@ public class AddActivity extends AppCompatActivity {
 
                 CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar1);
                 dateStart.setText(charSequence);
+                //save data for next reuse
+                YEAR=year;
+                MONTH=month;
+                DATE=date;
+                System.out.println(""+YEAR +MONTH +DATE);
+                System.out.println(""+year +month +date);
             }
         },YEAR, MONTH, DATE);
+        //datePickerDialog.updateDate(YEAR,2,3);
         datePickerDialog.show();
     }
 
@@ -169,7 +200,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 if (is24format){
-                    timeStart.setText(Integer.toString(hour)+":"+Integer.toString(minute));
+                    timeStart.setText(intToTxtTime(hour, minute));
                 }else{
                     Calendar calendar1 = Calendar.getInstance();
                     calendar1.set(Calendar.HOUR, hour);

@@ -35,6 +35,7 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DefaultColorNotebook"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".AddActivity"
@@ -42,6 +43,7 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DefaultColorNotebook"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".TutorialActivity"

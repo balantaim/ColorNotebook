@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/badgeStyle"
+    android:fitsSystemWindows="true"
     tools:context=".AddActivity">
 
     <ScrollView
@@ -67,7 +68,8 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:singleLine="false"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:imeOptions="actionDone"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -89,12 +91,12 @@
                             android:id="@+id/advOptions"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/ic_arrow_down"
                             android:elevation="8dp"
                             android:text="@string/advanced_options"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="24sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:drawableRightCompat="@drawable/ic_arrow_down" />
 
                     </LinearLayout>
 
