@@ -152,8 +152,7 @@ public class AddActivity extends AppCompatActivity {
     private void setEndDate(){
         Calendar calendar = Calendar.getInstance();
         String data = dateEnd.getText().toString();
-
-        /* TODO */
+        // todo
 
         Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
     }
