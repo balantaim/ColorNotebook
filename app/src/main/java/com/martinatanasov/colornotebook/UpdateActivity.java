@@ -6,12 +6,16 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -58,14 +62,7 @@ public class UpdateActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Update DB
-                MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
-                title = eventTitle.getText().toString().trim();
-                location = eventLocation.getText().toString().trim();
-                input = eventInput.getText().toString().trim();
-                myDB.updateData(id, title, location, input);
-
-                Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input);
+                onUpdateBtn();
             }
         });
 
@@ -76,6 +73,17 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void onUpdateBtn(){
+        //Update DB
+        MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
+        title = eventTitle.getText().toString().trim();
+        location = eventLocation.getText().toString().trim();
+        input = eventInput.getText().toString().trim();
+        myDB.updateData(id, title, location, input);
+
+        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input);
     }
 
     void getAndSetIntentData(){
@@ -117,6 +125,22 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.update_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menuUpdate) {
+            onUpdateBtn();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressLint("ResourceAsColor")

@@ -5,6 +5,9 @@ import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -72,12 +76,7 @@ public class AddActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!tryEmpty(eventTitle.getText().toString(), eventLocation.getText().toString(), eventInput.getText().toString())){
-                    MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
-                    myDB.addEvent(eventTitle.getText().toString().trim(),
-                            eventLocation.getText().toString().trim(),
-                            eventInput.getText().toString().trim());
-                }
+                onAddBtn();
             }
         });
 
@@ -108,6 +107,17 @@ public class AddActivity extends AppCompatActivity {
                 setEndDate();
             }
         });
+    }
+
+    private void onAddBtn(){
+        if(eventTitle.getText().toString().length()>2){
+            if(!tryEmpty(eventTitle.getText().toString(), eventLocation.getText().toString(), eventInput.getText().toString())){
+                MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
+                myDB.addEvent(eventTitle.getText().toString().trim(),
+                        eventLocation.getText().toString().trim(),
+                        eventInput.getText().toString().trim());
+            }
+        }
     }
 
     private void initAdvancedOptions(){
@@ -239,6 +249,22 @@ public class AddActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menuUpdate) {
+            onAddBtn();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void expandView(){
