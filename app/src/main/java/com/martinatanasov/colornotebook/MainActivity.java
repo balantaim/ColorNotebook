@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     private static final String TAG = "MainActivity";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
-    private static boolean drawerStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
         nav_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!drawerStatus){
-                    drawerLayout.openDrawer(navigationView);
-                    drawerStatus=true;
+                if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 }else{
-                    drawerLayout.closeDrawers();
-                    drawerStatus=false;
+                    drawerLayout.openDrawer(GravityCompat.START);
                 }
             }
         });
@@ -92,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //Make navigation drawer responsive
+        navigationView.bringToFront();
 
         myDB = new MyDatabaseHelper(MainActivity.this);
         event_id = new ArrayList<>();
@@ -239,6 +239,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
 //        super.onBackPressed();
     }
 }

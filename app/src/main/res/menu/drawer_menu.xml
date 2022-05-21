@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/first"
+            android:icon="@drawable/ic_indent_in"
+            android:title="Home"/>
+        <item android:id="@+id/second"
+            android:icon="@drawable/ic_indent_in"
+            android:title="Home"/>
+        <item android:id="@+id/third"
+            android:icon="@drawable/ic_indent_in"
+            android:title="Home"/>
+    </group>
+
+    <item android:title="neshto">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/four"
+                    android:icon="@drawable/ic_indent_in"
+                    android:title="Home"/>
+                <item android:id="@+id/five"
+                    android:icon="@drawable/ic_indent_in"
+                    android:title="Home"/>
+                <item android:id="@+id/six"
+                    android:icon="@drawable/ic_indent_in"
+                    android:title="Home"/>
+            </group>
+        </menu>
+    </item>
+</menu>
