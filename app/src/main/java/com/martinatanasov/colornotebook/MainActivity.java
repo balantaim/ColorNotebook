@@ -18,17 +18,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    FloatingActionButton add_button;
+    FloatingActionButton add_button, nav_button;
     CustomAdapter customAdapter;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     MyDatabaseHelper myDB;
     public static ArrayList<String> event_id;
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     private static final String TAG = "MainActivity";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
+    private static boolean drawerStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,22 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView= findViewById(R.id.recyclerView);
         add_button=findViewById(R.id.add_button);
+        nav_button=findViewById(R.id.navigation_button);
+        drawerLayout=findViewById(R.id.layoutDrawer);
+        navigationView=findViewById(R.id.navDrawer);
+
+        nav_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!drawerStatus){
+                    drawerLayout.openDrawer(navigationView);
+                    drawerStatus=true;
+                }else{
+                    drawerLayout.closeDrawers();
+                    drawerStatus=false;
+                }
+            }
+        });
 
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
