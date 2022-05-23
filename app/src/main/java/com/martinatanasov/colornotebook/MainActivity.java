@@ -52,20 +52,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //hide Status Bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         //Load tutorial status
         loadTutorial();
-
         //Load skin resource
         skinTheme();
         setContentView(R.layout.activity_main);
-
 //        Day and Night modes
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 //        getDelegate().applyDayNight();
 
         super.onCreate(savedInstanceState);
-
         recyclerView= findViewById(R.id.recyclerView);
         add_button=findViewById(R.id.add_button);
         nav_button=findViewById(R.id.navigation_button);
