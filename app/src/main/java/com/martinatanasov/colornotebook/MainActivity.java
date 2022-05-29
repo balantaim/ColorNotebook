@@ -23,12 +23,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
     FloatingActionButton add_button, nav_button;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         nav_button=findViewById(R.id.navigation_button);
         drawerLayout=findViewById(R.id.layoutDrawer);
         navigationView=findViewById(R.id.navDrawer);
+        setNavigationViewListener();
 
         nav_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 
+    //Initiate Navigation item selection
+    private void setNavigationViewListener() {
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
     //Update date after move from UpdateAct to MainAct
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -134,6 +141,28 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.my_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    //Navigation menu
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        switch (item.getItemId()) {
+
+            case R.id.exit: {
+                finish();
+                System.exit(0);
+                break;
+            }
+            default: {
+                //drawerLayout.closeDrawer(GravityCompat.START);
+                break;
+            }
+        }
+        //close navigation drawer
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @SuppressLint("NonConstantResourceId")

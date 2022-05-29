@@ -24,9 +24,9 @@
                 <item android:id="@+id/five"
                     android:icon="@drawable/ic_indent_in"
                     android:title="Home"/>
-                <item android:id="@+id/six"
-                    android:icon="@drawable/ic_indent_in"
-                    android:title="Home"/>
+                <item android:id="@+id/exit"
+                    android:icon="@drawable/ic_power_off"
+                    android:title="Exit"/>
             </group>
         </menu>
     </item>

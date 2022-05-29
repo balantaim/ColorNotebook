@@ -92,6 +92,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:elevation="8dp"
+                            android:paddingVertical="10dp"
                             android:text="@string/advanced_options"
                             android:layout_marginStart="4dp"
                             android:textColor="?attr/colorPrimary"
@@ -127,6 +128,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
+                                android:contentDescription="@string/startTime"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -136,6 +138,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
+                                android:contentDescription="@string/startDate"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                                 app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -145,6 +148,7 @@
                                 android:id="@+id/endDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/endTime"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintBottom_toBottomOf="@+id/txtTo"
@@ -160,6 +164,7 @@
                                 android:layout_marginTop="48dp"
                                 android:paddingBottom="16dp"
                                 android:text="@string/to"
+                                app:layout_constraintBottom_toTopOf="@+id/allDaySw"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
 
@@ -167,11 +172,53 @@
                                 android:id="@+id/endTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/endTime"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintBottom_toBottomOf="@+id/endDate"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                                 app:layout_constraintTop_toTopOf="@+id/endDate" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/allDaySw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginEnd="10dp"
+                                android:checked="false"
+                                android:text="@string/allDay"
+                                app:layout_constraintBottom_toTopOf="@+id/alarmSw"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/txtTo" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/alarmSw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginTop="32dp"
+                                android:checked="false"
+                                android:text="@string/alarmNotifications"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/allDaySw" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/silentNotificationSw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginTop="32dp"
+                                android:checked="true"
+                                android:text="@string/silentNotifications"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/alarmSw" />
 
                             <androidx.constraintlayout.widget.Guideline
                                 android:id="@+id/guideline6"

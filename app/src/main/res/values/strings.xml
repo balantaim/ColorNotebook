@@ -24,6 +24,9 @@
     <string name="advanced_options">Advanced Options</string>
     <string name="from">From:</string>
     <string name="to">To:</string>
+    <string name="allDay">All day event</string>
+    <string name="silentNotifications">Silent notifications</string>
+    <string name="alarmNotifications">Sound notifications</string>
     <!--    tutorial fragments-->
     <string name="description_first_fragment">Create and edit events</string>
     <string name="description_second_fragment">Enter your data to the text fields</string>
@@ -32,6 +35,11 @@
     <string name="fragThreeHeader">Add location to your event</string>
     <string name="fragTwoHeader">Create you own event</string>
     <string name="fragOneHeader">Welcome to tutorial guide</string>
+    <!--    Description-->
+    <string name="startDate">Event start date</string>
+    <string name="endDate">Event end date</string>
+    <string name="startTime">Event start time</string>
+    <string name="endTime">Event end time</string>
     <!--    Menu-->
     <string name="forceDarkMode">Force dark mode</string>
     <string name="skinColor">Skin color</string>
