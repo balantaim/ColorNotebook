@@ -120,6 +120,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="32dp"
                                 android:text="@string/from"
+                                android:focusable="false"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -128,6 +129,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
+                                android:focusable="false"
                                 android:contentDescription="@string/startTime"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
@@ -138,6 +140,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
+                                android:focusable="false"
                                 android:contentDescription="@string/startDate"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -150,6 +153,7 @@
                                 android:layout_height="wrap_content"
                                 android:contentDescription="@string/endTime"
                                 android:paddingBottom="16dp"
+                                android:focusable="false"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintBottom_toBottomOf="@+id/txtTo"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -163,6 +167,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="48dp"
                                 android:paddingBottom="16dp"
+                                android:focusable="false"
                                 android:text="@string/to"
                                 app:layout_constraintBottom_toTopOf="@+id/allDaySw"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -172,6 +177,7 @@
                                 android:id="@+id/endTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:focusable="false"
                                 android:contentDescription="@string/endTime"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
@@ -188,13 +194,13 @@
                                 android:layout_marginEnd="10dp"
                                 android:checked="false"
                                 android:text="@string/allDay"
-                                app:layout_constraintBottom_toTopOf="@+id/alarmSw"
+                                app:layout_constraintBottom_toTopOf="@+id/soundNotSw"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/txtTo" />
 
                             <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/alarmSw"
+                                android:id="@+id/soundNotSw"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -218,7 +224,7 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/alarmSw" />
+                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw" />
 
                             <androidx.constraintlayout.widget.Guideline
                                 android:id="@+id/guideline6"

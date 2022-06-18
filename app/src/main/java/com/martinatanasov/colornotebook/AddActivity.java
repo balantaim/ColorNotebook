@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
@@ -34,12 +35,16 @@ public class AddActivity extends AppCompatActivity {
     TextView advOptions, dateStart, dateEnd, timeStart, timeEnd;
     LinearLayout expandableLayout;
     CardView cardView;
+    DatePickerDialog datePickerDialog;
+    SwitchCompat allDaySw, soundNotSw, silentNotSw;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
-    public static int YEAR=0, MONTH=0, DATE=0;
+    public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
+    public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
+    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,7 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
 
         advOptions =findViewById(R.id.advOptions);
@@ -68,43 +74,40 @@ public class AddActivity extends AppCompatActivity {
         eventLocation =findViewById(R.id.eventLocation);
         eventInput =findViewById(R.id.eventNode);
         btnAdd=findViewById(R.id.btnAdd);
+        allDaySw=findViewById(R.id.allDaySw);
+        soundNotSw =findViewById(R.id.soundNotSw);
+        silentNotSw =findViewById(R.id.silentNotificationSw);
 
         if ((dateStart.getText().toString().equals("") || dateStart == null)
         && (dateEnd.getText().toString().equals("") || dateEnd == null)){
             initAdvancedOptions();
         }
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddBtn();
-            }
-        });
+        btnAdd.setOnClickListener(v -> onAddBtn());
 
-        advOptions.setOnClickListener(new View.OnClickListener() {
+        advOptions.setOnClickListener(view -> expandView());
+
+        dateStart.setOnClickListener(view -> setStartDate());
+
+        timeStart.setOnClickListener(view -> setStartTime());
+
+        dateEnd.setOnClickListener(view -> setEndDate());
+
+        allDaySw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                expandView();
+                dayEventBool = allDaySw.isChecked() ? 1:0;
             }
         });
-
-        dateStart.setOnClickListener(new View.OnClickListener() {
+        soundNotSw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setStartDate();
+                soundNotificationBool = soundNotSw.isChecked() ? 1:0;
             }
         });
-
-        timeStart.setOnClickListener(new View.OnClickListener() {
+        silentNotSw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setStartTime();
-            }
-        });
-
-        dateEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setEndDate();
+                silentNotificationBool = silentNotSw.isChecked() ? 1:0;
             }
         });
     }
@@ -172,54 +175,59 @@ public class AddActivity extends AppCompatActivity {
         if(YEAR>-1){
             YEAR = calendar.get(Calendar.YEAR);
             MONTH = calendar.get(Calendar.MONTH);
-            DATE = calendar.get(Calendar.DATE);
+            DAY = calendar.get(Calendar.DATE);
         }
-//        calendar.set(Calendar.YEAR, YEAR);
-//        calendar.set(Calendar.MONTH, MONTH);
-//        calendar.set(Calendar.DATE, DATE);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            {
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(Calendar.YEAR, year);
                 calendar1.set(Calendar.MONTH, month);
-                calendar1.set(Calendar.DATE, date);
+                calendar1.set(Calendar.DATE, day);
 
                 CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar1);
                 dateStart.setText(charSequence);
                 //save data for next reuse
                 YEAR=year;
                 MONTH=month;
-                DATE=date;
-                System.out.println(""+YEAR +MONTH +DATE);
-                System.out.println(""+year +month +date);
+                DAY =day;
             }
-        },YEAR, MONTH, DATE);
-        //datePickerDialog.updateDate(YEAR,2,3);
+        };
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR, MONTH, DAY);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
+
     }
 
     private void setStartTime(){
-        Calendar calendar = Calendar.getInstance();
-        int HOUR = calendar.get(Calendar.HOUR);
-        int MINUTE = calendar.get(Calendar.MINUTE);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR, HOUR);
+//        calendar.set(Calendar.MINUTE, MINUTES);
         boolean is24format = DateFormat.is24HourFormat(this);
 
-        TimePickerDialog timePickerDialog= new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            public void onTimeSet(TimePicker timePicker, int Hour, int Minutes) {
+                if(Hour!=0 && Minutes!=0){
+                    HOUR = Hour;
+                    MINUTES = Minutes;
+                }
                 if (is24format){
-                    timeStart.setText(intToTxtTime(hour, minute));
+                    timeStart.setText(intToTxtTime(HOUR, MINUTES));
                 }else{
                     Calendar calendar1 = Calendar.getInstance();
-                    calendar1.set(Calendar.HOUR, hour);
-                    calendar1.set(Calendar.MINUTE, minute);
+                    calendar1.set(Calendar.HOUR, HOUR);
+                    calendar1.set(Calendar.MINUTE, MINUTES);
                     CharSequence charSequence= DateFormat.format("hh:mm aa", calendar1);
                     timeStart.setText(charSequence);
                 }
             }
-        },HOUR, MINUTE, is24format);
+        };
+        TimePickerDialog timePickerDialog= new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
+        //timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
     }
 
