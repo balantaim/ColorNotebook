@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/teal_900</item>
         <item name="colorOnSecondary">@color/teal_900</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/gray</item>
         <item name="badgeStyle">@color/gray</item>
@@ -27,7 +27,7 @@
         <item name="colorSecondaryVariant">@color/blue_300</item>
         <item name="colorOnSecondary">@color/blue_300</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/purple_900</item>
         <item name="badgeStyle">@color/purple_900</item>
@@ -44,7 +44,7 @@
         <item name="colorSecondaryVariant">@color/black</item>
         <item name="colorOnSecondary">@color/gray</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/black</item>
         <item name="badgeStyle">@color/gray</item>
@@ -61,7 +61,7 @@
         <item name="colorSecondaryVariant">@color/teal_900</item>
         <item name="colorOnSecondary">@color/teal_900</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/gray</item>
         <item name="badgeStyle">@color/gray</item>

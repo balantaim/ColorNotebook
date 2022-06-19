@@ -25,6 +25,10 @@
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="allDay">All day event</string>
+    <string name="pickColor">Event color</string>
+    <string name="avatarIcon">Avatar</string>
+    <string name="default_text">Default</string>
+    <string name="from_skin">From skin</string>
     <string name="silentNotifications">Silent notifications</string>
     <string name="alarmNotifications">Sound notifications</string>
     <!--    tutorial fragments-->

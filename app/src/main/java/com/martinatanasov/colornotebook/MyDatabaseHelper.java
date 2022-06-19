@@ -19,6 +19,13 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
     private final static String COLUMN_TITLE = "event_title";
     private final static String COLUMN_LOCATION = "event_location";
     private final static String COLUMN_EVENT = "event_node";
+    private final static String COLUMN_START_DATE = "start_date";
+    private final static String COLUMN_END_DATE = "end_date";
+    private final static String COLUMN_DAY_EVENT = "day_event";
+    private final static String COLUMN_SOUND_NOTIFICATION = "sound_notification";
+    private final static String COLUMN_SILENT_NOTIFICATIONS = "silent_notification";
+    private final static String COLUMN_PICKED_COLOR = "picked_color";
+    private final static String COLUMN_PICKED_AVATAR = "picked_avatar";
 
     MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

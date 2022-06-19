@@ -32,7 +32,7 @@ import java.util.Calendar;
 public class AddActivity extends AppCompatActivity {
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
-    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd;
+    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, avatar;
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
@@ -44,7 +44,7 @@ public class AddActivity extends AppCompatActivity {
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
-    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=1;
+    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=1, colorPicker=0, avatarPicker=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,11 @@ public class AddActivity extends AppCompatActivity {
         allDaySw=findViewById(R.id.allDaySw);
         soundNotSw =findViewById(R.id.soundNotSw);
         silentNotSw =findViewById(R.id.silentNotificationSw);
+        eventColor =findViewById(R.id.eventColor);
+        avatar =findViewById(R.id.avatar);
+
+        //Focus first edit text
+        eventTitle.requestFocus();
 
         if ((dateStart.getText().toString().equals("") || dateStart == null)
         && (dateEnd.getText().toString().equals("") || dateEnd == null)){
