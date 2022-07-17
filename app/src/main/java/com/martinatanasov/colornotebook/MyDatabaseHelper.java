@@ -14,7 +14,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
     private final Context context;
     private final static String DATABASE_NAME = "ColorEventsLibrary.db";
     private final static int DATABASE_VERSION = 1;
-    private final static String TABLE_NAME = "my_library";
+    private final static String TABLE_NAME = "my_events";
     private final static String COLUMN_ID = "_id";
     private final static String COLUMN_TITLE = "event_title";
     private final static String COLUMN_LOCATION = "event_location";
@@ -38,7 +38,15 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
                         " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_TITLE + " TEXT, " +
                         COLUMN_LOCATION + " TEXT, " +
-                        COLUMN_EVENT + " TEXT);";
+                        COLUMN_EVENT + " TEXT, " +
+                        COLUMN_PICKED_COLOR + " INTEGER, " +
+                        COLUMN_PICKED_AVATAR + " INTEGER, " +
+                        COLUMN_START_DATE + " TEXT, " +
+                        COLUMN_END_DATE + " TEXT, " +
+                        COLUMN_DAY_EVENT + " INTEGER, " +
+                        COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
+                        COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
+
         db.execSQL(query);
     }
 
@@ -48,13 +56,21 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addEvent(String title, String location, String input){
+    void addEvent(String title, String location, String input, int color, int avatar, String startTime, String endTime,
+                  int allDay , int soundNotifications, int silentNotifications){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_LOCATION, location);
         cv.put(COLUMN_EVENT, input);
+        cv.put(COLUMN_PICKED_COLOR, color);
+        cv.put(COLUMN_PICKED_AVATAR, avatar);
+        cv.put(COLUMN_START_DATE, startTime);
+        cv.put(COLUMN_END_DATE, endTime);
+        cv.put(COLUMN_DAY_EVENT, allDay);
+        cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
+        cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
 
         long result = db.insert(TABLE_NAME, null, cv);
         if (result == -1){
