@@ -128,8 +128,8 @@ public class AddActivity extends AppCompatActivity {
                         eventInput.getText().toString().trim(),
                         colorPicker,
                         avatarPicker,
-                        startDate,
-                        endDate,
+                        YEAR, MONTH, DAY, HOUR, MINUTES,
+                        YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
                         dayEventBool,
                         soundNotificationBool,
                         silentNotificationBool);

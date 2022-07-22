@@ -19,8 +19,16 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
     private final static String COLUMN_TITLE = "event_title";
     private final static String COLUMN_LOCATION = "event_location";
     private final static String COLUMN_EVENT = "event_node";
-    private final static String COLUMN_START_DATE = "start_date";
-    private final static String COLUMN_END_DATE = "end_date";
+    private final static String COLUMN_START_YEAR = "start_year";
+    private final static String COLUMN_START_MONTH = "start_month";
+    private final static String COLUMN_START_DAY = "start_day";
+    private final static String COLUMN_START_HOUR = "start_hour";
+    private final static String COLUMN_START_MINUTES = "start_minutes";
+    private final static String COLUMN_END_YEAR = "end_year";
+    private final static String COLUMN_END_MONTH = "end_month";
+    private final static String COLUMN_END_DAY = "end_day";
+    private final static String COLUMN_END_HOUR = "end_hour";
+    private final static String COLUMN_END_MINUTES = "end_minutes";
     private final static String COLUMN_DAY_EVENT = "day_event";
     private final static String COLUMN_SOUND_NOTIFICATION = "sound_notification";
     private final static String COLUMN_SILENT_NOTIFICATIONS = "silent_notification";
@@ -41,8 +49,16 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_EVENT + " TEXT, " +
                         COLUMN_PICKED_COLOR + " INTEGER, " +
                         COLUMN_PICKED_AVATAR + " INTEGER, " +
-                        COLUMN_START_DATE + " TEXT, " +
-                        COLUMN_END_DATE + " TEXT, " +
+                        COLUMN_START_YEAR + " INTEGER, " +
+                        COLUMN_START_MONTH + " INTEGER, " +
+                        COLUMN_START_DAY + " INTEGER, " +
+                        COLUMN_START_HOUR + " INTEGER, " +
+                        COLUMN_START_MINUTES + " INTEGER, " +
+                        COLUMN_END_YEAR + " INTEGER, " +
+                        COLUMN_END_MONTH + " INTEGER, " +
+                        COLUMN_END_DAY + " INTEGER, " +
+                        COLUMN_END_HOUR + " INTEGER, " +
+                        COLUMN_END_MINUTES + " INTEGER, " +
                         COLUMN_DAY_EVENT + " INTEGER, " +
                         COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
                         COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
@@ -56,7 +72,9 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addEvent(String title, String location, String input, int color, int avatar, String startTime, String endTime,
+    void addEvent(String title, String location, String input, int color, int avatar, int startYear,
+                  int startMonth, int startDay, int startHour, int startMinutes,
+                  int endYear, int endMonth, int endDay, int endHour, int endMinutes,
                   int allDay , int soundNotifications, int silentNotifications){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -66,8 +84,18 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_EVENT, input);
         cv.put(COLUMN_PICKED_COLOR, color);
         cv.put(COLUMN_PICKED_AVATAR, avatar);
-        cv.put(COLUMN_START_DATE, startTime);
-        cv.put(COLUMN_END_DATE, endTime);
+
+        cv.put(COLUMN_START_YEAR, startYear);
+        cv.put(COLUMN_START_MONTH, startMonth);
+        cv.put(COLUMN_START_DAY, startDay);
+        cv.put(COLUMN_START_HOUR, startHour);
+        cv.put(COLUMN_START_MINUTES, startMinutes);
+        cv.put(COLUMN_END_YEAR, endYear);
+        cv.put(COLUMN_END_MONTH, endMonth);
+        cv.put(COLUMN_END_DAY, endDay);
+        cv.put(COLUMN_END_HOUR, endHour);
+        cv.put(COLUMN_END_MINUTES, endMinutes);
+
         cv.put(COLUMN_DAY_EVENT, allDay);
         cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
