@@ -84,7 +84,6 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_EVENT, input);
         cv.put(COLUMN_PICKED_COLOR, color);
         cv.put(COLUMN_PICKED_AVATAR, avatar);
-
         cv.put(COLUMN_START_YEAR, startYear);
         cv.put(COLUMN_START_MONTH, startMonth);
         cv.put(COLUMN_START_DAY, startDay);
@@ -95,7 +94,6 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_END_DAY, endDay);
         cv.put(COLUMN_END_HOUR, endHour);
         cv.put(COLUMN_END_MINUTES, endMinutes);
-
         cv.put(COLUMN_DAY_EVENT, allDay);
         cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
@@ -120,12 +118,30 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    void updateData(String row_id, String title, String location, String node){
+    void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
+                    int startMonth, int startDay, int startHour, int startMinutes,
+                    int endYear, int endMonth, int endDay, int endHour, int endMinutes,
+                    int allDay , int soundNotifications, int silentNotifications){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_LOCATION, location);
         cv.put(COLUMN_EVENT, node);
+        cv.put(COLUMN_PICKED_COLOR, color);
+        cv.put(COLUMN_PICKED_AVATAR, avatar);
+        cv.put(COLUMN_START_YEAR, startYear);
+        cv.put(COLUMN_START_MONTH, startMonth);
+        cv.put(COLUMN_START_DAY, startDay);
+        cv.put(COLUMN_START_HOUR, startHour);
+        cv.put(COLUMN_START_MINUTES, startMinutes);
+        cv.put(COLUMN_END_YEAR, endYear);
+        cv.put(COLUMN_END_MONTH, endMonth);
+        cv.put(COLUMN_END_DAY, endDay);
+        cv.put(COLUMN_END_HOUR, endHour);
+        cv.put(COLUMN_END_MINUTES, endMinutes);
+        cv.put(COLUMN_DAY_EVENT, allDay);
+        cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
+        cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
 
         long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
         if (result == -1){

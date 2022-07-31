@@ -120,8 +120,6 @@ public class AddActivity extends AppCompatActivity {
     private void onAddBtn(){
         if(eventTitle.getText().toString().length()>2){
             if(!tryEmpty(eventTitle.getText().toString(), eventLocation.getText().toString(), eventInput.getText().toString())){
-                String startDate = YEAR +","+ MONTH +","+ DAY +","+ HOUR +","+ MINUTES;
-                String endDate = YEAR2 +","+ MONTH2 +","+ DAY2 +","+ HOUR2 +","+ MINUTES2;
                 MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
                 myDB.addEvent(eventTitle.getText().toString().trim(),
                         eventLocation.getText().toString().trim(),

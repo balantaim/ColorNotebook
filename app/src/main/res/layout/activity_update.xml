@@ -71,6 +71,230 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="38dp">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/pickColor"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/eventColor2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/from_skin"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/avatarIcon"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                <TextView
+                    android:id="@+id/avatar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/default_text"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventColor2" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="58dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/advOptions2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:elevation="8dp"
+                            android:paddingVertical="10dp"
+                            android:text="@string/advanced_options"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:drawableRightCompat="@drawable/ic_arrow_down" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/expandableLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/txtFrom2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="32dp"
+                                android:focusable="false"
+                                android:text="@string/from"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/startTime2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:contentDescription="@string/startTime"
+                                android:focusable="false"
+                                android:textColor="?attr/colorOnPrimary"
+                                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/startDate2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:contentDescription="@string/startDate"
+                                android:focusable="false"
+                                android:textColor="?attr/colorOnPrimary"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/endDate2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/endTime"
+                                android:focusable="false"
+                                android:paddingBottom="16dp"
+                                android:textColor="?attr/colorOnPrimary"
+                                app:layout_constraintBottom_toBottomOf="@+id/txtTo2"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                                app:layout_constraintTop_toTopOf="@+id/txtTo2" />
+
+                            <TextView
+                                android:id="@+id/txtTo2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="48dp"
+                                android:focusable="false"
+                                android:paddingBottom="16dp"
+                                android:text="@string/to"
+                                app:layout_constraintBottom_toTopOf="@+id/allDaySw2"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/txtFrom2" />
+
+                            <TextView
+                                android:id="@+id/endTime2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/endTime"
+                                android:focusable="false"
+                                android:paddingBottom="16dp"
+                                android:textColor="?attr/colorOnPrimary"
+                                app:layout_constraintBottom_toBottomOf="@+id/endDate2"
+                                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                                app:layout_constraintTop_toTopOf="@+id/endDate2" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/allDaySw2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="32dp"
+                                android:layout_marginEnd="10dp"
+                                android:checked="false"
+                                android:text="@string/allDay"
+                                app:layout_constraintBottom_toTopOf="@+id/soundNotSw2"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/txtTo2" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/soundNotSw2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="32dp"
+                                android:layout_marginEnd="10dp"
+                                android:checked="false"
+                                android:text="@string/alarmNotifications"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/allDaySw2" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/silentNotificationSw2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="32dp"
+                                android:layout_marginEnd="10dp"
+                                android:checked="true"
+                                android:text="@string/silentNotifications"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw2" />
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.12" />
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.7" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <Button
                 android:id="@+id/btnUpdate"
                 android:layout_width="match_parent"
