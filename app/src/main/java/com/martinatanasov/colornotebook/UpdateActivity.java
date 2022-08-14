@@ -42,7 +42,7 @@ public class UpdateActivity extends AppCompatActivity {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
-    static String id, title, location, input;
+    public static String id, title, location, input;
 
     public static final String TAG = "UpdateActivity";
     public static final String SHARED_PREF = "sharedPref";
@@ -129,9 +129,7 @@ public class UpdateActivity extends AppCompatActivity {
         });
         silentNotSw.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                silentNotificationBool = silentNotSw.isChecked() ? 1:0;
-            }
+            public void onClick(View view) { silentNotificationBool = silentNotSw.isChecked() ? 1:0; }
         });
 
     }
@@ -165,11 +163,50 @@ public class UpdateActivity extends AppCompatActivity {
             location = getIntent().getStringExtra("location");
             input = getIntent().getStringExtra("input");
 
+//            colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
+            colorPicker = getIntent().getIntExtra("color",0);
+            avatarPicker = Integer.parseInt(getIntent().getStringExtra("avatar"));
+            YEAR = Integer.parseInt(getIntent().getStringExtra("start_year"));
+            MONTH = Integer.parseInt(getIntent().getStringExtra("start_mouth"));
+            DAY = Integer.parseInt(getIntent().getStringExtra("start_day"));
+            HOUR = Integer.parseInt(getIntent().getStringExtra("start_hour"));
+            MINUTES = Integer.parseInt(getIntent().getStringExtra("start_minutes"));
+            YEAR2 = Integer.parseInt(getIntent().getStringExtra("end_year"));
+            MONTH2 = Integer.parseInt(getIntent().getStringExtra("end_month"));
+            DAY2 = Integer.parseInt(getIntent().getStringExtra("end_day"));
+            HOUR2 = Integer.parseInt(getIntent().getStringExtra("end_hour"));
+            MINUTES2 = Integer.parseInt(getIntent().getStringExtra("end_minutes"));
+            dayEventBool = Integer.parseInt(getIntent().getStringExtra("all_day"));
+            soundNotificationBool = Integer.parseInt(getIntent().getStringExtra("sound_notifications"));
+            silentNotificationBool = Integer.parseInt(getIntent().getStringExtra("silent_notifications"));
+
             //Setting Intent data
             eventTitle.setText(title);
             eventLocation.setText(location);
             eventInput.setText(input);
+            allDaySw.setChecked(dayEventBool == 1);
+            soundNotSw.setChecked(soundNotificationBool == 1);
+            silentNotSw.setChecked(silentNotificationBool == 1);
 
+
+            Calendar calendar = Calendar.getInstance();
+            boolean is24format = DateFormat.is24HourFormat(this);
+
+            CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar);
+            dateStart.setText(charSequence);
+            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH + 1));
+            dateEnd.setText(charSequence);
+            if (is24format){
+                timeStart.setText(intToTxtTime(HOUR, MINUTES));
+                timeEnd.setText(intToTxtTime(HOUR, MINUTES));
+            }else{
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.set(Calendar.HOUR, HOUR);
+                calendar1.set(Calendar.MINUTE, MINUTES);
+                CharSequence charSequence1= DateFormat.format("hh:mm aa", calendar1);
+                timeStart.setText(charSequence1);
+                timeEnd.setText(charSequence1);
+            }
         } else {
             Toast.makeText(this, R.string.toast_noData, Toast.LENGTH_SHORT).show();
         }
