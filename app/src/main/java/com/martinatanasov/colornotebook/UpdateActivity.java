@@ -163,8 +163,8 @@ public class UpdateActivity extends AppCompatActivity {
             location = getIntent().getStringExtra("location");
             input = getIntent().getStringExtra("input");
 
-//            colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
-            colorPicker = getIntent().getIntExtra("color",0);
+            colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
+//            colorPicker = getIntent().getIntExtra("color",0);
             avatarPicker = Integer.parseInt(getIntent().getStringExtra("avatar"));
             YEAR = Integer.parseInt(getIntent().getStringExtra("start_year"));
             MONTH = Integer.parseInt(getIntent().getStringExtra("start_mouth"));

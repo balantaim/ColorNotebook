@@ -3,7 +3,6 @@ package com.martinatanasov.colornotebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("location", String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("input", String.valueOf(txtNode.get(holder.getBindingAdapterPosition())));
 
-                intent.putExtra("color", (Bundle) int_color_picker.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("color", String.valueOf(int_color_picker.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("avatar", String.valueOf(int_avatar_picker.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("start_year", String.valueOf(int_start_year.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("start_mouth", String.valueOf(int_start_month.get(holder.getBindingAdapterPosition())));
@@ -94,7 +93,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("all_day", String.valueOf(int_all_day.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("sound_notifications", String.valueOf(int_sound_notifications.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("silent_notifications", String.valueOf(int_silent_notifications.get(holder.getBindingAdapterPosition())));
-                //Toast.makeText(context, "sound on?:" + int_start_hour.get(holder.getBindingAdapterPosition()) , Toast.LENGTH_SHORT).show();
                 activity.startActivityForResult(intent, 1);
             }
         });
