@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private final Context context;
-    private static ArrayList txtEventId, txtEventTitle, txtEventLocation, txtNode;
-    private static ArrayList int_color_picker, int_avatar_picker, int_start_year, int_start_month, int_start_day, int_start_hour,
+    private static ArrayList<String> txtEventId, txtEventTitle, txtEventLocation, txtNode;
+    private static ArrayList<Integer> int_color_picker, int_avatar_picker, int_start_year, int_start_month, int_start_day, int_start_hour,
             int_start_minutes, int_end_year, int_end_month, int_end_day, int_end_hour, int_end_minutes,
             int_all_day, int_sound_notifications, int_silent_notifications;
     private static final String TAG = "CustomAdapter";
@@ -78,21 +78,21 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("location", String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
                 intent.putExtra("input", String.valueOf(txtNode.get(holder.getBindingAdapterPosition())));
 
-                intent.putExtra("color", String.valueOf(int_color_picker.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("avatar", String.valueOf(int_avatar_picker.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("start_year", String.valueOf(int_start_year.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("start_mouth", String.valueOf(int_start_month.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("start_day", String.valueOf(int_start_day.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("start_hour", String.valueOf(int_start_hour.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("start_minutes", String.valueOf(int_start_minutes.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("end_year", String.valueOf(int_end_year.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("end_month", String.valueOf(int_end_month.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("end_day", String.valueOf(int_end_day.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("end_hour", String.valueOf(int_end_hour.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("end_minutes", String.valueOf(int_end_minutes.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("all_day", String.valueOf(int_all_day.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("sound_notifications", String.valueOf(int_sound_notifications.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("silent_notifications", String.valueOf(int_silent_notifications.get(holder.getBindingAdapterPosition())));
+                intent.putExtra("color", int_color_picker.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("avatar", int_avatar_picker.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_year", int_start_year.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_mouth", int_start_month.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_day", int_start_day.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_hour", int_start_hour.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_minutes", int_start_minutes.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_year", int_end_year.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_month", int_end_month.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_day", int_end_day.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_hour", int_end_hour.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_minutes", int_end_minutes.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("all_day", int_all_day.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("sound_notifications", int_sound_notifications.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("silent_notifications", int_silent_notifications.get(holder.getBindingAdapterPosition()));
                 activity.startActivityForResult(intent, 1);
             }
         });

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Rainbow Color Events</string>
-    <string name="version">v1.0.0</string>
     <string name="creator">Created by Rainbow Infinium</string>
 
     <string-array name="skin_array">
@@ -44,6 +43,8 @@
     <string name="endDate">Event end date</string>
     <string name="startTime">Event start time</string>
     <string name="endTime">Event end time</string>
+    <string name="loadWelcomeImage">Load welcome image</string>
+    <string name="loadAppVersion">Load application version</string>
     <!--    Menu-->
     <string name="forceDarkMode">Force dark mode</string>
     <string name="skinColor">Skin color</string>

@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CustomAdapter customAdapter;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-
     MyDatabaseHelper myDB;
     public static ArrayList<String> event_id;
     public static ArrayList<String> event_title;
@@ -62,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
-    private static final String TAG = "MainActivity";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void storeDataInArrays(){
         Cursor cursor = myDB.readAllData();
         if(cursor.getCount() == 0){
-            Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "storeDataInArrays: There is no data");
         } else {
             while (cursor.moveToNext()){
                 event_id.add(cursor.getString(0));
@@ -200,6 +200,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
 
+            case R.id.about: {
+                InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
+                infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
+                break;
+            }
             case R.id.exit: {
                 finish();
                 System.exit(0);

@@ -163,22 +163,22 @@ public class UpdateActivity extends AppCompatActivity {
             location = getIntent().getStringExtra("location");
             input = getIntent().getStringExtra("input");
 
-            colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
-//            colorPicker = getIntent().getIntExtra("color",0);
-            avatarPicker = Integer.parseInt(getIntent().getStringExtra("avatar"));
-            YEAR = Integer.parseInt(getIntent().getStringExtra("start_year"));
-            MONTH = Integer.parseInt(getIntent().getStringExtra("start_mouth"));
-            DAY = Integer.parseInt(getIntent().getStringExtra("start_day"));
-            HOUR = Integer.parseInt(getIntent().getStringExtra("start_hour"));
-            MINUTES = Integer.parseInt(getIntent().getStringExtra("start_minutes"));
-            YEAR2 = Integer.parseInt(getIntent().getStringExtra("end_year"));
-            MONTH2 = Integer.parseInt(getIntent().getStringExtra("end_month"));
-            DAY2 = Integer.parseInt(getIntent().getStringExtra("end_day"));
-            HOUR2 = Integer.parseInt(getIntent().getStringExtra("end_hour"));
-            MINUTES2 = Integer.parseInt(getIntent().getStringExtra("end_minutes"));
-            dayEventBool = Integer.parseInt(getIntent().getStringExtra("all_day"));
-            soundNotificationBool = Integer.parseInt(getIntent().getStringExtra("sound_notifications"));
-            silentNotificationBool = Integer.parseInt(getIntent().getStringExtra("silent_notifications"));
+//            colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
+            colorPicker = getIntent().getIntExtra("color",0);
+            avatarPicker = getIntent().getIntExtra("avatar", 0);
+            YEAR = getIntent().getIntExtra("start_year", 0);
+            MONTH = getIntent().getIntExtra("start_mouth", 0);
+            DAY = getIntent().getIntExtra("start_day", 0);
+            HOUR = getIntent().getIntExtra("start_hour", 0);
+            MINUTES = getIntent().getIntExtra("start_minutes", 0);
+            YEAR2 = getIntent().getIntExtra("end_year", 0);
+            MONTH2 = getIntent().getIntExtra("end_month", 0);
+            DAY2 = getIntent().getIntExtra("end_day", 0);
+            HOUR2 = getIntent().getIntExtra("end_hour", 0);
+            MINUTES2 = getIntent().getIntExtra("end_minutes", 0);
+            dayEventBool = getIntent().getIntExtra("all_day", 0);
+            soundNotificationBool = getIntent().getIntExtra("sound_notifications", 0);
+            silentNotificationBool = getIntent().getIntExtra("silent_notifications",1);
 
             //Setting Intent data
             eventTitle.setText(title);

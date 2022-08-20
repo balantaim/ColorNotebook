@@ -21,9 +21,9 @@
                 <item android:id="@+id/four"
                     android:icon="@drawable/ic_indent_in"
                     android:title="Home"/>
-                <item android:id="@+id/five"
+                <item android:id="@+id/about"
                     android:icon="@drawable/ic_indent_in"
-                    android:title="Home"/>
+                    android:title="About"/>
                 <item android:id="@+id/exit"
                     android:icon="@drawable/ic_power_off"
                     android:title="Exit"/>

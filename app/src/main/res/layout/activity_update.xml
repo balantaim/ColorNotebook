@@ -124,6 +124,7 @@
                 android:id="@+id/cardView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
                 android:layout_marginBottom="58dp">
 
                 <LinearLayout
@@ -268,6 +269,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="32dp"
                                 android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="24dp"
                                 android:checked="true"
                                 android:text="@string/silentNotifications"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -299,7 +301,7 @@
                 android:id="@+id/btnUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="52dp"
                 android:background="@drawable/btn_custom"
                 android:minHeight="50dp"
                 android:text="@string/update"
@@ -315,6 +317,7 @@
                 android:background="@drawable/btn_delete"
                 android:minHeight="52dp"
                 android:text="@string/delete"
+                android:layout_marginBottom="52dp"
                 android:textAllCaps="false"
                 android:textColor="@color/red"
                 android:textSize="20sp"

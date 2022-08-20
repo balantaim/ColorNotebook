@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -17,18 +18,23 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 public class OptionActivity extends AppCompatActivity {
 
     private Switch switchDarkMode;
-    private TextView txtSize;
+    private TextView txtSize, txtVersion;
     private Spinner spinner;
     private Button btnApply;
+    private ImageView loadImage;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     private static int theme;
+    private static final String imgUrl = BuildConfig.LOADING_IMAGE + ".png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +55,25 @@ public class OptionActivity extends AppCompatActivity {
         ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#201E1E"));
         actionBar.setBackgroundDrawable(colorDrawable);
 
+        txtVersion=findViewById(R.id.version);
+        loadImage=findViewById(R.id.loadImage);
         switchDarkMode=findViewById(R.id.switchDarkMode);
         txtSize=findViewById(R.id.txtSize);
         spinner=findViewById(R.id.spinnerSkins);
         btnApply=findViewById(R.id.btnApply);
+
+        //Check for current version and store it in TextView
+        txtVersion.setText("v." + BuildConfig.VERSION_NAME);
+
+        //Load image from webserver
+        Glide.with(OptionActivity.this)
+                .load(imgUrl)
+                .timeout(1000)
+                .fitCenter()
+                //reload image every time
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .error(R.drawable.ic_logo)
+                .into(loadImage);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         switchDarkMode.setChecked(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false));
