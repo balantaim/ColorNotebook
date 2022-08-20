@@ -81,7 +81,6 @@ public class OptionActivity extends AppCompatActivity {
         switchDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean(SWITCH_DARK_MODE, switchDarkMode.isChecked());
                 editor.apply();
