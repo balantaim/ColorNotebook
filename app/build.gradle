@@ -17,6 +17,7 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "LOADING_IMAGE", "\"${properties.getProperty("LOADING_IMAGE")}\""
+        buildConfigField "String", "CHECK_DEV", "\"${properties.getProperty("CHECK_DEV")}\""
     }
 
     buildTypes {
@@ -56,4 +57,7 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+
+    //Volley: http library
+    implementation 'com.android.volley:volley:1.2.1'
 }

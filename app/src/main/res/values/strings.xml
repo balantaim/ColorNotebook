@@ -30,6 +30,8 @@
     <string name="from_skin">From skin</string>
     <string name="silentNotifications">Silent notifications</string>
     <string name="alarmNotifications">Sound notifications</string>
+    <string name="error_404">Error: 404
+ Check your internet connection</string>
     <!--    tutorial fragments-->
     <string name="description_first_fragment">Create and edit events</string>
     <string name="description_second_fragment">Enter your data to the text fields</string>
@@ -38,6 +40,7 @@
     <string name="fragThreeHeader">Add location to your event</string>
     <string name="fragTwoHeader">Create you own event</string>
     <string name="fragOneHeader">Welcome to tutorial guide</string>
+    <string name="checkInfoDev">About application</string>
     <!--    Description-->
     <string name="startDate">Event start date</string>
     <string name="endDate">Event end date</string>

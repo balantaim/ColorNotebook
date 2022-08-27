@@ -14,6 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 public class InfoPopupFragment extends DialogFragment {
@@ -33,9 +42,42 @@ public class InfoPopupFragment extends DialogFragment {
         checkDev= (Button) view.findViewById(R.id.checkDev);
         layoutPopup= (ConstraintLayout) view.findViewById(R.id.layoutPopup);
 
-        checkDev.setOnClickListener(view1 -> txtDevelopers.setText("Martin Atanasov\n"));
+        final String url = BuildConfig.CHECK_DEV + ".json";
+
+        checkDev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Create http GET request for data using Volley library
+                //RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>(){
+                    @Override
+                    public void onResponse(JSONArray response){
+                        //Toast.makeText(getActivity().getApplicationContext(), ""+response, Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject objectAppList = response.getJSONObject(0);
+                            String devName = objectAppList.getString("developer");
+                            txtDevelopers.setText("Created by:\n\n" + devName
+                                    + "\n\nVersion " + BuildConfig.VERSION_NAME);
+                        } catch (JSONException e) {
+                            txtDevelopers.setText(getResources().getString(R.string.error_404));
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        txtDevelopers.setText(getResources().getString(R.string.error_404));
+                    }
+                });
+                //queue.add(request);
+                MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(request);
+            }
+        });
         layoutPopup.setOnClickListener(view1 -> dismiss());
 
         return view;
     }
+
+
+
 }
