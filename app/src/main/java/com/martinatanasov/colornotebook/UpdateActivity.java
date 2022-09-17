@@ -155,8 +155,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     void getAndSetIntentData(){
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")
-                && getIntent().hasExtra("location") && getIntent().hasExtra("input")){
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title")){
             // Getting data from Intent
             id = getIntent().getStringExtra("id");
             title = getIntent().getStringExtra("title");

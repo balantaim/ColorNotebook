@@ -37,6 +37,8 @@ public class AddActivity extends AppCompatActivity {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
+    static Calendar calendar;
+    static Calendar calendar1;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -83,6 +85,8 @@ public class AddActivity extends AppCompatActivity {
         //Focus first edit text
         eventTitle.requestFocus();
 
+        calendar = Calendar.getInstance();
+        calendar1 = Calendar.getInstance();
         if ((dateStart.getText().toString().equals("") || dateStart == null)
         && (dateEnd.getText().toString().equals("") || dateEnd == null)){
             initAdvancedOptions();
@@ -96,6 +100,8 @@ public class AddActivity extends AppCompatActivity {
         timeStart.setOnClickListener(view -> setStartTime());
 
         dateEnd.setOnClickListener(view -> setEndDate());
+
+        timeEnd.setOnClickListener(view -> setEndTime());
 
         allDaySw.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,27 +153,25 @@ public class AddActivity extends AppCompatActivity {
 //    }
 
     private void initAdvancedOptions(){
-        Calendar calendar = Calendar.getInstance();
-
-        int HOUR = calendar.get(Calendar.HOUR);
-        int MINUTE = calendar.get(Calendar.MINUTE);
+        int Hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int Minute = calendar.get(Calendar.MINUTE);
         boolean is24format = DateFormat.is24HourFormat(this);
 
         CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar);
         dateStart.setText(charSequence);
-        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH + 1));
         dateEnd.setText(charSequence);
         if (is24format){
-            timeStart.setText(intToTxtTime(HOUR, MINUTE));
-            timeEnd.setText(intToTxtTime(HOUR, MINUTE));
+            timeStart.setText(intToTxtTime(Hour, Minute));
+            timeEnd.setText(intToTxtTime(Hour, Minute));
         }else{
-            Calendar calendar1 = Calendar.getInstance();
-            calendar1.set(Calendar.HOUR, HOUR);
-            calendar1.set(Calendar.MINUTE, MINUTE);
-            CharSequence charSequence1= DateFormat.format("hh:mm aa", calendar1);
+            CharSequence charSequence1= DateFormat.format("hh:mm aa", calendar);
             timeStart.setText(charSequence1);
             timeEnd.setText(charSequence1);
         }
+        HOUR=Hour;
+        MINUTES=Minute;
+        HOUR2=Hour;
+        MINUTES2=Minute;
     }
 
     private String intToTxtTime(int h, int m){
@@ -186,32 +190,38 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void setEndDate(){
-        Calendar calendar = Calendar.getInstance();
-        String data = dateEnd.getText().toString();
-        // todo
-
-        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-    }
-
-    private void setStartDate(){
-        Calendar calendar = Calendar.getInstance();
-        if(YEAR>-1){
-            YEAR = calendar.get(Calendar.YEAR);
-            MONTH = calendar.get(Calendar.MONTH);
-            DAY = calendar.get(Calendar.DATE);
-        }
-
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day)
             {
-                Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(Calendar.YEAR, year);
                 calendar1.set(Calendar.MONTH, month);
                 calendar1.set(Calendar.DATE, day);
 
                 CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar1);
+                dateEnd.setText(charSequence);
+                //save data for next reuse
+                YEAR2=year;
+                MONTH2=month;
+                DAY2 =day;
+            }
+        };
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR2, MONTH2, DAY2);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.show();
+    }
+
+    private void setStartDate(){
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DATE, day);
+                CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar);
                 dateStart.setText(charSequence);
                 //save data for next reuse
                 YEAR=year;
@@ -222,31 +232,47 @@ public class AddActivity extends AppCompatActivity {
         datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR, MONTH, DAY);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
-
     }
 
-    private void setStartTime(){
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.HOUR, HOUR);
-//        calendar.set(Calendar.MINUTE, MINUTES);
+    private void setEndTime(){
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int Hour, int Minutes) {
-                if(Hour!=0 && Minutes!=0){
-                    HOUR = Hour;
-                    MINUTES = Minutes;
-                }
-                if (is24format){
-                    timeStart.setText(intToTxtTime(HOUR, MINUTES));
+                calendar1.set(Calendar.HOUR_OF_DAY, Hour);
+                calendar1.set(Calendar.MINUTE, Minutes);
+                CharSequence charSequence= DateFormat.format("hh:mm aa", calendar1);
+                if(is24format){
+                    timeEnd.setText(intToTxtTime(Hour, Minutes));
                 }else{
-                    Calendar calendar1 = Calendar.getInstance();
-                    calendar1.set(Calendar.HOUR, HOUR);
-                    calendar1.set(Calendar.MINUTE, MINUTES);
-                    CharSequence charSequence= DateFormat.format("hh:mm aa", calendar1);
+                    timeEnd.setText(charSequence);
+                }
+                HOUR2 = Hour;
+                MINUTES2 = Minutes;
+            }
+        };
+        TimePickerDialog timePickerDialog= new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
+        //timePickerDialog.setTitle("Select Time");
+        timePickerDialog.show();
+    }
+
+    private void setStartTime(){
+        boolean is24format = DateFormat.is24HourFormat(this);
+
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int Hour, int Minutes) {
+                calendar.set(Calendar.HOUR_OF_DAY, Hour);
+                calendar.set(Calendar.MINUTE, Minutes);
+                CharSequence charSequence= DateFormat.format("hh:mm aa", calendar);
+                if(is24format){
+                    timeStart.setText(intToTxtTime(Hour, Minutes));
+                }else{
                     timeStart.setText(charSequence);
                 }
+                HOUR = Hour;
+                MINUTES = Minutes;
             }
         };
         TimePickerDialog timePickerDialog= new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
