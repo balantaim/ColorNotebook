@@ -7,11 +7,11 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\Balantaim\.android\avd\Resizable_API_32.avd" />
+            <value value="C:\Users\Balantaim\.android\avd\Pixel_2_API_30.avd" />
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-09-17T18:05:48.099948600Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-09-18T14:19:09.577443700Z" />
   </component>
 </project>

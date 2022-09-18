@@ -92,15 +92,10 @@ public class AddActivity extends AppCompatActivity {
             initAdvancedOptions();
         }
         btnAdd.setOnClickListener(v -> onAddBtn());
-
         advOptions.setOnClickListener(view -> expandView());
-
         dateStart.setOnClickListener(view -> setStartDate());
-
         timeStart.setOnClickListener(view -> setStartTime());
-
         dateEnd.setOnClickListener(view -> setEndDate());
-
         timeEnd.setOnClickListener(view -> setEndTime());
 
         allDaySw.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +119,8 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void onAddBtn(){
-        if(eventTitle.getText().toString().length()>2){
-            if(!tryEmpty(eventTitle.getText().toString(), eventLocation.getText().toString(), eventInput.getText().toString())){
+        if(eventTitle.getText().toString().length()>1){
+            if(!tryEmpty(eventTitle.getText().toString(), eventInput.getText().toString())){
                 MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
                 myDB.addEvent(eventTitle.getText().toString().trim(),
                         eventLocation.getText().toString().trim(),
@@ -138,19 +133,10 @@ public class AddActivity extends AppCompatActivity {
                         soundNotificationBool,
                         silentNotificationBool);
             }
+        }else{
+            Toast.makeText(this, "Header should contain at least 2 symbols!", Toast.LENGTH_SHORT).show();
         }
     }
-
-//    private void onAddBtnOld(){
-//        if(eventTitle.getText().toString().length()>2){
-//            if(!tryEmpty(eventTitle.getText().toString(), eventLocation.getText().toString(), eventInput.getText().toString())){
-//                MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
-//                myDB.addEvent(eventTitle.getText().toString().trim(),
-//                        eventLocation.getText().toString().trim(),
-//                        eventInput.getText().toString().trim());
-//            }
-//        }
-//    }
 
     private void initAdvancedOptions(){
         int Hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -198,7 +184,6 @@ public class AddActivity extends AppCompatActivity {
                 calendar1.set(Calendar.YEAR, year);
                 calendar1.set(Calendar.MONTH, month);
                 calendar1.set(Calendar.DATE, day);
-
                 CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar1);
                 dateEnd.setText(charSequence);
                 //save data for next reuse
@@ -280,13 +265,13 @@ public class AddActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    private boolean tryEmpty(String title, String location, String input){
-        if (title == null || location == null || input == null){
-            Toast.makeText(this, "Empty Label!", Toast.LENGTH_SHORT).show();
+    private boolean tryEmpty(String title, String input){
+        if (title == null || title.isEmpty()){
+            Toast.makeText(this, "Title is empty!", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if ( (title.isEmpty() || location.isEmpty() || input.isEmpty()) ){
-            Toast.makeText(this, "Empty Label!", Toast.LENGTH_SHORT).show();
+        if (input == null || input.isEmpty()){
+            Toast.makeText(this, "Event's description is empty!", Toast.LENGTH_SHORT).show();
             return true;
         }
         int count1 =0;
@@ -301,8 +286,8 @@ public class AddActivity extends AppCompatActivity {
                 count2++;
             }
         }
-        if((count1==title.length()) || (count2==location.length())){
-            Toast.makeText(this, "Remove spaces!", Toast.LENGTH_SHORT).show();
+        if((count1==title.length()) || (count2==input.length())){
+            Toast.makeText(this, "Too much space characters!", Toast.LENGTH_SHORT).show();
             return true;
         }
         return false;
