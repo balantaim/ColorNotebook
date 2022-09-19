@@ -139,25 +139,24 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void initAdvancedOptions(){
-        int Hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int Minute = calendar.get(Calendar.MINUTE);
-        boolean is24format = DateFormat.is24HourFormat(this);
+        HOUR = HOUR2 = calendar.get(Calendar.HOUR_OF_DAY);
+        MINUTES = MINUTES2 = calendar.get(Calendar.MINUTE);
+        final boolean is24format = DateFormat.is24HourFormat(this);
+        YEAR = YEAR2 = calendar.get(Calendar.YEAR);
+        MONTH = MONTH2 = calendar.get(Calendar.MONTH);
+        DAY = DAY2 = calendar.get(Calendar.DATE);
 
         CharSequence charSequence= DateFormat.format("MMM d, yyyy", calendar);
         dateStart.setText(charSequence);
         dateEnd.setText(charSequence);
         if (is24format){
-            timeStart.setText(intToTxtTime(Hour, Minute));
-            timeEnd.setText(intToTxtTime(Hour, Minute));
+            timeStart.setText(intToTxtTime(HOUR, MINUTES));
+            timeEnd.setText(intToTxtTime(HOUR2, MINUTES2));
         }else{
             CharSequence charSequence1= DateFormat.format("hh:mm aa", calendar);
             timeStart.setText(charSequence1);
             timeEnd.setText(charSequence1);
         }
-        HOUR=Hour;
-        MINUTES=Minute;
-        HOUR2=Hour;
-        MINUTES2=Minute;
     }
 
     private String intToTxtTime(int h, int m){

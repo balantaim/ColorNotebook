@@ -97,6 +97,9 @@ public class UpdateActivity extends AppCompatActivity {
         if (ab != null) {
             ab.setTitle(title);
         }
+        if(dayEventBool==1 || soundNotificationBool==1){
+            expandView();
+        }
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
