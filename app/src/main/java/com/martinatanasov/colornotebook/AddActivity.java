@@ -162,14 +162,14 @@ public class AddActivity extends AppCompatActivity {
     private String intToTxtTime(int h, int m){
         String s ="";
         if(h<10){
-            s+="0" + Integer.toString(h);
+            s+="0" + h;
         }else{
-            s+="" + Integer.toString(h);
+            s+="" + h;
         }
         if(m<10){
-            s+=":0" + Integer.toString(m);
+            s+=":0" + m;
         }else{
-            s+=":" + Integer.toString(m);
+            s+=":" + m;
         }
         return s;
     }

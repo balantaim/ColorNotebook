@@ -53,7 +53,7 @@ public class UpdateActivity extends AppCompatActivity {
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR=10, MONTH=10, DAY=10, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
-    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=1, colorPicker=0, avatarPicker=0;
+    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, avatarPicker=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +136,6 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) { silentNotificationBool = silentNotSw.isChecked() ? 1:0; }
         });
-
     }
 
     private void onUpdateBtn(){
@@ -225,14 +224,14 @@ public class UpdateActivity extends AppCompatActivity {
     private String intToTxtTime(int h, int m){
         String s ="";
         if(h<10){
-            s+="0" + Integer.toString(h);
+            s+="0" + h;
         }else{
-            s+="" + Integer.toString(h);
+            s+="" + h;
         }
         if(m<10){
-            s+=":0" + Integer.toString(m);
+            s+=":0" + m;
         }else{
-            s+=":" + Integer.toString(m);
+            s+=":" + m;
         }
         return s;
     }
@@ -381,7 +380,6 @@ public class UpdateActivity extends AppCompatActivity {
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 //        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
-
 
         if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

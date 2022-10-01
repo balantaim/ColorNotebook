@@ -8,11 +8,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,11 +35,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
-    FloatingActionButton add_button, nav_button;
+    FloatingActionButton add_button;
     CustomAdapter customAdapter;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MyDatabaseHelper myDB;
+    public static TextView counter, activeAlarms;
     public static ArrayList<String> event_id;
     public static ArrayList<String> event_title;
     public static ArrayList<String> event_location;
@@ -80,21 +84,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         recyclerView= findViewById(R.id.recyclerView);
         add_button=findViewById(R.id.add_button);
-        nav_button=findViewById(R.id.navigation_button);
         drawerLayout=findViewById(R.id.layoutDrawer);
         navigationView=findViewById(R.id.navDrawer);
         setNavigationViewListener();
-
-        nav_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }else{
-                    drawerLayout.openDrawer(GravityCompat.START);
-                }
-            }
-        });
 
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +132,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //recycler view Layout
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+        //Create drawer menu counters
+        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+        counter = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
+        activeAlarms = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
+        navigationView.getMenu().findItem(R.id.totalCount).setActionView(counter);
+        navigationView.getMenu().findItem(R.id.activeAlarms).setActionView(activeAlarms);
+        updateDrawerCounter();
     }
 
     //Initiate Navigation item selection
     private void setNavigationViewListener() {
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private static void formatCount(TextView tv, int index){
+        if(index>99){
+            tv.setText("+99");
+        }else{
+            tv.setText(index+"");
+        }
+    }
+
+    public static void updateDrawerCounter(){
+        int index=0,alarm=0;
+        index = event_id.size();
+        formatCount(counter, index);
+        for (int i=0;i<event_id.size();i++){
+            if(event_sound_notifications.get(i)>0){
+                alarm++;
+            }
+        }
+        formatCount(activeAlarms, alarm);
     }
 
     //Update date after move from UpdateAct to MainAct
@@ -199,7 +220,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-
+            case R.id.website: {
+                Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
+                break;
+            }
             case R.id.about: {
                 InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
                 infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
@@ -224,6 +248,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+            case R.id.navigation_button:
+                onBackPressed();
+                return true;
             case R.id.delete_all:
                 confirmDialog();
                 return true;

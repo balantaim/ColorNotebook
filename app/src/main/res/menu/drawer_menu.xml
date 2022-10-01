@@ -3,30 +3,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item android:id="@+id/first"
-            android:icon="@drawable/ic_indent_in"
-            android:title="Home"/>
-        <item android:id="@+id/second"
-            android:icon="@drawable/ic_indent_in"
-            android:title="Home"/>
-        <item android:id="@+id/third"
-            android:icon="@drawable/ic_indent_in"
-            android:title="Home"/>
-    </group>
-
-    <item android:title="neshto">
+   <item android:title="@string/drawer_statistic">
         <menu>
-            <group android:checkableBehavior="single">
-                <item android:id="@+id/four"
-                    android:icon="@drawable/ic_indent_in"
-                    android:title="Home"/>
+            <group android:checkableBehavior="none">
+                <item android:id="@+id/totalCount"
+                    android:icon="@drawable/ic_stats_all"
+                    android:title="@string/drawer_total"/>
+                <item android:id="@+id/activeAlarms"
+                    android:icon="@drawable/ic_alarm"
+                    android:title="@string/drawer_sound_notifications"/>
+                <item android:id="@+id/importantEvents"
+                    android:icon="@drawable/ic_one_priority"
+                    android:title="@string/drawer_one_priority"/>
+                <item android:id="@+id/regularEvents"
+                    android:icon="@drawable/ic_two_priority"
+                    android:title="@string/drawer_two_priority"/>
+                <item android:id="@+id/lowPriorityEvents"
+                    android:icon="@drawable/ic_three_priority"
+                    android:title="@string/drawer_three_priority"/>
+            </group>
+        </menu>
+   </item>
+
+    <item android:title="@string/drawer_app">
+        <menu>
+            <group android:checkableBehavior="none">
+                <item android:id="@+id/website"
+                    android:icon="@drawable/ic_website"
+                    android:title="@string/drawer_website"/>
                 <item android:id="@+id/about"
-                    android:icon="@drawable/ic_indent_in"
-                    android:title="About"/>
+                    android:icon="@drawable/ic_about"
+                    android:title="@string/drawer_about"/>
                 <item android:id="@+id/exit"
                     android:icon="@drawable/ic_power_off"
-                    android:title="Exit"/>
+                    android:title="@string/drawer_exit"/>
             </group>
         </menu>
     </item>

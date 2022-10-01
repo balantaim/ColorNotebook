@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/navigation_button"
+        android:icon="@drawable/ic_indent_in"
+        android:title="@string/my_menu_advanced"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/delete_all"
-        android:title="Delete all"
+        android:title="@string/my_menu_dell"
         android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom"/>
-
     <item android:id="@+id/options"
         android:icon="@drawable/ic_settings"
-        android:title="Options"
+        android:title="@string/my_menu_options"
         app:showAsAction="ifRoom"/>
 </menu>

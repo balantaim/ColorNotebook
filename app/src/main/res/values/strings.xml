@@ -7,7 +7,21 @@
         <item>Blue</item>
         <item>Dark</item>
     </string-array>
-
+    <!--    My Menu-->
+    <string name="my_menu_options">Options</string>
+    <string name="my_menu_dell">Delete all</string>
+    <string name="my_menu_advanced">Advanced tools</string>
+    <!--    Drawer Menu-->
+    <string name="drawer_statistic">Statistic</string>
+    <string name="drawer_app">Application</string>
+    <string name="drawer_exit">Exit</string>
+    <string name="drawer_total">Total events</string>
+    <string name="drawer_sound_notifications">Active alarms</string>
+    <string name="drawer_one_priority">Important</string>
+    <string name="drawer_two_priority">Regular</string>
+    <string name="drawer_three_priority">Unimportant</string>
+    <string name="drawer_about">About DEV</string>
+    <string name="drawer_website">Website</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

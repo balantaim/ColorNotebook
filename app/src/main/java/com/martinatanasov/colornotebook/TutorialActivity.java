@@ -30,4 +30,8 @@ public class TutorialActivity extends AppCompatActivity {
         viewPager2.setPageTransformer(new ZoomOutPageTransformer());
         viewPager2.setAdapter(introAdapter);
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
