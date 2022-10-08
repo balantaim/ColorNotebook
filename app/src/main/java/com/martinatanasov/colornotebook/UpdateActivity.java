@@ -51,7 +51,7 @@ public class UpdateActivity extends AppCompatActivity {
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
-    public static int YEAR=10, MONTH=10, DAY=10, HOUR=0, MINUTES=0;
+    public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
     public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, avatarPicker=0;
 
@@ -97,7 +97,7 @@ public class UpdateActivity extends AppCompatActivity {
         if (ab != null) {
             ab.setTitle(title);
         }
-        if(dayEventBool==1 || soundNotificationBool==1){
+        if(dayEventBool==1 || soundNotificationBool==1 || silentNotificationBool==1){
             expandView();
         }
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +180,7 @@ public class UpdateActivity extends AppCompatActivity {
             MINUTES2 = getIntent().getIntExtra("end_minutes", 0);
             dayEventBool = getIntent().getIntExtra("all_day", 0);
             soundNotificationBool = getIntent().getIntExtra("sound_notifications", 0);
-            silentNotificationBool = getIntent().getIntExtra("silent_notifications",1);
+            silentNotificationBool = getIntent().getIntExtra("silent_notifications",0);
 
             //Setting Intent data
             eventTitle.setText(title);

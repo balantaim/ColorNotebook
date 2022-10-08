@@ -46,7 +46,7 @@ public class AddActivity extends AppCompatActivity {
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
-    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=1, colorPicker=0, avatarPicker=0;
+    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, avatarPicker=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

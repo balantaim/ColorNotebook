@@ -15,6 +15,7 @@
         <item name="android:windowBackground">@color/teal_200</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
+        <item name="colorError">@color/error</item>
     </style>
 
     <style name="Theme.BlueColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -32,6 +33,7 @@
         <item name="android:windowBackground">@color/blue_200</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
+        <item name="colorError">@color/error</item>
     </style>
 
     <style name="Theme.DarkColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -49,6 +51,7 @@
         <item name="android:windowBackground">@color/gray</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
+        <item name="colorError">@color/error</item>
     </style>
 
     <style name="Theme.Tutorial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -66,6 +69,7 @@
         <item name="android:windowBackground">@color/teal_200</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
+        <item name="colorError">@color/error</item>
     </style>
 
 <!--    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">-->

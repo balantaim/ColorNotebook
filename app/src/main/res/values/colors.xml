@@ -13,7 +13,8 @@
     <color name="gray">#2B2A2A</color>
     <color name="white_darker">#E0F2F1</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#EA1717</color>
+    <color name="error">#EA1717</color>
+    <color name="error_night">#9E2CCF</color>
     <color name="yellow">#4b4531</color>
     <color name="purple_900">#322835</color>
 

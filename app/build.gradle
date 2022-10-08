@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.martinatanasov.colornotebook"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -60,4 +60,8 @@ dependencies {
 
     //Volley: http library
     implementation 'com.android.volley:volley:1.2.1'
+
+    //NotificationCompat used for foreground services
+    implementation "androidx.core:core:1.9.0"
+
 }

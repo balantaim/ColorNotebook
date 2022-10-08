@@ -1,11 +1,14 @@
 package com.martinatanasov.colornotebook;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -140,6 +143,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.totalCount).setActionView(counter);
         navigationView.getMenu().findItem(R.id.activeAlarms).setActionView(activeAlarms);
         updateDrawerCounter();
+
+        //Start Foreground Services
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            if(!isForegroundServiceRunning()){
+                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
+                startForegroundService(serviceIntent);
+            }
+        }
     }
 
     //Initiate Navigation item selection
@@ -317,6 +328,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!checkTutorial){
             startActivity(new Intent(MainActivity.this, TutorialActivity.class));
         }
+    }
+
+    public boolean isForegroundServiceRunning(){
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for(ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)){
+            if(MyForegroundServices.class.getName().equals(service.service.getClassName())){
+                return true;
+            }
+        }
+        return false;
     }
 
     //Load Theme Setting
