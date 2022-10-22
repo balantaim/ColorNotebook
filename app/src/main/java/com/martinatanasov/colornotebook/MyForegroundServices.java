@@ -14,21 +14,21 @@ import androidx.annotation.Nullable;
 public class MyForegroundServices extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true){
-                        Log.d("Service", "Service is running: ");
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    Log.d("Service", "Service is running: ");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
-            }).start();
-            final String CHANNEL_ID = "Foreground service ID";
+            }
+        }).start();
+        final String CHANNEL_ID = "Foreground service ID";
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
                     CHANNEL_ID,
@@ -39,9 +39,9 @@ public class MyForegroundServices extends Service {
                     .setContentText("Server is running")
                     .setContentTitle("Service enabled")
                     .setSmallIcon(R.drawable.ic_three_priority);
-
             startForeground(1001, notification.build());
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
