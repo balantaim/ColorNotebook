@@ -47,7 +47,7 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.about)).perform(click());
         //Check if the button is displayed and perform click
         onView(withId(R.id.checkDev)).check(matches(isDisplayed())).perform(click());
-        //This is timeout for the POST query
+        //This is timeout for the GET query
         SystemClock.sleep(3000);
         //This is Positive test and the internet connection should be disrupted!
         //Check if the error message is presented from string resource R.string.error_404
