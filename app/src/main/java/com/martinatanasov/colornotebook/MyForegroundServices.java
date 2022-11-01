@@ -38,7 +38,7 @@ public class MyForegroundServices extends Service {
             Notification.Builder notification = new Notification.Builder(this, CHANNEL_ID)
                     .setContentText("Server is running")
                     .setContentTitle("Service enabled")
-                    .setSmallIcon(R.drawable.ic_three_priority);
+                    .setSmallIcon(R.drawable.ic_unimportant_priority);
             startForeground(1001, notification.build());
         }
 

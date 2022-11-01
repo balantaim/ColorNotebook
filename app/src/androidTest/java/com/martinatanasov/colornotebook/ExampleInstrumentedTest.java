@@ -9,7 +9,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
-import android.os.SystemClock;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -48,13 +47,13 @@ public class ExampleInstrumentedTest {
         //Check if the button is displayed and perform click
         onView(withId(R.id.checkDev)).check(matches(isDisplayed())).perform(click());
         //This is timeout for the POST query
-        SystemClock.sleep(3000);
+
+        //SystemClock.sleep(3000);
         //This is Positive test and the internet connection should be disrupted!
         //Check if the error message is presented from string resource R.string.error_404
         onView(withId(R.id.txtDevelopers)).check(matches(withText(R.string.error_404)));
         //Perform click in order to return to the main screen
         onView(withId(R.id.txtDevelopers)).perform(click());
-        SystemClock.sleep(1000);
 
     }
 }

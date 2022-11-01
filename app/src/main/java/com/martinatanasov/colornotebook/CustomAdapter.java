@@ -24,10 +24,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     Activity activity;
     //int position;
 
-    CustomAdapter(Activity activity, Context context, ArrayList EventId, ArrayList EventTitle, ArrayList EventLocation,
-                  ArrayList Node, ArrayList color_picker, ArrayList avatar_picker, ArrayList start_year, ArrayList start_month, ArrayList start_day, ArrayList start_hour,
-                  ArrayList start_minutes, ArrayList end_year, ArrayList end_month, ArrayList end_day, ArrayList end_hour, ArrayList end_minutes,
-                  ArrayList all_day, ArrayList sound_notifications, ArrayList silent_notifications){
+    CustomAdapter(Activity activity, Context context, ArrayList<String> EventId, ArrayList<String> EventTitle, ArrayList<String> EventLocation,
+                  ArrayList<String> Node, ArrayList<Integer> color_picker, ArrayList<Integer> avatar_picker, ArrayList<Integer> start_year,
+                  ArrayList<Integer> start_month, ArrayList<Integer> start_day, ArrayList<Integer> start_hour, ArrayList<Integer> start_minutes,
+                  ArrayList<Integer> end_year, ArrayList<Integer> end_month, ArrayList<Integer> end_day, ArrayList<Integer> end_hour,
+                  ArrayList<Integer> end_minutes, ArrayList<Integer> all_day, ArrayList<Integer> sound_notifications,
+                  ArrayList<Integer> silent_notifications){
 
         this.activity=activity;
         this.context=context;

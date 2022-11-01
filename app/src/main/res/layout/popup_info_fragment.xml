@@ -9,6 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="320dp"
         android:layout_height="340dp"
+        android:minWidth="240dp"
         android:layout_marginVertical="20dp"
         android:layout_marginHorizontal="20dp"
         app:cardCornerRadius="42dp"

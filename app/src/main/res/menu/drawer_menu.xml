@@ -13,13 +13,13 @@
                     android:icon="@drawable/ic_alarm"
                     android:title="@string/drawer_sound_notifications"/>
                 <item android:id="@+id/importantEvents"
-                    android:icon="@drawable/ic_one_priority"
+                    android:icon="@drawable/ic_important_priority"
                     android:title="@string/drawer_one_priority"/>
                 <item android:id="@+id/regularEvents"
-                    android:icon="@drawable/ic_two_priority"
+                    android:icon="@drawable/ic_regular_priority"
                     android:title="@string/drawer_two_priority"/>
                 <item android:id="@+id/lowPriorityEvents"
-                    android:icon="@drawable/ic_three_priority"
+                    android:icon="@drawable/ic_unimportant_priority"
                     android:title="@string/drawer_three_priority"/>
             </group>
         </menu>

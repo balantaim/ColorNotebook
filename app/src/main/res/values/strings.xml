@@ -81,5 +81,9 @@
     <string name="toast_fail_to_delete">Fail to delete</string>
     <string name="toast_successfully_deleted">Successfully deleted</string>
     <string name="toast_noData">No Data</string>
+    <!--    Priority picker-->
+    <string name="set_important">Important</string>
+    <string name="set_regular">Regular</string>
+    <string name="set_unimportant">Unimportant</string>
 
 </resources>
