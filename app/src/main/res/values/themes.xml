@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@color/black</item>
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor" >@color/teal_700</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/teal_200</item>
         <item name="badgeStyle">@color/white</item>
@@ -29,6 +31,8 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@color/black</item>
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor" >@color/blue_300</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/blue_200</item>
         <item name="badgeStyle">@color/white</item>
@@ -47,6 +51,8 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/gray</item>
         <item name="badgeStyle">@color/white</item>
@@ -65,6 +71,8 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@color/black</item>
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor" >@color/teal_700</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/teal_200</item>
         <item name="badgeStyle">@color/white</item>

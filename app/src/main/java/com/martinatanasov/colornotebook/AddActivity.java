@@ -29,10 +29,14 @@ import androidx.transition.TransitionManager;
 
 import java.util.Calendar;
 
-public class AddActivity extends AppCompatActivity {
+import views.ApplyPriority;
+import views.CustomView;
+
+
+public class AddActivity extends AppCompatActivity implements ApplyPriority {
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
-    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, avatar;
+    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority;
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
@@ -40,13 +44,17 @@ public class AddActivity extends AppCompatActivity {
     static Calendar calendar;
     static Calendar calendar1;
 
+    //private ApplyPriority listener;
+    //Dialog priorityDialog;
+    //ConstraintLayout setImportant, setRegular, setUnimportant;
+
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
     public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
-    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, avatarPicker=0;
+    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +88,7 @@ public class AddActivity extends AppCompatActivity {
         soundNotSw =findViewById(R.id.soundNotSw);
         silentNotSw =findViewById(R.id.silentNotificationSw);
         eventColor =findViewById(R.id.eventColor);
-        avatar =findViewById(R.id.avatar);
+        priority =findViewById(R.id.priority);
 
         //Focus first edit text
         eventTitle.requestFocus();
@@ -116,6 +124,39 @@ public class AddActivity extends AppCompatActivity {
                 silentNotificationBool = silentNotSw.isChecked() ? 1:0;
             }
         });
+        //Custom dialog set event priority
+        //priorityDialog = new Dialog(this);
+        priority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                managePriority();
+            }
+        });
+    }
+
+    private void managePriority(){
+        CustomView customView = new CustomView(getApplicationContext());
+        customView.setPriority(this, "My priority");
+        customView.setDialogResult(new ApplyPriority(){
+            @Override
+            public void setPriority(int status) {
+                priorityPicker = status;
+                Toast.makeText(getApplicationContext(), "DA "+status, Toast.LENGTH_SHORT).show();
+            }
+        });
+        /*
+        SetPriority setPriority = new SetPriority();
+        setPriority.show(getSupportFragmentManager(), "Set priority");
+        priorityDialog.setContentView(R.layout.set_priority_dialog);
+        setImportant = (ConstraintLayout) priorityDialog.findViewById(R.id.setImportant);
+        setRegular = (ConstraintLayout) priorityDialog.findViewById(R.id.setRegular);
+        setUnimportant = (ConstraintLayout) priorityDialog.findViewById(R.id.setUnimportant);
+        setImportant.setOnClickListener(v -> { priorityPicker=0; priorityDialog.dismiss();});
+        setRegular.setOnClickListener(v -> {listener.setPriority(1);priorityDialog.dismiss();});
+        setUnimportant.setOnClickListener(v -> {listener.setPriority(2);priorityDialog.dismiss();});
+        priorityDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        priorityDialog.show();
+        */
     }
 
     private void onAddBtn(){
@@ -126,7 +167,7 @@ public class AddActivity extends AppCompatActivity {
                         eventLocation.getText().toString().trim(),
                         eventInput.getText().toString().trim(),
                         colorPicker,
-                        avatarPicker,
+                        priorityPicker,
                         YEAR, MONTH, DAY, HOUR, MINUTES,
                         YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
                         dayEventBool,
@@ -343,5 +384,11 @@ public class AddActivity extends AppCompatActivity {
                 setTheme(R.style.Theme_DefaultColorNotebook);
                 break;
         }
+    }
+
+    @Override
+    public void setPriority(int status) {
+        priorityPicker = status;
+        Toast.makeText(this, "DA "+status, Toast.LENGTH_SHORT).show();
     }
 }

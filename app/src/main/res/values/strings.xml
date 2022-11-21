@@ -39,8 +39,7 @@
     <string name="to">To:</string>
     <string name="allDay">All day event</string>
     <string name="pickColor">Event color</string>
-    <string name="avatarIcon">Avatar</string>
-    <string name="default_text">Default</string>
+    <string name="priorityIcon">Priority</string>
     <string name="from_skin">From skin</string>
     <string name="silentNotifications">Silent notifications</string>
     <string name="alarmNotifications">Sound notifications</string>
@@ -62,6 +61,9 @@
     <string name="endTime">Event end time</string>
     <string name="loadWelcomeImage">Load welcome image</string>
     <string name="loadAppVersion">Load application version</string>
+    <string name="descImportant">Set event status to important</string>
+    <string name="descRegular">Set event status to regular</string>
+    <string name="descUnimportant">Set event status to unimportant</string>
     <!--    Menu-->
     <string name="forceDarkMode">Force dark mode</string>
     <string name="skinColor">Skin color</string>
@@ -72,6 +74,8 @@
     <string name="alert_dialog_message_sure_to_dell">Are you sure you want to delete </string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <!--    Toast-->
     <string name="toast_failed">Failed</string>
     <string name="toast_no_data">There is no data</string>

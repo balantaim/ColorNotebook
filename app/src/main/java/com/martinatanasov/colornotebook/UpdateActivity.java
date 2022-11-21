@@ -33,11 +33,14 @@ import androidx.transition.TransitionManager;
 
 import java.util.Calendar;
 
+import views.ApplyPriority;
+import views.CustomView;
+
 public class UpdateActivity extends AppCompatActivity {
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnUpdate, btnDelete;
-    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, avatar;
+    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority;
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
@@ -53,7 +56,7 @@ public class UpdateActivity extends AppCompatActivity {
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
-    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, avatarPicker=0;
+    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,7 @@ public class UpdateActivity extends AppCompatActivity {
         soundNotSw =findViewById(R.id.soundNotSw2);
         silentNotSw =findViewById(R.id.silentNotificationSw2);
         eventColor =findViewById(R.id.eventColor2);
-        avatar =findViewById(R.id.avatar2);
+        priority =findViewById(R.id.priority2);
 
         //First before update DB
         calendar = Calendar.getInstance();
@@ -136,6 +139,24 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) { silentNotificationBool = silentNotSw.isChecked() ? 1:0; }
         });
+        priority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                managePriority();
+            }
+        });
+    }
+
+    private void managePriority(){
+        CustomView customView = new CustomView(getApplicationContext());
+        customView.setPriority(this, "My priority");
+        customView.setDialogResult(new ApplyPriority(){
+            @Override
+            public void setPriority(int status) {
+                priorityPicker = status;
+                Toast.makeText(getApplicationContext(), "DA "+status, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void onUpdateBtn(){
@@ -147,7 +168,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         myDB.updateData(id, title, location, input,
                 colorPicker,
-                avatarPicker,
+                priorityPicker,
                 YEAR, MONTH, DAY, HOUR, MINUTES,
                 YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
                 dayEventBool,
@@ -167,7 +188,7 @@ public class UpdateActivity extends AppCompatActivity {
 
 //            colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
             colorPicker = getIntent().getIntExtra("color",0);
-            avatarPicker = getIntent().getIntExtra("avatar", 0);
+            priorityPicker = getIntent().getIntExtra("avatar", 0);
             YEAR = getIntent().getIntExtra("start_year", 0);
             MONTH = getIntent().getIntExtra("start_mouth", 0);
             DAY = getIntent().getIntExtra("start_day", 0);
