@@ -117,6 +117,7 @@
             android:minHeight="56dp"
             android:text="Try changes"
             android:textAllCaps="false"
+            android:visibility="gone"
             android:textColor="?attr/customColorValue"
             android:textSize="20sp"
             android:textStyle="bold"

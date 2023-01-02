@@ -33,6 +33,7 @@ import androidx.transition.TransitionManager;
 
 import java.util.Calendar;
 
+import tools.ConvertTimeToTxt;
 import views.ApplyPriority;
 import views.CustomView;
 
@@ -48,6 +49,7 @@ public class UpdateActivity extends AppCompatActivity {
     static Calendar calendar;
     static Calendar calendar1;
     public static String id, title, location, input;
+    static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
 
     public static final String TAG = "UpdateActivity";
     public static final String SHARED_PREF = "sharedPref";
@@ -229,8 +231,8 @@ public class UpdateActivity extends AppCompatActivity {
             dateStart.setText(charSequence);
             dateEnd.setText(charSequence1);
             if (is24format){
-                timeStart.setText(intToTxtTime(HOUR, MINUTES));
-                timeEnd.setText(intToTxtTime(HOUR2, MINUTES2));
+                timeStart.setText(timeToString.intToTxtTime(HOUR, MINUTES));
+                timeEnd.setText(timeToString.intToTxtTime(HOUR2, MINUTES2));
             }else{
                 CharSequence timeSequence= DateFormat.format("hh:mm aa", calendar);
                 CharSequence timeSequence1= DateFormat.format("hh:mm aa", calendar1);
@@ -240,21 +242,6 @@ public class UpdateActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.toast_noData, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private String intToTxtTime(int h, int m){
-        String s ="";
-        if(h<10){
-            s+="0" + h;
-        }else{
-            s+="" + h;
-        }
-        if(m<10){
-            s+=":0" + m;
-        }else{
-            s+=":" + m;
-        }
-        return s;
     }
 
     private void setEndDate(){
@@ -311,7 +298,7 @@ public class UpdateActivity extends AppCompatActivity {
                 calendar1.set(Calendar.MINUTE, Minutes);
                 CharSequence charSequence= DateFormat.format("hh:mm aa", calendar1);
                 if(is24format){
-                    timeEnd.setText(intToTxtTime(Hour, Minutes));
+                    timeEnd.setText(timeToString.intToTxtTime(Hour, Minutes));
                 }else{
                     timeEnd.setText(charSequence);
                 }
@@ -334,7 +321,7 @@ public class UpdateActivity extends AppCompatActivity {
                 calendar.set(Calendar.MINUTE, Minutes);
                 CharSequence charSequence= DateFormat.format("hh:mm aa", calendar);
                 if(is24format){
-                    timeStart.setText(intToTxtTime(Hour, Minutes));
+                    timeStart.setText(timeToString.intToTxtTime(Hour, Minutes));
                 }else{
                     timeStart.setText(charSequence);
                 }

@@ -50,6 +50,7 @@
     <string name="description_second_fragment">Enter your data to the text fields</string>
     <string name="description_third_fragment">Find location</string>
     <string name="add_item">Add item</string>
+    <string name="scroll_top">Scroll to the top</string>
     <string name="fragThreeHeader">Add location to your event</string>
     <string name="fragTwoHeader">Create you own event</string>
     <string name="fragOneHeader">Welcome to tutorial guide</string>

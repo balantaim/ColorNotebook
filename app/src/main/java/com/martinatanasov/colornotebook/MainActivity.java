@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
-    FloatingActionButton add_button;
+    FloatingActionButton add_button, scroll_top;
     CustomAdapter customAdapter;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //hide Status Bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //Load tutorial status
         loadTutorial();
         //Load skin resource
@@ -85,10 +85,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        getDelegate().applyDayNight();
 
         super.onCreate(savedInstanceState);
-        recyclerView= findViewById(R.id.recyclerView);
-        add_button=findViewById(R.id.add_button);
-        drawerLayout=findViewById(R.id.layoutDrawer);
-        navigationView=findViewById(R.id.navDrawer);
+        recyclerView = findViewById(R.id.recyclerView);
+        add_button = findViewById(R.id.add_button);
+        scroll_top = findViewById(R.id.scrollTop);
+        drawerLayout = findViewById(R.id.layoutDrawer);
+        navigationView = findViewById(R.id.navDrawer);
         setNavigationViewListener();
 
         add_button.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         event_silent_notifications = new ArrayList<>();
 
         storeDataInArrays();
-        customAdapter= new CustomAdapter(MainActivity.this, this, event_id, event_title, event_location, event_note,
+        customAdapter = new CustomAdapter(MainActivity.this, this, event_id, event_title, event_location, event_note,
                 event_color_picker, event_avatar_picker, event_start_year, event_start_month, event_start_day, event_start_hour,
                 event_start_minutes, event_end_year, event_end_month, event_end_day, event_end_hour, event_end_minutes,
                 event_all_day, event_sound_notifications, event_silent_notifications);
@@ -135,6 +136,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //recycler view Layout
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    scroll_top.setVisibility(View.VISIBLE);
+                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                    scroll_top.setVisibility(View.GONE);
+                }
+            }
+        });
+        scroll_top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
 
         //Create drawer menu counters
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
@@ -145,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         updateDrawerCounter();
 
         //Start Foreground Services
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            if(!isForegroundServiceRunning()){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!isForegroundServiceRunning()) {
                 Intent serviceIntent = new Intent(this, MyForegroundServices.class);
                 startForegroundService(serviceIntent);
             }
@@ -159,20 +176,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @SuppressLint("SetTextI18n")
-    private static void formatCount(TextView tv, int index){
-        if(index>99){
+    private static void formatCount(TextView tv, int index) {
+        if (index > 99) {
             tv.setText("+99");
-        }else{
-            tv.setText(index+"");
+        } else {
+            tv.setText(index + "");
         }
     }
 
-    public static void updateDrawerCounter(){
-        int index=0,alarm=0;
+    public static void updateDrawerCounter() {
+        int index = 0, alarm = 0;
         index = event_id.size();
         formatCount(counter, index);
-        for (int i=0;i<event_id.size();i++){
-            if(event_sound_notifications.get(i)>0){
+        for (int i = 0; i < event_id.size(); i++) {
+            if (event_sound_notifications.get(i) > 0) {
                 alarm++;
             }
         }
@@ -183,18 +200,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
+        if (requestCode == 1) {
             recreate();
         }
     }
 
-    void storeDataInArrays(){
+    void storeDataInArrays() {
         Cursor cursor = myDB.readAllData();
-        if(cursor.getCount() == 0){
+        if (cursor.getCount() == 0) {
 //            Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
             Log.d(TAG, "storeDataInArrays: There is no data");
         } else {
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 event_id.add(cursor.getString(0));
                 event_title.add(cursor.getString(1));
                 event_location.add(cursor.getString(2));
@@ -258,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.navigation_button:
                 onBackPressed();
                 return true;
@@ -274,11 +291,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    void confirmDialog(){
+    void confirmDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle( R.string.alert_dialog_title );
-        builder.setMessage( R.string.alert_dialog_message_dell );
-        builder.setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.alert_dialog_title);
+        builder.setMessage(R.string.alert_dialog_message_dell);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
@@ -289,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
             }
         });
-        builder.setNegativeButton( R.string.no, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -307,8 +324,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-          long id = viewHolder.getAbsoluteAdapterPosition();
-          String idS = String.valueOf(id);
+            long id = viewHolder.getAbsoluteAdapterPosition();
+            String idS = String.valueOf(id);
 
             MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
 
@@ -322,18 +339,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    private void loadTutorial(){
+    private void loadTutorial() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         boolean checkTutorial = (sharedPreferences.getBoolean(DISABLE_TUTORIAL, false));
-        if (!checkTutorial){
+        if (!checkTutorial) {
             startActivity(new Intent(MainActivity.this, TutorialActivity.class));
         }
     }
 
-    public boolean isForegroundServiceRunning(){
+    public boolean isForegroundServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)){
-            if(MyForegroundServices.class.getName().equals(service.service.getClassName())){
+        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MyForegroundServices.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -341,18 +358,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Load Theme Setting
-    private void skinTheme(){
+    private void skinTheme() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 
-        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+        if (sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }else{
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         getDelegate().applyDayNight();
 
         int theme = sharedPreferences.getInt(THEME, 0);
-        switch (theme){
+        switch (theme) {
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;
@@ -367,9 +384,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }else{
+        } else {
             drawerLayout.openDrawer(GravityCompat.START);
         }
 //        super.onBackPressed();
