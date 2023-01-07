@@ -143,12 +143,22 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
 
     private void managePriority() {
         CustomView customView = new CustomView(getApplicationContext());
-        customView.setPriority(this, "My priority");
+        customView.setPriority(this, priorityPicker);
         customView.setDialogResult(new ApplyPriority() {
             @Override
             public void setPriority(int status) {
                 priorityPicker = status;
-                Toast.makeText(getApplicationContext(), "DA " + status, Toast.LENGTH_SHORT).show();
+                switch (priorityPicker){
+                    case 1:
+                        priority.setText(R.string.set_regular);
+                        break;
+                    case 2:
+                        priority.setText(R.string.set_unimportant);
+                        break;
+                    default:
+                        priority.setText(R.string.set_important);
+                        break;
+                }
             }
         });
         /*
