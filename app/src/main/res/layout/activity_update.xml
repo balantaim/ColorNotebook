@@ -65,11 +65,11 @@
                 android:gravity="top"
                 android:hint="@string/hintNote"
                 android:inputType="textMultiLine"
-                android:singleLine="false"
                 android:minHeight="100dp"
                 android:paddingVertical="8dp"
                 android:paddingStart="8dp"
-                android:paddingEnd="8dp" />
+                android:paddingEnd="8dp"
+                android:singleLine="false" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -123,8 +123,8 @@
                 android:id="@+id/cardView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                android:layout_marginBottom="58dp">
+                android:layout_marginBottom="58dp"
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -243,10 +243,12 @@
                                 android:layout_marginEnd="10dp"
                                 android:checked="false"
                                 android:text="@string/allDay"
+                                android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintBottom_toTopOf="@+id/soundNotSw2"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txtTo2" />
+                                app:layout_constraintTop_toBottomOf="@+id/txtTo2"
+                                app:track="@drawable/my_switch_body" />
 
                             <androidx.appcompat.widget.SwitchCompat
                                 android:id="@+id/soundNotSw2"
@@ -257,9 +259,11 @@
                                 android:layout_marginEnd="10dp"
                                 android:checked="false"
                                 android:text="@string/alarmNotifications"
+                                android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/allDaySw2" />
+                                app:layout_constraintTop_toBottomOf="@+id/allDaySw2"
+                                app:track="@drawable/my_switch_body" />
 
                             <androidx.appcompat.widget.SwitchCompat
                                 android:id="@+id/silentNotificationSw2"
@@ -271,10 +275,12 @@
                                 android:layout_marginBottom="24dp"
                                 android:checked="false"
                                 android:text="@string/silentNotifications"
+                                android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw2" />
+                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw2"
+                                app:track="@drawable/my_switch_body" />
 
                             <androidx.constraintlayout.widget.Guideline
                                 android:id="@+id/guideline6"
@@ -313,10 +319,10 @@
                 android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="52dp"
                 android:background="@drawable/btn_delete"
                 android:minHeight="52dp"
                 android:text="@string/delete"
-                android:layout_marginBottom="52dp"
                 android:textAllCaps="false"
                 android:textColor="@color/error"
                 android:textSize="20sp"
