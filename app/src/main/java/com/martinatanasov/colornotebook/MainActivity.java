@@ -1,5 +1,7 @@
 package com.martinatanasov.colornotebook;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -160,6 +162,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.totalCount).setActionView(counter);
         navigationView.getMenu().findItem(R.id.activeAlarms).setActionView(activeAlarms);
         updateDrawerCounter();
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            final Animator animStart = AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.rotate_back);
+            final Animator animEnd = AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.rotate_start);
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                animStart.setTarget(recyclerView);
+                animStart.start();
+            }
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                animEnd.setTarget(recyclerView);
+                animEnd.start();
+            }
+            @Override
+            public void onDrawerStateChanged(int newState) {}
+        });
 
         //Start Foreground Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
