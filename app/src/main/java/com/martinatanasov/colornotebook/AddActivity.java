@@ -3,6 +3,7 @@ package com.martinatanasov.colornotebook;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.Menu;
@@ -214,6 +215,10 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
             CharSequence charSequence1 = DateFormat.format("hh:mm aa", calendar);
             timeStart.setText(charSequence1);
             timeEnd.setText(charSequence1);
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            soundNotSw.setEnabled(false);
+            silentNotSw.setEnabled(false);
         }
     }
 

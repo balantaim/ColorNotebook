@@ -43,6 +43,7 @@
             android:id="@+id/switchDarkMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:scaleX="1"
             android:scaleY="1"
             android:textColor="@color/white"

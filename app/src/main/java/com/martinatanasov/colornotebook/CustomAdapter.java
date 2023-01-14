@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
-    private final Context context;
+    private Context context;
+//    private final Context context;
     private static ArrayList<String> txtEventId, txtEventTitle, txtEventLocation, txtNode;
     private static ArrayList<Integer> int_color_picker, int_avatar_picker, int_start_year, int_start_month, int_start_day, int_start_hour,
             int_start_minutes, int_end_year, int_end_month, int_end_day, int_end_hour, int_end_minutes,
@@ -66,7 +67,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
         holder.txtEventId.setText(String.valueOf(txtEventId.get(holder.getBindingAdapterPosition())));
         holder.txtEventTitle.setText(String.valueOf(txtEventTitle.get(holder.getBindingAdapterPosition())));
         holder.txtEventLocation.setText(String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
@@ -119,4 +119,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             mainLayout=itemView.findViewById(R.id.mainLayout);
         }
     }
+
+//    @Override
+//    public void onViewDetachedFromWindow(@NonNull MyViewHolder holder) {
+//        context = null;
+//        super.onViewDetachedFromWindow(holder);
+//    }
 }

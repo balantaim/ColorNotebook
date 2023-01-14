@@ -391,4 +391,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 //        super.onBackPressed();
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        recyclerView.setAdapter(null);
+//        customAdapter = null;
+//        super.onDestroy();
+//    }
 }

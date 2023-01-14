@@ -5,10 +5,11 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -177,7 +178,10 @@ public class UpdateActivity extends AppCompatActivity {
                 soundNotificationBool,
                 silentNotificationBool);
 
-        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input);
+//        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     void getAndSetIntentData(){
@@ -243,6 +247,10 @@ public class UpdateActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.toast_noData, Toast.LENGTH_SHORT).show();
         }
         getPriorityString();
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            soundNotSw.setEnabled(false);
+            silentNotSw.setEnabled(false);
+        }
     }
 
     private void getPriorityString(){
