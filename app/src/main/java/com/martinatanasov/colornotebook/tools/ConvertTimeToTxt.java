@@ -1,4 +1,4 @@
-package tools;
+package com.martinatanasov.colornotebook.tools;
 
 public class ConvertTimeToTxt {
     public String intToTxtTime(int h, int m){

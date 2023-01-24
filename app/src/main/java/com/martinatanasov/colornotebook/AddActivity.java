@@ -28,11 +28,11 @@ import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import java.util.Calendar;
+import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
+import com.martinatanasov.colornotebook.views.ApplyPriority;
+import com.martinatanasov.colornotebook.views.CustomView;
 
-import tools.ConvertTimeToTxt;
-import views.ApplyPriority;
-import views.CustomView;
+import java.util.Calendar;
 
 
 public class AddActivity extends AppCompatActivity implements ApplyPriority {

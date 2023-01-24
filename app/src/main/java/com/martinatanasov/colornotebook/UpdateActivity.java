@@ -34,9 +34,9 @@ import androidx.transition.TransitionManager;
 
 import java.util.Calendar;
 
-import tools.ConvertTimeToTxt;
-import views.ApplyPriority;
-import views.CustomView;
+import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
+import com.martinatanasov.colornotebook.views.ApplyPriority;
+import com.martinatanasov.colornotebook.views.CustomView;
 
 public class UpdateActivity extends AppCompatActivity {
 

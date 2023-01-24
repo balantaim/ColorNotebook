@@ -1,4 +1,4 @@
-package views;
+package com.martinatanasov.colornotebook.views;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
