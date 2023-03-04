@@ -18,9 +18,9 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "LOADING_IMAGE", "\"${properties.getProperty("LOADING_IMAGE")}\""
         buildConfigField "String", "CHECK_DEV", "\"${properties.getProperty("CHECK_DEV")}\""
+        resConfigs 'en'
 
         //Set supported per-app language
-        resConfigs "en"
 
         //Espresso setup
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -51,8 +51,8 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'

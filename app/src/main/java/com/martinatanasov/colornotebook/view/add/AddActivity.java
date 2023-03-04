@@ -1,11 +1,13 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.add;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,11 +30,15 @@ import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
+import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
+import com.martinatanasov.colornotebook.dialog_views.CustomView;
+import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
-import com.martinatanasov.colornotebook.views.ApplyPriority;
-import com.martinatanasov.colornotebook.views.CustomView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class AddActivity extends AppCompatActivity implements ApplyPriority {
@@ -181,6 +187,11 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
         if (eventTitle.getText().toString().length() > 1) {
             if (!tryEmpty(eventTitle.getText().toString(), eventInput.getText().toString())) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
+
+                long testTime = SystemClock.uptimeMillis();
+
+
+
                 myDB.addEvent(eventTitle.getText().toString().trim(),
                         eventLocation.getText().toString().trim(),
                         eventInput.getText().toString().trim(),
@@ -188,9 +199,20 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
                         priorityPicker,
                         YEAR, MONTH, DAY, HOUR, MINUTES,
                         YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
+                        testTime,
+                        testTime,
                         dayEventBool,
                         soundNotificationBool,
                         silentNotificationBool);
+
+                Log.d("TEST", "onAddBtn: " + testTime);
+
+                //String pattern = "MM-dd-yyyy";
+                String pattern = "dd-M-yyyy hh:mm:ss";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                //Date date = new Date(testTime);
+                String ss = simpleDateFormat.format(new Date(testTime));
+                Log.d("TEST", "TimePrint: " + ss + " ," + testTime );
             }
         } else {
             Toast.makeText(this, "Header should contain at least 2 symbols!", Toast.LENGTH_SHORT).show();

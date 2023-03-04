@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.tutorial;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

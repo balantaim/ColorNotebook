@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.view.update.UpdateActivity;
 
 import java.util.ArrayList;
 
@@ -25,19 +28,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     Activity activity;
     //int position;
 
-    CustomAdapter(Activity activity, Context context, ArrayList<String> EventId, ArrayList<String> EventTitle, ArrayList<String> EventLocation,
-                  ArrayList<String> Node, ArrayList<Integer> color_picker, ArrayList<Integer> avatar_picker, ArrayList<Integer> start_year,
-                  ArrayList<Integer> start_month, ArrayList<Integer> start_day, ArrayList<Integer> start_hour, ArrayList<Integer> start_minutes,
-                  ArrayList<Integer> end_year, ArrayList<Integer> end_month, ArrayList<Integer> end_day, ArrayList<Integer> end_hour,
-                  ArrayList<Integer> end_minutes, ArrayList<Integer> all_day, ArrayList<Integer> sound_notifications,
-                  ArrayList<Integer> silent_notifications){
+    public CustomAdapter(Activity activity, Context context, ArrayList<String> EventId, ArrayList<String> EventTitle, ArrayList<String> EventLocation,
+                         ArrayList<String> Node, ArrayList<Integer> color_picker, ArrayList<Integer> avatar_picker, ArrayList<Integer> start_year,
+                         ArrayList<Integer> start_month, ArrayList<Integer> start_day, ArrayList<Integer> start_hour, ArrayList<Integer> start_minutes,
+                         ArrayList<Integer> end_year, ArrayList<Integer> end_month, ArrayList<Integer> end_day, ArrayList<Integer> end_hour,
+                         ArrayList<Integer> end_minutes, ArrayList<Integer> all_day, ArrayList<Integer> sound_notifications,
+                         ArrayList<Integer> silent_notifications){
 
         this.activity=activity;
         this.context=context;
-        this.txtEventId =EventId;
-        this.txtEventTitle =EventTitle;
-        this.txtEventLocation =EventLocation;
-        this.txtNode =Node;
+        this.txtEventId = EventId;
+        this.txtEventTitle = EventTitle;
+        this.txtEventLocation = EventLocation;
+        this.txtNode = Node;
 
         this.int_color_picker = color_picker;
         this.int_avatar_picker = avatar_picker;

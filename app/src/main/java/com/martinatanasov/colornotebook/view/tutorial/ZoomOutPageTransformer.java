@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.tutorial;
 
 import android.view.View;
 

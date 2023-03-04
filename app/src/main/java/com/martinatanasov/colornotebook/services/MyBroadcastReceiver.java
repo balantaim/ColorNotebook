@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

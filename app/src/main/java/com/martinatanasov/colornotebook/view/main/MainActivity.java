@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -34,6 +34,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.services.MyForegroundServices;
+import com.martinatanasov.colornotebook.view.add.AddActivity;
+import com.martinatanasov.colornotebook.view.option.OptionActivity;
+import com.martinatanasov.colornotebook.view.tutorial.TutorialActivity;
 
 import java.util.ArrayList;
 

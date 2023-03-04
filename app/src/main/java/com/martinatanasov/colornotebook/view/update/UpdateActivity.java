@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.update;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -32,11 +32,14 @@ import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import java.util.Calendar;
-
+import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
+import com.martinatanasov.colornotebook.dialog_views.CustomView;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
-import com.martinatanasov.colornotebook.views.ApplyPriority;
-import com.martinatanasov.colornotebook.views.CustomView;
+import com.martinatanasov.colornotebook.view.main.MainActivity;
+
+import java.util.Calendar;
 
 public class UpdateActivity extends AppCompatActivity {
 

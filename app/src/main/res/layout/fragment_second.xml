@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimaryVariant"
-    tools:context=".SecondFragment">
+    tools:context=".view.tutorial.SecondFragment">
 
     <TextView
         android:id="@+id/textView2"

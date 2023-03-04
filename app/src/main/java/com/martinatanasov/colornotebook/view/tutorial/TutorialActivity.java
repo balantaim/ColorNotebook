@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.tutorial;
 
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -6,6 +6,8 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.martinatanasov.colornotebook.R;
 
 public class TutorialActivity extends AppCompatActivity {
 

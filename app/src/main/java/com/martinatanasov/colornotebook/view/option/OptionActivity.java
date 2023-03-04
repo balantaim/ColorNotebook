@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.option;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.martinatanasov.colornotebook.BuildConfig;
+import com.martinatanasov.colornotebook.R;
 
 public class OptionActivity extends AppCompatActivity {
 

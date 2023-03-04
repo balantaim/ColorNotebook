@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.view.main;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +18,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.martinatanasov.colornotebook.BuildConfig;
+import com.martinatanasov.colornotebook.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

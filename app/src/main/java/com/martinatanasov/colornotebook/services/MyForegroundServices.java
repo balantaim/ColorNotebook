@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,6 +10,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.martinatanasov.colornotebook.R;
 
 public class MyForegroundServices extends Service {
     @Override

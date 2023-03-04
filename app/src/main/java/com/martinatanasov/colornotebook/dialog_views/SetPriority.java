@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook.views;
+package com.martinatanasov.colornotebook.dialog_views;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -60,7 +60,7 @@ public class SetPriority extends AppCompatDialogFragment {
         try {
             listener = (ApplyPriority) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "Implement dialog listener");
+            throw new ClassCastException(context + "Implement dialog listener");
         }
     }
 }

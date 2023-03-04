@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook;
+package com.martinatanasov.colornotebook.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,7 +9,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-class MyDatabaseHelper extends SQLiteOpenHelper {
+import com.martinatanasov.colornotebook.R;
+
+public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private final Context context;
     private final static String DATABASE_NAME = "ColorEventsLibrary.db";
@@ -29,13 +31,18 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
     private final static String COLUMN_END_DAY = "end_day";
     private final static String COLUMN_END_HOUR = "end_hour";
     private final static String COLUMN_END_MINUTES = "end_minutes";
+
+    private final static String COLUMN_CREATED_DATE = "created_date";
+
+    private final static String COLUMN_MODIFIED_DATE = "modified_date";
     private final static String COLUMN_DAY_EVENT = "day_event";
     private final static String COLUMN_SOUND_NOTIFICATION = "sound_notification";
     private final static String COLUMN_SILENT_NOTIFICATIONS = "silent_notification";
     private final static String COLUMN_PICKED_COLOR = "picked_color";
     private final static String COLUMN_PICKED_AVATAR = "picked_avatar";
 
-    MyDatabaseHelper(@Nullable Context context) {
+
+    public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -59,6 +66,10 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_END_DAY + " INTEGER, " +
                         COLUMN_END_HOUR + " INTEGER, " +
                         COLUMN_END_MINUTES + " INTEGER, " +
+
+                        COLUMN_CREATED_DATE + " INTEGER, " +
+                        COLUMN_MODIFIED_DATE + " INTEGER, " +
+
                         COLUMN_DAY_EVENT + " INTEGER, " +
                         COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
                         COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
@@ -72,10 +83,11 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addEvent(String title, String location, String input, int color, int avatar, int startYear,
-                  int startMonth, int startDay, int startHour, int startMinutes,
-                  int endYear, int endMonth, int endDay, int endHour, int endMinutes,
-                  int allDay , int soundNotifications, int silentNotifications){
+    public void addEvent(String title, String location, String input, int color, int avatar, int startYear,
+                         int startMonth, int startDay, int startHour, int startMinutes,
+                         int endYear, int endMonth, int endDay, int endHour, int endMinutes,
+                         long createdDate, long modifiedDate,
+                         int allDay, int soundNotifications, int silentNotifications){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -94,6 +106,10 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_END_DAY, endDay);
         cv.put(COLUMN_END_HOUR, endHour);
         cv.put(COLUMN_END_MINUTES, endMinutes);
+
+        cv.put(COLUMN_CREATED_DATE, createdDate);
+        cv.put(COLUMN_MODIFIED_DATE, modifiedDate);
+
         cv.put(COLUMN_DAY_EVENT, allDay);
         cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
@@ -106,7 +122,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    Cursor readAllData(){
+    public Cursor readAllData(){
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -118,7 +134,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
+    public void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
                     int startMonth, int startDay, int startHour, int startMinutes,
                     int endYear, int endMonth, int endDay, int endHour, int endMinutes,
                     int allDay , int soundNotifications, int silentNotifications){
@@ -151,7 +167,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    void deleteDataOnOneRow(String row_id){
+    public void deleteDataOnOneRow(String row_id){
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
         
@@ -162,7 +178,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    void deleteAllData(){
+    public void deleteAllData(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
         //Delete DB file from the phone
@@ -171,7 +187,7 @@ class MyDatabaseHelper extends SQLiteOpenHelper {
 
 //    public boolean swipeDeleteItem(String delItem){
 //        SQLiteDatabase db = this.getWritableDatabase();
-//        String queryString = ("DELETE FROM " + TABLE_NAME + "WHERE " + COLUMN_ID + " = " + delItem);
+//        String queryString = ("DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + delItem);
 //        Cursor cursor = db.rawQuery(queryString, null);
 //
 //        if(cursor.moveToFirst()){
