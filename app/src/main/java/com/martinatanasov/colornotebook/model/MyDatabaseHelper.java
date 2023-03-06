@@ -33,7 +33,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private final static String COLUMN_END_MINUTES = "end_minutes";
 
     private final static String COLUMN_CREATED_DATE = "created_date";
-
     private final static String COLUMN_MODIFIED_DATE = "modified_date";
     private final static String COLUMN_DAY_EVENT = "day_event";
     private final static String COLUMN_SOUND_NOTIFICATION = "sound_notification";

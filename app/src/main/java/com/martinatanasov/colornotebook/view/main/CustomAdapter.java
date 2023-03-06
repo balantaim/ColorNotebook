@@ -21,18 +21,22 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private final Context context;
 //    private final Context context;
     private static ArrayList<String> txtEventId, txtEventTitle, txtEventLocation, txtNode;
-    private static ArrayList<Integer> int_color_picker, int_avatar_picker, int_start_year, int_start_month, int_start_day, int_start_hour,
-            int_start_minutes, int_end_year, int_end_month, int_end_day, int_end_hour, int_end_minutes,
+    private static ArrayList<Integer> int_color_picker, int_avatar_picker,
+            int_start_year, int_end_year,
             int_all_day, int_sound_notifications, int_silent_notifications;
+    private static ArrayList<Byte> byte_start_month, byte_start_day, byte_start_hour,
+            byte_start_minutes, byte_end_month, byte_end_day, byte_end_hour, byte_end_minutes;
+    private static ArrayList<Long> long_created_date, long_modified_date;
     private static final String TAG = "CustomAdapter";
     Activity activity;
     //int position;
 
     public CustomAdapter(Activity activity, Context context, ArrayList<String> EventId, ArrayList<String> EventTitle, ArrayList<String> EventLocation,
                          ArrayList<String> Node, ArrayList<Integer> color_picker, ArrayList<Integer> avatar_picker, ArrayList<Integer> start_year,
-                         ArrayList<Integer> start_month, ArrayList<Integer> start_day, ArrayList<Integer> start_hour, ArrayList<Integer> start_minutes,
-                         ArrayList<Integer> end_year, ArrayList<Integer> end_month, ArrayList<Integer> end_day, ArrayList<Integer> end_hour,
-                         ArrayList<Integer> end_minutes, ArrayList<Integer> all_day, ArrayList<Integer> sound_notifications,
+                         ArrayList<Byte> start_month, ArrayList<Byte> start_day, ArrayList<Byte> start_hour, ArrayList<Byte> start_minutes,
+                         ArrayList<Integer> end_year, ArrayList<Byte> end_month, ArrayList<Byte> end_day, ArrayList<Byte> end_hour,
+                         ArrayList<Byte> end_minutes, ArrayList<Long> long_created_date, ArrayList<Long> long_modified_date,
+                         ArrayList<Integer> all_day, ArrayList<Integer> sound_notifications,
                          ArrayList<Integer> silent_notifications){
 
         this.activity=activity;
@@ -45,15 +49,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.int_color_picker = color_picker;
         this.int_avatar_picker = avatar_picker;
         this.int_start_year = start_year;
-        this.int_start_month = start_month;
-        this.int_start_day = start_day;
-        this.int_start_hour = start_hour;
-        this.int_start_minutes = start_minutes;
+        this.byte_start_month = start_month;
+        this.byte_start_day = start_day;
+        this.byte_start_hour = start_hour;
+        this.byte_start_minutes = start_minutes;
         this.int_end_year = end_year;
-        this.int_end_month = end_month;
-        this.int_end_day = end_day;
-        this.int_end_hour = end_hour;
-        this.int_end_minutes = end_minutes;
+        this.byte_end_month = end_month;
+        this.byte_end_day = end_day;
+        this.byte_end_hour = end_hour;
+        this.byte_end_minutes = end_minutes;
+        this.long_created_date = long_created_date;
+        this.long_modified_date = long_modified_date;
         this.int_all_day = all_day;
         this.int_sound_notifications = sound_notifications;
         this.int_silent_notifications = silent_notifications;
@@ -86,15 +92,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("color", int_color_picker.get(holder.getBindingAdapterPosition()));
                 intent.putExtra("avatar", int_avatar_picker.get(holder.getBindingAdapterPosition()));
                 intent.putExtra("start_year", int_start_year.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_mouth", int_start_month.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_day", int_start_day.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_hour", int_start_hour.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_minutes", int_start_minutes.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_mouth", byte_start_month.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_day", byte_start_day.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_hour", byte_start_hour.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("start_minutes", byte_start_minutes.get(holder.getBindingAdapterPosition()));
                 intent.putExtra("end_year", int_end_year.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_month", int_end_month.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_day", int_end_day.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_hour", int_end_hour.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_minutes", int_end_minutes.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_month", byte_end_month.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_day", byte_end_day.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_hour", byte_end_hour.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("end_minutes", byte_end_minutes.get(holder.getBindingAdapterPosition()));
+
+                intent.putExtra("created_date", long_created_date.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("modified_date", long_modified_date.get(holder.getBindingAdapterPosition()));
+
                 intent.putExtra("all_day", int_all_day.get(holder.getBindingAdapterPosition()));
                 intent.putExtra("sound_notifications", int_sound_notifications.get(holder.getBindingAdapterPosition()));
                 intent.putExtra("silent_notifications", int_silent_notifications.get(holder.getBindingAdapterPosition()));

@@ -5,9 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,9 +34,7 @@ import com.martinatanasov.colornotebook.dialog_views.CustomView;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
 public class AddActivity extends AppCompatActivity implements ApplyPriority {
@@ -187,11 +183,7 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
         if (eventTitle.getText().toString().length() > 1) {
             if (!tryEmpty(eventTitle.getText().toString(), eventInput.getText().toString())) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
-
-                long testTime = SystemClock.uptimeMillis();
-
-
-
+                final long timestamp = Calendar.getInstance().getTimeInMillis();
                 myDB.addEvent(eventTitle.getText().toString().trim(),
                         eventLocation.getText().toString().trim(),
                         eventInput.getText().toString().trim(),
@@ -199,20 +191,18 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
                         priorityPicker,
                         YEAR, MONTH, DAY, HOUR, MINUTES,
                         YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
-                        testTime,
-                        testTime,
+                        timestamp,
+                        timestamp,
                         dayEventBool,
                         soundNotificationBool,
                         silentNotificationBool);
-
-                Log.d("TEST", "onAddBtn: " + testTime);
-
-                //String pattern = "MM-dd-yyyy";
+                /*
+                Log.d("TEST", "onAddBtn: " + timestamp);
                 String pattern = "dd-M-yyyy hh:mm:ss";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                //Date date = new Date(testTime);
-                String ss = simpleDateFormat.format(new Date(testTime));
-                Log.d("TEST", "TimePrint: " + ss + " ," + testTime );
+                String ss = simpleDateFormat.format(new Date(timestamp));
+                Log.d("TEST", "TimePrint: " + ss + " ," + timestamp);
+                */
             }
         } else {
             Toast.makeText(this, "Header should contain at least 2 symbols!", Toast.LENGTH_SHORT).show();

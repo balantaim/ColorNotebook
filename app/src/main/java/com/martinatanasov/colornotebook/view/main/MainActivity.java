@@ -60,15 +60,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static ArrayList<Integer> event_color_picker;
     private static ArrayList<Integer> event_avatar_picker;
     private static ArrayList<Integer> event_start_year;
-    private static ArrayList<Integer> event_start_month;
-    private static ArrayList<Integer> event_start_day;
-    private static ArrayList<Integer> event_start_hour;
-    private static ArrayList<Integer> event_start_minutes;
+    private static ArrayList<Byte> event_start_month;
+    private static ArrayList<Byte> event_start_day;
+    private static ArrayList<Byte> event_start_hour;
+    private static ArrayList<Byte> event_start_minutes;
     private static ArrayList<Integer> event_end_year;
-    private static ArrayList<Integer> event_end_month;
-    private static ArrayList<Integer> event_end_day;
-    private static ArrayList<Integer> event_end_hour;
-    private static ArrayList<Integer> event_end_minutes;
+    private static ArrayList<Byte> event_end_month;
+    private static ArrayList<Byte> event_end_day;
+    private static ArrayList<Byte> event_end_hour;
+    private static ArrayList<Byte> event_end_minutes;
+    private static ArrayList<Long> event_created_date;
+    private static ArrayList<Long> event_modified_date;
     private static ArrayList<Integer> event_all_day;
     private static ArrayList<Integer> event_sound_notifications;
     private static ArrayList<Integer> event_silent_notifications;
@@ -128,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         event_end_day = new ArrayList<>();
         event_end_hour = new ArrayList<>();
         event_end_minutes = new ArrayList<>();
+        event_created_date = new ArrayList<>();
+        event_modified_date = new ArrayList<>();
         event_all_day = new ArrayList<>();
         event_sound_notifications = new ArrayList<>();
         event_silent_notifications = new ArrayList<>();
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         customAdapter = new CustomAdapter(MainActivity.this, this, event_id, event_title, event_location, event_note,
                 event_color_picker, event_avatar_picker, event_start_year, event_start_month, event_start_day, event_start_hour,
                 event_start_minutes, event_end_year, event_end_month, event_end_day, event_end_hour, event_end_minutes,
+                event_created_date, event_modified_date,
                 event_all_day, event_sound_notifications, event_silent_notifications);
 
         //SimpleCallback - Drag and Drop function
@@ -245,18 +250,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 event_color_picker.add(Integer.parseInt(cursor.getString(4)));
                 event_avatar_picker.add(Integer.parseInt(cursor.getString(5)));
                 event_start_year.add(Integer.parseInt(cursor.getString(6)));
-                event_start_month.add(Integer.parseInt(cursor.getString(7)));
-                event_start_day.add(Integer.parseInt(cursor.getString(8)));
-                event_start_hour.add(Integer.parseInt(cursor.getString(9)));
-                event_start_minutes.add(Integer.parseInt(cursor.getString(10)));
+                event_start_month.add(Byte.parseByte(cursor.getString(7)));
+                event_start_day.add(Byte.parseByte(cursor.getString(8)));
+                event_start_hour.add(Byte.parseByte(cursor.getString(9)));
+                event_start_minutes.add(Byte.parseByte(cursor.getString(10)));
                 event_end_year.add(Integer.parseInt(cursor.getString(11)));
-                event_end_month.add(Integer.parseInt(cursor.getString(12)));
-                event_end_day.add(Integer.parseInt(cursor.getString(13)));
-                event_end_hour.add(Integer.parseInt(cursor.getString(14)));
-                event_end_minutes.add(Integer.parseInt(cursor.getString(15)));
-                event_all_day.add(Integer.parseInt(cursor.getString(16)));
-                event_sound_notifications.add(Integer.parseInt(cursor.getString(17)));
-                event_silent_notifications.add(Integer.parseInt(cursor.getString(18)));
+                event_end_month.add(Byte.parseByte(cursor.getString(12)));
+                event_end_day.add(Byte.parseByte(cursor.getString(13)));
+                event_end_hour.add(Byte.parseByte(cursor.getString(14)));
+                event_end_minutes.add(Byte.parseByte(cursor.getString(15)));
+                event_created_date.add(Long.parseLong(cursor.getString(16)));
+                event_modified_date.add(Long.parseLong(cursor.getString(17)));
+                event_all_day.add(Integer.parseInt(cursor.getString(18)));
+                event_sound_notifications.add(Integer.parseInt(cursor.getString(19)));
+                event_silent_notifications.add(Integer.parseInt(cursor.getString(20)));
             }
         }
     }
@@ -417,11 +424,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 //        super.onBackPressed();
     }
-
-//    @Override
-//    protected void onDestroy() {
-//        recyclerView.setAdapter(null);
-//        customAdapter = null;
-//        super.onDestroy();
-//    }
 }
