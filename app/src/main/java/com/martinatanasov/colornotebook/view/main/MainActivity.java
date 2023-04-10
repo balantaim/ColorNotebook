@@ -21,27 +21,27 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.data.UserEvent;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.services.MyForegroundServices;
 import com.martinatanasov.colornotebook.view.add.AddActivity;
 import com.martinatanasov.colornotebook.view.option.OptionActivity;
 import com.martinatanasov.colornotebook.view.tutorial.TutorialActivity;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -137,11 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         event_silent_notifications = new ArrayList<>();
 
         storeDataInArrays();
-        customAdapter = new CustomAdapter(MainActivity.this, this, event_id, event_title, event_location, event_note,
-                event_color_picker, event_avatar_picker, event_start_year, event_start_month, event_start_day, event_start_hour,
-                event_start_minutes, event_end_year, event_end_month, event_end_day, event_end_hour, event_end_minutes,
-                event_created_date, event_modified_date,
-                event_all_day, event_sound_notifications, event_silent_notifications);
+        //List<UserEvent> dataItems = storeDataInObjects();
+        customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
 
         //SimpleCallback - Drag and Drop function
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
@@ -267,11 +264,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
+    private List<UserEvent> storeDataInObjects(){
+        List<UserEvent> allDataInObjects = new ArrayList<>();
+        for (int i = 0; i < event_id.size(); i++){
+            allDataInObjects.add(new UserEvent(
+                    event_id.get(i),
+                    event_title.get(i),
+                    event_location.get(i),
+                    event_note.get(i),
+                    event_color_picker.get(i),
+                    event_avatar_picker.get(i),
+                    event_start_year.get(i),
+                    event_end_year.get(i),
+                    event_all_day.get(i),
+                    event_sound_notifications.get(i),
+                    event_silent_notifications.get(i),
+                    event_start_month.get(i),
+                    event_start_day.get(i),
+                    event_start_hour.get(i),
+                    event_start_minutes.get(i),
+                    event_end_month.get(i),
+                    event_end_day.get(i),
+                    event_end_hour.get(i),
+                    event_end_minutes.get(i),
+                    event_created_date.get(i),
+                    event_modified_date.get(i)
+            ));
+        }
+        return allDataInObjects;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.my_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText != null){
+                    customAdapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

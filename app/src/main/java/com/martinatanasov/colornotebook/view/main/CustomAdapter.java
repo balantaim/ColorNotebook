@@ -1,70 +1,38 @@
 package com.martinatanasov.colornotebook.view.main;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.data.UserEvent;
 import com.martinatanasov.colornotebook.view.update.UpdateActivity;
-
 import java.util.ArrayList;
+import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
-    private final Context context;
-//    private final Context context;
-    private static ArrayList<String> txtEventId, txtEventTitle, txtEventLocation, txtNode;
-    private static ArrayList<Integer> int_color_picker, int_avatar_picker,
-            int_start_year, int_end_year,
-            int_all_day, int_sound_notifications, int_silent_notifications;
-    private static ArrayList<Byte> byte_start_month, byte_start_day, byte_start_hour,
-            byte_start_minutes, byte_end_month, byte_end_day, byte_end_hour, byte_end_minutes;
-    private static ArrayList<Long> long_created_date, long_modified_date;
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> implements Filterable {
+    private Context context;
     private static final String TAG = "CustomAdapter";
-    Activity activity;
-    //int position;
+    private List<UserEvent> userModelList;
+    private List<UserEvent> userModelListFiltered;
+    private Activity activity;
 
-    public CustomAdapter(Activity activity, Context context, ArrayList<String> EventId, ArrayList<String> EventTitle, ArrayList<String> EventLocation,
-                         ArrayList<String> Node, ArrayList<Integer> color_picker, ArrayList<Integer> avatar_picker, ArrayList<Integer> start_year,
-                         ArrayList<Byte> start_month, ArrayList<Byte> start_day, ArrayList<Byte> start_hour, ArrayList<Byte> start_minutes,
-                         ArrayList<Integer> end_year, ArrayList<Byte> end_month, ArrayList<Byte> end_day, ArrayList<Byte> end_hour,
-                         ArrayList<Byte> end_minutes, ArrayList<Long> long_created_date, ArrayList<Long> long_modified_date,
-                         ArrayList<Integer> all_day, ArrayList<Integer> sound_notifications,
-                         ArrayList<Integer> silent_notifications){
+    public CustomAdapter(Activity activity, Context context, List<UserEvent> userModel){
+        this.userModelList = userModel;
+        this.userModelListFiltered = userModel;
+        this.context = context;
+        this.activity = activity;
 
-        this.activity=activity;
-        this.context=context;
-        this.txtEventId = EventId;
-        this.txtEventTitle = EventTitle;
-        this.txtEventLocation = EventLocation;
-        this.txtNode = Node;
-
-        this.int_color_picker = color_picker;
-        this.int_avatar_picker = avatar_picker;
-        this.int_start_year = start_year;
-        this.byte_start_month = start_month;
-        this.byte_start_day = start_day;
-        this.byte_start_hour = start_hour;
-        this.byte_start_minutes = start_minutes;
-        this.int_end_year = end_year;
-        this.byte_end_month = end_month;
-        this.byte_end_day = end_day;
-        this.byte_end_hour = end_hour;
-        this.byte_end_minutes = end_minutes;
-        this.long_created_date = long_created_date;
-        this.long_modified_date = long_modified_date;
-        this.int_all_day = all_day;
-        this.int_sound_notifications = sound_notifications;
-        this.int_silent_notifications = silent_notifications;
     }
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -76,48 +44,80 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.txtEventId.setText(String.valueOf(txtEventId.get(holder.getBindingAdapterPosition())));
-        holder.txtEventTitle.setText(String.valueOf(txtEventTitle.get(holder.getBindingAdapterPosition())));
-        holder.txtEventLocation.setText(String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
-        holder.txtNode.setText(String.valueOf(txtNode.get(holder.getBindingAdapterPosition())));
+
+        UserEvent userEvent = userModelList.get(position);
+        holder.txtEventId.setText(userEvent.getTxtEventId());
+        holder.txtEventTitle.setText(userEvent.getTxtEventTitle());
+        holder.txtEventLocation.setText(userEvent.getTxtEventLocation());
+        holder.txtNode.setText(userEvent.getTxtNode());
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateActivity.class);
-                intent.putExtra("id", String.valueOf(txtEventId.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("title", String.valueOf(txtEventTitle.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("location", String.valueOf(txtEventLocation.get(holder.getBindingAdapterPosition())));
-                intent.putExtra("input", String.valueOf(txtNode.get(holder.getBindingAdapterPosition())));
-
-                intent.putExtra("color", int_color_picker.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("avatar", int_avatar_picker.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_year", int_start_year.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_mouth", byte_start_month.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_day", byte_start_day.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_hour", byte_start_hour.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("start_minutes", byte_start_minutes.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_year", int_end_year.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_month", byte_end_month.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_day", byte_end_day.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_hour", byte_end_hour.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("end_minutes", byte_end_minutes.get(holder.getBindingAdapterPosition()));
-
-                intent.putExtra("created_date", long_created_date.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("modified_date", long_modified_date.get(holder.getBindingAdapterPosition()));
-
-                intent.putExtra("all_day", int_all_day.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("sound_notifications", int_sound_notifications.get(holder.getBindingAdapterPosition()));
-                intent.putExtra("silent_notifications", int_silent_notifications.get(holder.getBindingAdapterPosition()));
+                intent.putExtra("id", String.valueOf(userEvent.getTxtEventId()));
+                intent.putExtra("title", (userEvent.getTxtEventTitle()));
+                intent.putExtra("location", userEvent.getTxtEventLocation());
+                intent.putExtra("input", userEvent.getTxtNode());
+                intent.putExtra("color", userEvent.getInt_color_picker());
+                intent.putExtra("avatar", userEvent.getInt_avatar_picker());
+                intent.putExtra("start_year", userEvent.getInt_start_year());
+                intent.putExtra("start_mouth", Integer.valueOf(userEvent.getByte_start_month()));
+                intent.putExtra("start_day", Integer.valueOf(userEvent.getByte_start_day()));
+                intent.putExtra("start_hour", Integer.valueOf(userEvent.getByte_start_hour()));
+                intent.putExtra("start_minutes", Integer.valueOf(userEvent.getByte_start_minutes()));
+                intent.putExtra("end_year", userEvent.getInt_end_year());
+                intent.putExtra("end_month", Integer.valueOf(userEvent.getByte_end_month()));
+                intent.putExtra("end_day", Integer.valueOf(userEvent.getByte_end_day()));
+                intent.putExtra("end_hour", Integer.valueOf(userEvent.getByte_end_hour()));
+                intent.putExtra("end_minutes", Integer.valueOf(userEvent.getByte_end_minutes()));
+                intent.putExtra("created_date", userEvent.getLong_created_date());
+                intent.putExtra("modified_date", userEvent.getLong_modified_date());
+                intent.putExtra("all_day", userEvent.getInt_all_day());
+                intent.putExtra("sound_notifications", userEvent.getInt_sound_notifications());
+                intent.putExtra("silent_notifications", userEvent.getInt_silent_notifications());
                 activity.startActivityForResult(intent, 1);
             }
         });
     }
-
     @Override
     public int getItemCount() {
-        return txtEventId.size();
+        //return txtEventId.size();
+        return userModelList.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                if (constraint == null || constraint.length() == 0){
+                    filterResults.values = userModelListFiltered;
+                    filterResults.count = userModelListFiltered.size();
+                }else{
+                    String search = constraint.toString().toLowerCase();
+                    List<UserEvent> userFilteredList = new ArrayList<>();
+                    for(UserEvent userEvent: userModelListFiltered){
+                        if(userEvent.getTxtEventTitle().toLowerCase().contains(search) ||
+                                userEvent.getTxtNode().toLowerCase().contains(search) ||
+                                userEvent.getTxtEventLocation().toLowerCase().contains(search)){
+                            userFilteredList.add(userEvent);
+                        }
+                    }
+                    filterResults.values = userFilteredList;
+                    filterResults.count = userFilteredList.size();
+                }
+                return filterResults;
+            }
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                userModelList = (List<UserEvent>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+        return filter;
+    }
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtEventId, txtEventTitle, txtEventLocation, txtNode;
@@ -132,5 +132,4 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             mainLayout=itemView.findViewById(R.id.mainLayout);
         }
     }
-
 }

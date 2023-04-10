@@ -11,6 +11,7 @@
     <string name="my_menu_options">Options</string>
     <string name="my_menu_dell">Delete all</string>
     <string name="my_menu_advanced">Advanced tools</string>
+    <string name="my_menu_search">Search</string>
     <!--    Drawer Menu-->
     <string name="drawer_statistic">Statistic</string>
     <string name="drawer_app">Application</string>

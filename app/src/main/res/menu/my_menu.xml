@@ -5,13 +5,18 @@
     <item android:id="@+id/navigation_button"
         android:icon="@drawable/ic_indent_in"
         android:title="@string/my_menu_advanced"
-        app:showAsAction="ifRoom"/>
-    <item android:id="@+id/delete_all"
-        android:title="@string/my_menu_dell"
-        android:icon="@drawable/ic_delete"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always|collapseActionView"/>
+    <item android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/my_menu_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
     <item android:id="@+id/options"
         android:icon="@drawable/ic_settings"
         android:title="@string/my_menu_options"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom|collapseActionView"/>
+    <item android:id="@+id/delete_all"
+        android:title="@string/my_menu_dell"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="never|collapseActionView"/>
 </menu>

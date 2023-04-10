@@ -32,10 +32,10 @@ import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.CustomView;
+import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
 
@@ -63,6 +63,7 @@ public class UpdateActivity extends AppCompatActivity {
     public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
     public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker =0;
+    public static long eventCreatedDate=0, eventModifiedDate=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,11 +178,14 @@ public class UpdateActivity extends AppCompatActivity {
                 priorityPicker,
                 YEAR, MONTH, DAY, HOUR, MINUTES,
                 YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
+                eventCreatedDate,
+                eventModifiedDate,
                 dayEventBool,
                 soundNotificationBool,
                 silentNotificationBool);
 
-//        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input);
+//        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input
+//        + " Start Hour " + HOUR +" Start min " + MINUTES + " CreatedDate " + eventCreatedDate);
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -208,6 +212,10 @@ public class UpdateActivity extends AppCompatActivity {
             DAY2 = getIntent().getIntExtra("end_day", 0);
             HOUR2 = getIntent().getIntExtra("end_hour", 0);
             MINUTES2 = getIntent().getIntExtra("end_minutes", 0);
+
+            eventCreatedDate = getIntent().getLongExtra("created_date", 0);
+            eventModifiedDate = getIntent().getLongExtra("modified_date", 0);
+
             dayEventBool = getIntent().getIntExtra("all_day", 0);
             soundNotificationBool = getIntent().getIntExtra("sound_notifications", 0);
             silentNotificationBool = getIntent().getIntExtra("silent_notifications",0);

@@ -136,6 +136,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
                     int startMonth, int startDay, int startHour, int startMinutes,
                     int endYear, int endMonth, int endDay, int endHour, int endMinutes,
+                    long createdDate, long modifiedDate,
                     int allDay , int soundNotifications, int silentNotifications){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -154,6 +155,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_END_DAY, endDay);
         cv.put(COLUMN_END_HOUR, endHour);
         cv.put(COLUMN_END_MINUTES, endMinutes);
+        cv.put(COLUMN_CREATED_DATE, createdDate);
+        cv.put(COLUMN_MODIFIED_DATE, modifiedDate);
         cv.put(COLUMN_DAY_EVENT, allDay);
         cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
