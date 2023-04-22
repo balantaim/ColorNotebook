@@ -31,6 +31,9 @@
                 <item android:id="@+id/website"
                     android:icon="@drawable/ic_website"
                     android:title="@string/drawer_website"/>
+                <item android:id="@+id/events_chart"
+                    android:icon="@drawable/ic_chart"
+                    android:title="@string/events_chart"/>
                 <item android:id="@+id/about"
                     android:icon="@drawable/ic_about"
                     android:title="@string/drawer_about"/>

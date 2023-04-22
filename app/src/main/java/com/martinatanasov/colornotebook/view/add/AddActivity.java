@@ -20,7 +20,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
@@ -33,8 +32,10 @@ import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.CustomView;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
+import com.martinatanasov.colornotebook.tools.Tools;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 
 public class AddActivity extends AppCompatActivity implements ApplyPriority {
@@ -55,7 +56,6 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
-    public static final String TXT_SIZE = "txtSize";
     public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
     public static int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
@@ -74,9 +74,9 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
+        //Change Back arrow button
+        Tools tools = new Tools();
+        tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
 
         advOptions = findViewById(R.id.advOptions);
         dateStart = findViewById(R.id.startDate);

@@ -2,27 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DefaultColorNotebook"
-        android:localeConfig="@xml/locales_config"
         tools:targetApi="tiramisu">
         <activity
             android:name=".view.main.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/Theme.DefaultColorNotebook">
+            android:theme="@style/Theme.DefaultColorNotebook"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,9 +29,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".view.chart.ChartActivity"
+            android:parentActivityName=".view.main.MainActivity"
+            android:label="@string/chart"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".view.option.OptionActivity"
             android:exported="true"
-            android:label="Options"
+            android:label="@string/my_menu_options"
             android:parentActivityName=".view.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DefaultColorNotebook"
@@ -46,7 +52,7 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".view.add.AddActivity"
-            android:label="Add Event"
+            android:label="@string/add_event"
             android:parentActivityName=".view.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DefaultColorNotebook"
@@ -56,14 +62,16 @@
             android:name=".view.tutorial.TutorialActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/Theme.Tutorial" />
+            android:theme="@style/Theme.Tutorial"
+            tools:ignore="LockedOrientationActivity" />
 
         <service android:name=".services.MyForegroundServices" />
-        <receiver android:name=".services.MyBroadcastReceiver"
+
+        <receiver
+            android:name=".services.MyBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

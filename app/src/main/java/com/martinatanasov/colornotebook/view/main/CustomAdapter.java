@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.data.UserEvent;
+import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.view.update.UpdateActivity;
 import java.util.ArrayList;
 import java.util.List;

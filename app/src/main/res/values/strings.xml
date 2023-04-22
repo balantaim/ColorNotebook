@@ -91,5 +91,10 @@
     <string name="set_important">Important</string>
     <string name="set_regular">Regular</string>
     <string name="set_unimportant">Unimportant</string>
+    <string name="events_chart">Events chart</string>
+    <string name="events">Events</string>
+    <!--    Manifest label activity-->
+    <string name="chart">Chart</string>
+    <string name="add_event">Add Event</string>
 
 </resources>

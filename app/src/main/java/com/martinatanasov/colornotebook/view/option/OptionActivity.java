@@ -51,6 +51,7 @@ public class OptionActivity extends AppCompatActivity {
 
         //Change Back arrow button
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
 
         //Change actionBar Background color dynamic

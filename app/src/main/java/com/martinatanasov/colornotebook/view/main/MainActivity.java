@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,15 +32,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.data.UserEvent;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.services.MyForegroundServices;
 import com.martinatanasov.colornotebook.view.add.AddActivity;
+import com.martinatanasov.colornotebook.view.chart.ChartActivity;
 import com.martinatanasov.colornotebook.view.option.OptionActivity;
 import com.martinatanasov.colornotebook.view.tutorial.TutorialActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MyDatabaseHelper myDB;
-    private static TextView counter, activeAlarms;
+    TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
     private static ArrayList<String> event_id;
     private static ArrayList<String> event_title;
     private static ArrayList<String> event_location;
     private static ArrayList<String> event_note;
     //Secondary data parameters
     private static ArrayList<Integer> event_color_picker;
-    private static ArrayList<Integer> event_avatar_picker;
+    private static ArrayList<Integer> event_priority_picker;
     private static ArrayList<Integer> event_start_year;
     private static ArrayList<Byte> event_start_month;
     private static ArrayList<Byte> event_start_day;
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static ArrayList<Integer> event_silent_notifications;
     private static final String SHARED_PREF = "sharedPref";
     private static final String THEME = "theme";
-    private static final String TXT_SIZE = "txtSize";
     private static final String SWITCH_DARK_MODE = "switchDarkMode";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
     private static final String TAG = "MainActivity";
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         event_note = new ArrayList<>();
         //Secondary data parameters
         event_color_picker = new ArrayList<>();
-        event_avatar_picker = new ArrayList<>();
+        event_priority_picker = new ArrayList<>();
         event_start_year = new ArrayList<>();
         event_start_month = new ArrayList<>();
         event_start_day = new ArrayList<>();
@@ -167,9 +170,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
         counter = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
         activeAlarms = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
+        importantEvents = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
+        regularEvents = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
+        lowPriorityEvents = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
         navigationView.getMenu().findItem(R.id.totalCount).setActionView(counter);
         navigationView.getMenu().findItem(R.id.activeAlarms).setActionView(activeAlarms);
-        updateDrawerCounter();
+        navigationView.getMenu().findItem(R.id.importantEvents).setActionView(importantEvents);
+        navigationView.getMenu().findItem(R.id.regularEvents).setActionView(regularEvents);
+        navigationView.getMenu().findItem(R.id.lowPriorityEvents).setActionView(lowPriorityEvents);
+        updateDrawerCounter(counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             final Animator animStart = AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.rotate_back);
             final Animator animEnd = AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.rotate_start);
@@ -212,16 +221,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public static void updateDrawerCounter() {
-        int index = 0, alarm = 0;
-        index = event_id.size();
-        formatCount(counter, index);
+    public static void updateDrawerCounter(TextView counter,
+                                           TextView activeAlarms,
+                                           TextView importantEvents,
+                                           TextView regularEvents,
+                                           TextView lowPriorityEvents) {
+        int alarm = 0, important = 0, regular = 0, unimportant = 0;
         for (int i = 0; i < event_id.size(); i++) {
             if (event_sound_notifications.get(i) > 0) {
                 alarm++;
             }
+            switch (event_priority_picker.get(i)){
+                case 1:
+                    regular++;
+                    break;
+                case 2:
+                    unimportant++;
+                    break;
+                default:
+                    important++;
+                    break;
+            }
         }
+        formatCount(counter, event_id.size());
         formatCount(activeAlarms, alarm);
+        formatCount(importantEvents, important);
+        formatCount(regularEvents, regular);
+        formatCount(lowPriorityEvents, unimportant);
     }
 
     //Update date after move from UpdateAct to MainAct
@@ -245,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 event_location.add(cursor.getString(2));
                 event_note.add(cursor.getString(3));
                 event_color_picker.add(Integer.parseInt(cursor.getString(4)));
-                event_avatar_picker.add(Integer.parseInt(cursor.getString(5)));
+                event_priority_picker.add(Integer.parseInt(cursor.getString(5)));
                 event_start_year.add(Integer.parseInt(cursor.getString(6)));
                 event_start_month.add(Byte.parseByte(cursor.getString(7)));
                 event_start_day.add(Byte.parseByte(cursor.getString(8)));
@@ -273,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     event_location.get(i),
                     event_note.get(i),
                     event_color_picker.get(i),
-                    event_avatar_picker.get(i),
+                    event_priority_picker.get(i),
                     event_start_year.get(i),
                     event_end_year.get(i),
                     event_all_day.get(i),
@@ -323,6 +349,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
+            case R.id.events_chart: {
+                openChartFragment();
+                break;
+            }
             case R.id.website: {
                 Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
                 break;
@@ -345,6 +375,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void openChartFragment(){
+        Intent intent = new Intent(this, ChartActivity.class);
+        startActivity(intent);
     }
 
     @SuppressLint("NonConstantResourceId")

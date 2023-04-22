@@ -1,4 +1,4 @@
-package com.martinatanasov.colornotebook.data;
+package com.martinatanasov.colornotebook.model;
 
 public class UserEvent {
     String txtEventId;

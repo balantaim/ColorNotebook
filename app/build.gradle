@@ -86,4 +86,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
 
+    //Chart library
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 }
