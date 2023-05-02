@@ -15,21 +15,21 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.martinatanasov.colornotebook.R;
 
-public class SetPriority extends AppCompatDialogFragment {
+public class SelectColor extends AppCompatDialogFragment {
 
     ConstraintLayout setImportant, setRegular, setUnimportant;
     private static int status = 1;
-    private ApplyPriority listener;
+    private ApplyColor listener;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.set_priority_dialog, null);
+        View view = layoutInflater.inflate(R.layout.pickup_color, null);
 
         builder.setView(view)
-                .setTitle("NANA")
+                .setTitle(R.string.pickColor)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -39,17 +39,17 @@ public class SetPriority extends AppCompatDialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.setPriority(status);
+                        //listener.setColor(status);
                     }
                 });
-        setImportant = (ConstraintLayout) view.findViewById(R.id.setImportant);
-        setRegular = (ConstraintLayout) view.findViewById(R.id.setRegular);
-        setUnimportant = (ConstraintLayout) view.findViewById(R.id.setUnimportant);
+//        setImportant = (ConstraintLayout) view.findViewById(R.id.setImportant);
+//        setRegular = (ConstraintLayout) view.findViewById(R.id.setRegular);
+//        setUnimportant = (ConstraintLayout) view.findViewById(R.id.setUnimportant);
 
         //onClick(view);
-        setImportant.setOnClickListener(v -> status = 0);
-        setRegular.setOnClickListener(v -> status = 1);
-        setUnimportant.setOnClickListener(v -> status = 2);
+//        setImportant.setOnClickListener(v -> status = 0);
+//        setRegular.setOnClickListener(v -> status = 1);
+//        setUnimportant.setOnClickListener(v -> status = 2);
 
         return builder.create();
     }
@@ -58,7 +58,7 @@ public class SetPriority extends AppCompatDialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (ApplyPriority) context;
+            listener = (ApplyColor) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context + "Implement dialog listener");
         }

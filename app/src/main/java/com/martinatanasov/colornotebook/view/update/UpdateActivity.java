@@ -1,6 +1,5 @@
 package com.martinatanasov.colornotebook.view.update;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -26,15 +25,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
-import com.martinatanasov.colornotebook.dialog_views.CustomView;
+import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
+import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.Tools;
@@ -43,7 +43,7 @@ import com.martinatanasov.colornotebook.view.main.MainActivity;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class UpdateActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity implements ApplyColor {
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnUpdate, btnDelete;
@@ -52,15 +52,13 @@ public class UpdateActivity extends AppCompatActivity {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
-    static Calendar calendar;
-    static Calendar calendar1;
+    private static Calendar calendar, calendar1;
     public static String id, title, location, input;
-    static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
+    private static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
 
     public static final String TAG = "UpdateActivity";
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
-    public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
     public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
     public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker =0;
@@ -104,61 +102,34 @@ public class UpdateActivity extends AppCompatActivity {
         getAndSetIntentData();
 
         //Set actionbar title after getAndSetIntentData method
-        ActionBar ab =getSupportActionBar();
-        if (ab != null) {
-            ab.setTitle(title);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
         }
-        if(dayEventBool==1 || soundNotificationBool==1 || silentNotificationBool==1){
+        if(dayEventBool == 1 || soundNotificationBool == 1 || silentNotificationBool == 1){
             expandView();
         }
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onUpdateBtn();
-            }
-        });
+        btnUpdate.setOnClickListener(v -> onUpdateBtn());
 
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmDialog();
-            }
-        });
+        btnDelete.setOnClickListener(v -> confirmDialog());
 
         advOptions.setOnClickListener(view -> expandView());
         dateStart.setOnClickListener(view -> setStartDate());
         timeStart.setOnClickListener(view -> setStartTime());
         dateEnd.setOnClickListener(view -> setEndDate());
         timeEnd.setOnClickListener(view -> setEndTime());
+        eventColor.setOnClickListener(view -> selectColor());
 
-        allDaySw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dayEventBool = allDaySw.isChecked() ? 1:0;
-            }
-        });
-        soundNotSw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                soundNotificationBool = soundNotSw.isChecked() ? 1:0;
-            }
-        });
-        silentNotSw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { silentNotificationBool = silentNotSw.isChecked() ? 1:0; }
-        });
-        priority.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                managePriority();
-            }
-        });
+        allDaySw.setOnClickListener(view -> dayEventBool = allDaySw.isChecked() ? 1:0);
+        soundNotSw.setOnClickListener(view -> soundNotificationBool = soundNotSw.isChecked() ? 1:0);
+        silentNotSw.setOnClickListener(view -> silentNotificationBool = silentNotSw.isChecked() ? 1:0);
+        priority.setOnClickListener(v -> managePriority());
     }
 
     private void managePriority(){
-        CustomView customView = new CustomView(getApplicationContext());
-        customView.setPriority(this, priorityPicker);
-        customView.setDialogResult(new ApplyPriority(){
+        PriorityDialog priorityDialog = new PriorityDialog(getApplicationContext());
+        priorityDialog.setPriority(this, priorityPicker);
+        priorityDialog.setDialogResult(new ApplyPriority(){
             @Override
             public void setPriority(int status) {
                 priorityPicker = status;
@@ -264,7 +235,10 @@ public class UpdateActivity extends AppCompatActivity {
             silentNotSw.setEnabled(false);
         }
     }
-
+    private void selectColor(){
+        SelectColor selectColor = new SelectColor();
+        selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
+    }
     private void getPriorityString(){
         switch (priorityPicker){
             case 1:
@@ -381,7 +355,6 @@ public class UpdateActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -419,18 +392,15 @@ public class UpdateActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-//        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
-
-        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            getDelegate().applyDayNight();
-        }else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            getDelegate().applyDayNight();
-        }
+//        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//            getDelegate().applyDayNight();
+//        }else{
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+//            getDelegate().applyDayNight();
+//        }
 
         int theme = sharedPreferences.getInt(THEME, 0);
         switch (theme){
@@ -444,5 +414,12 @@ public class UpdateActivity extends AppCompatActivity {
                 setTheme(R.style.Theme_DefaultColorNotebook);
                 break;
         }
+    }
+
+    @Override
+    public void setColor(int color) {
+        color = 1;
+        colorPicker = color;
+        Toast.makeText(this, "DA " + color, Toast.LENGTH_SHORT).show();
     }
 }

@@ -35,6 +35,7 @@
                 android:layout_marginBottom="18dp"
                 android:backgroundTint="?attr/colorPrimary"
                 android:ems="10"
+                android:windowSoftInputMode="stateHidden"
                 android:hint="@string/hintTitle"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"

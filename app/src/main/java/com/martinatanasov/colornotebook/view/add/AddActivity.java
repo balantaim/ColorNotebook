@@ -21,15 +21,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
-import com.martinatanasov.colornotebook.dialog_views.CustomView;
+import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
+import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.Tools;
@@ -38,7 +39,7 @@ import java.util.Calendar;
 import java.util.Objects;
 
 
-public class AddActivity extends AppCompatActivity implements ApplyPriority {
+public class AddActivity extends AppCompatActivity implements ApplyColor {
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
     TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority;
@@ -46,17 +47,15 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
-    static Calendar calendar;
-    static Calendar calendar1;
-    static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
+    private static Calendar calendar, calendar1;
+    private static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
 
     //private ApplyPriority listener;
-    //Dialog priorityDialog;
+    //Dialog colorDialog;
     //ConstraintLayout setImportant, setRegular, setUnimportant;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
-    public static final String SWITCH_DARK_MODE = "switchDarkMode";
     public static int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
     public static int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
     public static int dayEventBool = 0, soundNotificationBool = 0, silentNotificationBool = 0, colorPicker = 0, priorityPicker = 1;
@@ -104,50 +103,36 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
                 && (dateEnd.getText().toString().equals("") || dateEnd == null)) {
             initAdvancedOptions();
         }
+        //Custom dialog set event priority
+        //colorDialog = new Dialog(this);
+
         btnAdd.setOnClickListener(v -> onAddBtn());
         advOptions.setOnClickListener(view -> expandView());
         dateStart.setOnClickListener(view -> setStartDate());
         timeStart.setOnClickListener(view -> setStartTime());
         dateEnd.setOnClickListener(view -> setEndDate());
         timeEnd.setOnClickListener(view -> setEndTime());
+        eventColor.setOnClickListener(view -> selectColor());
 
 //        Scale fonts change getApplicationContext with context
 //        Configuration configuration = getApplicationContext().getResources().getConfiguration();
 //        configuration.fontScale = 3.0f;
 //        getApplicationContext().createConfigurationContext(configuration);
 
-        allDaySw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dayEventBool = allDaySw.isChecked() ? 1 : 0;
-            }
-        });
-        soundNotSw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                soundNotificationBool = soundNotSw.isChecked() ? 1 : 0;
-            }
-        });
-        silentNotSw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                silentNotificationBool = silentNotSw.isChecked() ? 1 : 0;
-            }
-        });
-        //Custom dialog set event priority
-        //priorityDialog = new Dialog(this);
-        priority.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                managePriority();
-            }
-        });
+        allDaySw.setOnClickListener(view -> dayEventBool = allDaySw.isChecked() ? 1 : 0);
+        soundNotSw.setOnClickListener(view -> soundNotificationBool = soundNotSw.isChecked() ? 1 : 0);
+        silentNotSw.setOnClickListener(view -> silentNotificationBool = silentNotSw.isChecked() ? 1 : 0);
+        priority.setOnClickListener(v -> managePriority());
+    }
+    private void selectColor(){
+        SelectColor selectColor = new SelectColor();
+        selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
     }
 
     private void managePriority() {
-        CustomView customView = new CustomView(getApplicationContext());
-        customView.setPriority(this, priorityPicker);
-        customView.setDialogResult(new ApplyPriority() {
+        PriorityDialog priorityDialog = new PriorityDialog(getApplicationContext());
+        priorityDialog.setPriority(this, priorityPicker);
+        priorityDialog.setDialogResult(new ApplyPriority() {
             @Override
             public void setPriority(int status) {
                 priorityPicker = status;
@@ -378,14 +363,13 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
 
     private void skinTheme() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-//        boolean swOnOff = sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
-        if (sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            getDelegate().applyDayNight();
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            getDelegate().applyDayNight();
-        }
+//        if (sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)) {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//            getDelegate().applyDayNight();
+//        } else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+//            getDelegate().applyDayNight();
+//        }
 
         int theme = sharedPreferences.getInt(THEME, 0);
         switch (theme) {
@@ -402,8 +386,9 @@ public class AddActivity extends AppCompatActivity implements ApplyPriority {
     }
 
     @Override
-    public void setPriority(int status) {
-        priorityPicker = status;
-        Toast.makeText(this, "DA " + status, Toast.LENGTH_SHORT).show();
+    public void setColor(int color) {
+        color = 1;
+        colorPicker = color;
+        Toast.makeText(this, "DA " + color, Toast.LENGTH_SHORT).show();
     }
 }

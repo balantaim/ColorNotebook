@@ -136,11 +136,40 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:contentDescription="@string/loadWelcomeImage"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/version"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnApply" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerFrameLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/version"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnApply"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_duration="800">
+
+                    <ImageView
+                        android:id="@+id/shimmerView"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="24dp"
+                        android:src="@drawable/ic_default_image"
+                        android:contentDescription="@string/loadWelcomeImage"
+                        app:layout_constraintBottom_toTopOf="@+id/version"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btnApply" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
         <TextView
             android:id="@+id/version"

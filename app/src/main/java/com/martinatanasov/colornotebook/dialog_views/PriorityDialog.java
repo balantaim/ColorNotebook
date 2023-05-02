@@ -11,13 +11,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.martinatanasov.colornotebook.R;
 
-public class CustomView extends Dialog {
+public class PriorityDialog extends Dialog {
 
     ConstraintLayout setImportant, setRegular, setUnimportant;
     Dialog priorityDialog;
     ApplyPriority listener;
 
-    public CustomView(@NonNull Context context) {
+    public PriorityDialog(@NonNull Context context) {
         super(context);
     }
 
@@ -56,8 +56,8 @@ public class CustomView extends Dialog {
             if(listener != null){
                 listener.setPriority(2);
             }
-            ;priorityDialog.dismiss();}
-        );
+            priorityDialog.dismiss();
+        });
         priorityDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         priorityDialog.show();
     }

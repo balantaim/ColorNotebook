@@ -47,9 +47,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         UserEvent userEvent = userModelList.get(position);
         holder.txtEventId.setText(userEvent.getTxtEventId());
-        holder.txtEventTitle.setText(userEvent.getTxtEventTitle());
-        holder.txtEventLocation.setText(userEvent.getTxtEventLocation());
-        holder.txtNode.setText(userEvent.getTxtNode());
+        if(userEvent.getTxtEventTitle().length() >= 11){
+            holder.txtEventTitle.setText(userEvent.getTxtEventTitle().substring(0,10));
+        }else{
+            holder.txtEventTitle.setText(userEvent.getTxtEventTitle());
+        }
+        //holder.txtEventLocation.setText(userEvent.getTxtEventLocation());
+        //holder.txtNode.setText(userEvent.getTxtNode());
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +131,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             super(itemView);
             txtEventId =itemView.findViewById(R.id.txtEventId);
             txtEventTitle =itemView.findViewById(R.id.txtEventTitle);
-            txtEventLocation =itemView.findViewById(R.id.txtEventLocation);
+            //txtEventLocation =itemView.findViewById(R.id.txtEventLocation);
             txtNode =itemView.findViewById(R.id.txtNode);
             mainLayout=itemView.findViewById(R.id.mainLayout);
         }

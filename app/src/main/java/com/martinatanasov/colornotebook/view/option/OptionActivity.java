@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,11 +16,17 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.R;
 
@@ -29,7 +36,7 @@ public class OptionActivity extends AppCompatActivity {
     private TextView txtSize, txtVersion;
     private Spinner spinner;
     private Button btnApply;
-    private ImageView loadImage;
+    private ImageView loadImage, shimmerView;
 
     public static final String SHARED_PREF = "sharedPref";
     public static final String THEME = "theme";
@@ -64,14 +71,35 @@ public class OptionActivity extends AppCompatActivity {
         txtSize=findViewById(R.id.txtSize);
         spinner=findViewById(R.id.spinnerSkins);
         btnApply=findViewById(R.id.btnApply);
+        shimmerView=findViewById(R.id.shimmerView);
 
         //Check for current version and store it in TextView
         txtVersion.setText("v." + BuildConfig.VERSION_NAME);
 
+        //init Shimmer container
+        ShimmerFrameLayout shimmer = (ShimmerFrameLayout) findViewById(R.id.shimmerFrameLayout);
+
         //Load image from webserver
         Glide.with(OptionActivity.this)
                 .load(imgUrl)
-                .timeout(1000)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        shimmer.stopShimmer();
+                        shimmerView.setVisibility(View.GONE);
+                        loadImage.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        shimmer.stopShimmer();
+                        shimmerView.setVisibility(View.GONE);
+                        loadImage.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                })
+                .timeout(8000)
                 .fitCenter()
                 //reload image every time
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

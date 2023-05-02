@@ -378,6 +378,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void openChartFragment(){
         Intent intent = new Intent(this, ChartActivity.class);
+        intent.putExtra("important", importantEvents.getText().toString());
+        intent.putExtra("regular", regularEvents.getText().toString());
+        intent.putExtra("unimportant", lowPriorityEvents.getText().toString());
         startActivity(intent);
     }
 
@@ -465,17 +468,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
-
-    //Load Theme Setting
-    private void skinTheme() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-
+    //Check if Night mode is activated
+    private void darkModeChecker(SharedPreferences sharedPreferences){
         if (sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         getDelegate().applyDayNight();
+    }
+    //Load Theme Setting
+    private void skinTheme() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        darkModeChecker(sharedPreferences);
 
         int theme = sharedPreferences.getInt(THEME, 0);
         switch (theme) {
