@@ -87,8 +87,7 @@
                 android:src="@drawable/ic_alarm_2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txtNode"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.437" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtNode"
@@ -97,7 +96,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="999"
                 android:textSize="18sp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

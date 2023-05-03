@@ -153,7 +153,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnApply"
                     app:shimmer_auto_start="true"
-                    app:shimmer_duration="800">
+                    app:shimmer_duration="3400">
 
                     <ImageView
                         android:id="@+id/shimmerView"

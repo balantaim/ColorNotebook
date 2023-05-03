@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,6 +49,8 @@ public class ChartActivity extends AppCompatActivity {
             regular = getIntent().getStringExtra("regular");
             unimportant = getIntent().getStringExtra("unimportant");
             initiatePieChart();
+        }else{
+            Toast.makeText(this, "Not enough data!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -72,13 +75,7 @@ public class ChartActivity extends AppCompatActivity {
     }
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-//        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//            getDelegate().applyDayNight();
-//        }else{
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-//            getDelegate().applyDayNight();
-//        }
+
         int theme = sharedPreferences.getInt(THEME, 0);
         switch (theme){
             case 1:
