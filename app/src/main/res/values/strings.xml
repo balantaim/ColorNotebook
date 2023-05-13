@@ -7,6 +7,17 @@
         <item>Blue</item>
         <item>Dark</item>
     </string-array>
+    <string-array name="color_picker_array">
+        <item>Default</item>
+        <item>Sky blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Orange</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Gray</item>
+    </string-array>
     <!--    My Menu-->
     <string name="my_menu_options">Options</string>
     <string name="my_menu_dell">Delete all</string>
@@ -41,7 +52,7 @@
     <string name="allDay">All day event</string>
     <string name="pickColor">Event color</string>
     <string name="priorityIcon">Priority</string>
-    <string name="from_skin">From skin</string>
+    <string name="default_value">Default</string>
     <string name="silentNotifications">Silent notifications</string>
     <string name="alarmNotifications">Sound notifications</string>
     <string name="error_404">Error: 404
@@ -97,5 +108,16 @@
     <!--    Manifest label activity-->
     <string name="chart">Chart</string>
     <string name="add_event">Add Event</string>
+    <!--    Color description-->
+    <string name="default_color">Default color</string>
+    <string name="sky_blue_color">Sky blue color</string>
+    <string name="green_color">Green color</string>
+    <string name="yellow_color">Yellow color</string>
+    <string name="orange_color">Orange color</string>
+    <string name="red_color">Red color</string>
+    <string name="blue_color">Blue color</string>
+    <string name="purple_color">Purple color</string>
+    <string name="grey_color">Gray color</string>
+
 
 </resources>

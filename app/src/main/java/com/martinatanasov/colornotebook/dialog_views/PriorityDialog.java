@@ -5,17 +5,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.martinatanasov.colornotebook.R;
 
 public class PriorityDialog extends Dialog {
 
     ConstraintLayout setImportant, setRegular, setUnimportant;
     Dialog priorityDialog;
-    ApplyPriority listener;
+    private ApplyPriority listener;
 
     public PriorityDialog(@NonNull Context context) {
         super(context);
@@ -39,6 +37,12 @@ public class PriorityDialog extends Dialog {
                 setImportant.setBackgroundResource(R.drawable.rounded_bg);
                 break;
         }
+        updateStatus();
+        priorityDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        priorityDialog.show();
+    }
+
+    private void updateStatus() {
         //OnClick listener for set priority
         setImportant.setOnClickListener(v -> {
             if(listener != null){
@@ -58,9 +62,8 @@ public class PriorityDialog extends Dialog {
             }
             priorityDialog.dismiss();
         });
-        priorityDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        priorityDialog.show();
     }
+
     public void setDialogResult(ApplyPriority dialogResult){
         listener = dialogResult;
     }

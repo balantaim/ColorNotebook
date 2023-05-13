@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static ArrayList<Integer> event_all_day;
     private static ArrayList<Integer> event_sound_notifications;
     private static ArrayList<Integer> event_silent_notifications;
+    private static int alarm = 0, important = 0, regular = 0, unimportant = 0;
     private static final String SHARED_PREF = "sharedPref";
     private static final String THEME = "theme";
     private static final String SWITCH_DARK_MODE = "switchDarkMode";
@@ -226,21 +227,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                            TextView importantEvents,
                                            TextView regularEvents,
                                            TextView lowPriorityEvents) {
-        int alarm = 0, important = 0, regular = 0, unimportant = 0;
-        for (int i = 0; i < event_id.size(); i++) {
-            if (event_sound_notifications.get(i) > 0) {
-                alarm++;
-            }
-            switch (event_priority_picker.get(i)){
-                case 1:
-                    regular++;
-                    break;
-                case 2:
-                    unimportant++;
-                    break;
-                default:
-                    important++;
-                    break;
+        if(unimportant == 0 && regular == 0 && important == 0){
+            for (int i = 0; i < event_id.size(); i++) {
+                if (event_sound_notifications.get(i) > 0) {
+                    alarm++;
+                }
+                switch (event_priority_picker.get(i)){
+                    case 1:
+                        regular++;
+                        break;
+                    case 2:
+                        unimportant++;
+                        break;
+                    default:
+                        important++;
+                        break;
+                }
             }
         }
         formatCount(counter, event_id.size());
@@ -378,9 +380,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void openChartFragment(){
         Intent intent = new Intent(this, ChartActivity.class);
-        intent.putExtra("important", importantEvents.getText().toString());
-        intent.putExtra("regular", regularEvents.getText().toString());
-        intent.putExtra("unimportant", lowPriorityEvents.getText().toString());
+        intent.putExtra("important", Integer.toString(important));
+        intent.putExtra("regular", Integer.toString(regular));
+        intent.putExtra("unimportant", Integer.toString(unimportant));
         startActivity(intent);
     }
 
@@ -412,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
                 myDB.deleteAllData();
+                alarm = important = regular = unimportant = 0;
                 //Refresh activity
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);

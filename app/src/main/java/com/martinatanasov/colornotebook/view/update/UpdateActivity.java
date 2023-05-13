@@ -217,6 +217,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             CharSequence charSequence1= DateFormat.format("MMM d, yyyy", calendar1);
             dateStart.setText(charSequence);
             dateEnd.setText(charSequence1);
+            //Set color picker text
+            updateColorText(colorPicker);
             if (is24format){
                 timeStart.setText(timeToString.intToTxtTime(HOUR, MINUTES));
                 timeEnd.setText(timeToString.intToTxtTime(HOUR2, MINUTES2));
@@ -415,11 +417,41 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
                 break;
         }
     }
-
+    private void updateColorText(int color){
+        String[] stringArray = getResources().getStringArray(R.array.color_picker_array);
+        switch (color) {
+            case 1:
+                eventColor.setText(stringArray[1]);
+                break;
+            case 2:
+                eventColor.setText(stringArray[2]);
+                break;
+            case 3:
+                eventColor.setText(stringArray[3]);
+                break;
+            case 4:
+                eventColor.setText(stringArray[4]);
+                break;
+            case 5:
+                eventColor.setText(stringArray[5]);
+                break;
+            case 6:
+                eventColor.setText(stringArray[6]);
+                break;
+            case 7:
+                eventColor.setText(stringArray[7]);
+                break;
+            case 8:
+                eventColor.setText(stringArray[8]);
+                break;
+            default:
+                eventColor.setText(stringArray[0]);
+                break;
+        }
+    }
     @Override
     public void setColor(int color) {
-        color = 1;
         colorPicker = color;
-        Toast.makeText(this, "DA " + color, Toast.LENGTH_SHORT).show();
+        updateColorText(color);
     }
 }

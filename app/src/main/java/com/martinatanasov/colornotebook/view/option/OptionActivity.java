@@ -131,7 +131,6 @@ public class OptionActivity extends AppCompatActivity {
                     editor.apply();
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
