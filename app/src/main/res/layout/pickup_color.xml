@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/color_pickup"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -34,12 +35,20 @@
                     android:id="@+id/colDefault"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@color/black"
+                    android:background="@color/white"
                     android:contentDescription="@string/default_color"
                     app:layout_constraintEnd_toStartOf="@+id/colSkyBlue"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxDefault"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colDefault"
+                    app:layout_constraintEnd_toEndOf="@+id/colDefault"
+                    app:layout_constraintStart_toStartOf="@+id/colDefault"
+                    app:layout_constraintTop_toTopOf="@+id/colDefault" />
 
                 <ImageView
                     android:id="@+id/colSkyBlue"
@@ -51,6 +60,14 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/colDefault"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxSkyBlue"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colSkyBlue"
+                    app:layout_constraintEnd_toEndOf="@+id/colSkyBlue"
+                    app:layout_constraintStart_toStartOf="@+id/colSkyBlue"
+                    app:layout_constraintTop_toTopOf="@+id/colSkyBlue" />
 
                 <ImageView
                     android:id="@+id/colGreen"
@@ -62,6 +79,15 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/colSkyBlue"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxGreen"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colGreen"
+                    app:layout_constraintEnd_toEndOf="@+id/colGreen"
+                    app:layout_constraintStart_toStartOf="@+id/colGreen"
+                    app:layout_constraintTop_toTopOf="@+id/colGreen" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -86,6 +112,14 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxYellow"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colYellow"
+                    app:layout_constraintEnd_toEndOf="@+id/colYellow"
+                    app:layout_constraintStart_toStartOf="@+id/colYellow"
+                    app:layout_constraintTop_toTopOf="@+id/colYellow" />
 
                 <ImageView
                     android:id="@+id/colOrange"
@@ -98,6 +132,14 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/colYellow"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxOrange"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colOrange"
+                    app:layout_constraintEnd_toEndOf="@+id/colOrange"
+                    app:layout_constraintStart_toStartOf="@+id/colOrange"
+                    app:layout_constraintTop_toTopOf="@+id/colOrange" />
 
                 <ImageView
                     android:id="@+id/colRed"
@@ -110,6 +152,14 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/colOrange"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxRed"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colRed"
+                    app:layout_constraintEnd_toEndOf="@+id/colRed"
+                    app:layout_constraintStart_toStartOf="@+id/colRed"
+                    app:layout_constraintTop_toTopOf="@+id/colRed" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -134,6 +184,14 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxBlue"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colBlue"
+                    app:layout_constraintEnd_toEndOf="@+id/colBlue"
+                    app:layout_constraintStart_toStartOf="@+id/colBlue"
+                    app:layout_constraintTop_toTopOf="@+id/colBlue" />
 
                 <ImageView
                     android:id="@+id/colPurple"
@@ -147,6 +205,14 @@
                     app:layout_constraintStart_toEndOf="@+id/colBlue"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
+                <ImageView
+                    android:id="@+id/boxPurple"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colPurple"
+                    app:layout_constraintEnd_toEndOf="@+id/colPurple"
+                    app:layout_constraintStart_toStartOf="@+id/colPurple"
+                    app:layout_constraintTop_toTopOf="@+id/colPurple" />
 
                 <ImageView
                     android:id="@+id/colGray"
@@ -159,6 +225,15 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/colPurple"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/boxGray"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/colGray"
+                    app:layout_constraintEnd_toEndOf="@+id/colGray"
+                    app:layout_constraintStart_toStartOf="@+id/colGray"
+                    app:layout_constraintTop_toTopOf="@+id/colGray" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -125,7 +125,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         priority.setOnClickListener(v -> managePriority());
     }
     private void selectColor(){
-        SelectColor selectColor = new SelectColor();
+        SelectColor selectColor = new SelectColor(colorPicker);
         selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
     }
 

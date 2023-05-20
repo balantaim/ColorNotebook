@@ -8,18 +8,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
 import com.martinatanasov.colornotebook.R;
 
 public class SelectColor extends AppCompatDialogFragment {
 
-    //ConstraintLayout setImportant, setRegular, setUnimportant;
     ImageView colorOne, colorTwo, colorThree, colorFour, colorFive,
             colorSix, colorSeven, colorEight, colorNine;
-    private static int colorPosition = 0;
+    ImageView boxOne, boxTwo, boxThree, boxFour, boxFive, boxSix, boxSeven, boxEight, boxNine;
+
+    private int colorPosition = 0;
     private ApplyColor listener;
+
+    public SelectColor(int color) {
+        this.colorPosition = color;
+    }
 
     @NonNull
     @Override
@@ -36,37 +43,122 @@ public class SelectColor extends AppCompatDialogFragment {
 
                     }
                 })
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.apply, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.setColor(colorPosition);
                     }
                 });
         initView(view);
+        setFocusedPosition(colorPosition, -1);
         selectColor();
 
         return builder.create();
     }
 
     private void selectColor() {
-//        setImportant.setOnClickListener(v -> status = 0);
-//        setRegular.setOnClickListener(v -> status = 1);
-//        setUnimportant.setOnClickListener(v -> status = 2);
-        colorOne.setOnClickListener(v -> colorPosition = 0);
-        colorTwo.setOnClickListener(v -> colorPosition = 1);
-        colorThree.setOnClickListener(v -> colorPosition = 2);
-        colorFour.setOnClickListener(v -> colorPosition = 3);
-        colorFive.setOnClickListener(v -> colorPosition = 4);
-        colorSix.setOnClickListener(v -> colorPosition = 5);
-        colorSeven.setOnClickListener(v -> colorPosition = 6);
-        colorEight.setOnClickListener(v -> colorPosition = 7);
-        colorNine.setOnClickListener(v -> colorPosition = 8);
+        colorOne.setOnClickListener(v -> {
+            setFocusedPosition(0, colorPosition);
+            colorPosition = 0;
+        });
+        colorTwo.setOnClickListener(v -> {
+            setFocusedPosition(1, colorPosition);
+            colorPosition = 1;
+        });
+        colorThree.setOnClickListener(v -> {
+            setFocusedPosition(2, colorPosition);
+            colorPosition = 2;
+        });
+        colorFour.setOnClickListener(v -> {
+            setFocusedPosition(3, colorPosition);
+            colorPosition = 3;
+        });
+        colorFive.setOnClickListener(v -> {
+            setFocusedPosition(4, colorPosition);
+            colorPosition = 4;
+        });
+        colorSix.setOnClickListener(v -> {
+            setFocusedPosition(5, colorPosition);
+            colorPosition = 5;
+        });
+        colorSeven.setOnClickListener(v -> {
+            setFocusedPosition(6, colorPosition);
+            colorPosition = 6;
+        });
+        colorEight.setOnClickListener(v -> {
+            setFocusedPosition(7, colorPosition);
+            colorPosition = 7;
+        });
+        colorNine.setOnClickListener(v -> {
+            setFocusedPosition(8, colorPosition);
+            colorPosition = 8;
+        });
+    }
+    private void setFocusedPosition(int newPosition, int lastPosition){
+        ImageView imageView;
+        if(lastPosition == -1){
+            imageView = getSelectedView(newPosition);
+            imageView.setBackgroundResource(R.drawable.rounded_bg_transparent);
+            return;
+        }
+        if(newPosition != lastPosition){
+            imageView = getSelectedView(lastPosition);
+            imageView.setBackgroundResource(android.R.color.transparent);
+            imageView = getSelectedView(newPosition);
+            imageView.setBackgroundResource(R.drawable.rounded_bg_transparent);
+        }
+    }
+
+    /*
+    private void testAnime(ImageView imageView){
+        //Animation drawable
+        AnimatedVectorDrawableCompat avdCompat;
+        AnimatedVectorDrawable avd;
+        Drawable drawable = imageView.getDrawable();
+        if(drawable instanceof AnimatedVectorDrawableCompat){
+            avdCompat = (AnimatedVectorDrawableCompat) drawable;
+            avdCompat.start();
+        }else if(drawable instanceof AnimatedVectorDrawable){
+            avd = (AnimatedVectorDrawable) drawable;
+            avd.start();
+        }
+    }
+    */
+
+    private ImageView getSelectedView(int status){
+        ImageView result;
+        switch (status){
+            case 1:
+                result = boxTwo;
+                break;
+            case 2:
+                result = boxThree;
+                break;
+            case 3:
+                result = boxFour;
+                break;
+            case 4:
+                result = boxFive;
+                break;
+            case 5:
+                result = boxSix;
+                break;
+            case 6:
+                result = boxSeven;
+                break;
+            case 7:
+                result = boxEight;
+                break;
+            case 8:
+                result = boxNine;
+                break;
+            default:
+                result = boxOne;
+        }
+        return result;
     }
 
     private void initView(View view) {
-//        setImportant = (ConstraintLayout) view.findViewById(R.id.setImportant);
-//        setRegular = (ConstraintLayout) view.findViewById(R.id.setRegular);
-//        setUnimportant = (ConstraintLayout) view.findViewById(R.id.setUnimportant);
         colorOne = view.findViewById(R.id.colDefault);
         colorTwo = view.findViewById(R.id.colSkyBlue);
         colorThree = view.findViewById(R.id.colGreen);
@@ -76,6 +168,16 @@ public class SelectColor extends AppCompatDialogFragment {
         colorSeven = view.findViewById(R.id.colBlue);
         colorEight = view.findViewById(R.id.colPurple);
         colorNine = view.findViewById(R.id.colGray);
+        //Selected item
+        boxOne = view.findViewById(R.id.boxDefault);
+        boxTwo = view.findViewById(R.id.boxSkyBlue);
+        boxThree = view.findViewById(R.id.boxGreen);
+        boxFour = view.findViewById(R.id.boxYellow);
+        boxFive = view.findViewById(R.id.boxOrange);
+        boxSix = view.findViewById(R.id.boxRed);
+        boxSeven = view.findViewById(R.id.boxBlue);
+        boxEight = view.findViewById(R.id.boxPurple);
+        boxNine = view.findViewById(R.id.boxGray);
     }
 
     @Override

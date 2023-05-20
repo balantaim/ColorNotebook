@@ -238,7 +238,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         }
     }
     private void selectColor(){
-        SelectColor selectColor = new SelectColor();
+        SelectColor selectColor = new SelectColor(colorPicker);
         selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
     }
     private void getPriorityString(){

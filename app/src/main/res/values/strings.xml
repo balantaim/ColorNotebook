@@ -88,6 +88,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="select_priority">Select event priority</string>
     <!--    Toast-->
