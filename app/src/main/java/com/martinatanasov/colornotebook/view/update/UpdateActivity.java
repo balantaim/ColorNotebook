@@ -407,7 +407,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         Date date = new Date(timestamp);
         Format formatter;
         if(is24format){
-            formatter = new SimpleDateFormat("MMM d, yyyy  hh:mm");
+            formatter = new SimpleDateFormat("MMM d, yyyy  HH:mm");
         }else{
             //formatter = new SimpleDateFormat("yyyy-MM-dd   hh:mm:ss aa");
             formatter = new SimpleDateFormat("MMM d, yyyy  hh:mm aa");
