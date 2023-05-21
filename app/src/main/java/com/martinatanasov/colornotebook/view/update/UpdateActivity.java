@@ -40,14 +40,17 @@ import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.Tools;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 public class UpdateActivity extends AppCompatActivity implements ApplyColor {
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnUpdate, btnDelete;
-    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority;
+    TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority, createdDate, modifiedDate;
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
@@ -78,23 +81,25 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         Tools tools = new Tools();
         tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
 
-        advOptions =findViewById(R.id.advOptions2);
-        dateStart =findViewById(R.id.startDate2);
-        dateEnd =findViewById(R.id.endDate2);
-        timeStart =findViewById(R.id.startTime2);
-        timeEnd =findViewById(R.id.endTime2);
-        cardView =findViewById(R.id.cardView2);
-        expandableLayout =findViewById(R.id.expandableLayout2);
-        eventTitle =findViewById(R.id.eventTitle2);
-        eventLocation =findViewById(R.id.eventLocation2);
-        eventInput =findViewById(R.id.eventInput2);
-        btnUpdate =findViewById(R.id.btnUpdate);
-        btnDelete =findViewById(R.id.btnDelete);
-        allDaySw=findViewById(R.id.allDaySw2);
-        soundNotSw =findViewById(R.id.soundNotSw2);
-        silentNotSw =findViewById(R.id.silentNotificationSw2);
-        eventColor =findViewById(R.id.eventColor2);
-        priority =findViewById(R.id.priority2);
+        advOptions = findViewById(R.id.advOptions2);
+        dateStart = findViewById(R.id.startDate2);
+        dateEnd = findViewById(R.id.endDate2);
+        timeStart = findViewById(R.id.startTime2);
+        timeEnd = findViewById(R.id.endTime2);
+        cardView = findViewById(R.id.cardView2);
+        expandableLayout = findViewById(R.id.expandableLayout2);
+        eventTitle = findViewById(R.id.eventTitle2);
+        eventLocation = findViewById(R.id.eventLocation2);
+        eventInput = findViewById(R.id.eventInput2);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        btnDelete = findViewById(R.id.btnDelete);
+        allDaySw = findViewById(R.id.allDaySw2);
+        soundNotSw = findViewById(R.id.soundNotSw2);
+        silentNotSw = findViewById(R.id.silentNotificationSw2);
+        eventColor = findViewById(R.id.eventColor2);
+        priority = findViewById(R.id.priority2);
+        createdDate = findViewById(R.id.created);
+        modifiedDate = findViewById(R.id.modified);
 
         //First before update DB
         calendar = Calendar.getInstance();
@@ -144,6 +149,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         title = eventTitle.getText().toString().trim();
         location = eventLocation.getText().toString().trim();
         input = eventInput.getText().toString().trim();
+        //Update modifier date
+        eventModifiedDate = Calendar.getInstance().getTimeInMillis();
 
         myDB.updateData(id, title, location, input,
                 colorPicker,
@@ -219,6 +226,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             dateEnd.setText(charSequence1);
             //Set color picker text
             updateColorText(colorPicker);
+            //Update create/modified date
+            createdDate.setText(timestampToDate(eventCreatedDate, is24format));
+            modifiedDate.setText(timestampToDate(eventModifiedDate, is24format));
             if (is24format){
                 timeStart.setText(timeToString.intToTxtTime(HOUR, MINUTES));
                 timeEnd.setText(timeToString.intToTxtTime(HOUR2, MINUTES2));
@@ -393,7 +403,17 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
         }
     }
-
+    private String timestampToDate(long timestamp, boolean is24format){
+        Date date = new Date(timestamp);
+        Format formatter;
+        if(is24format){
+            formatter = new SimpleDateFormat("MMM d, yyyy  hh:mm");
+        }else{
+            //formatter = new SimpleDateFormat("yyyy-MM-dd   hh:mm:ss aa");
+            formatter = new SimpleDateFormat("MMM d, yyyy  hh:mm aa");
+        }
+        return formatter.format(date);
+    }
     private void skinTheme(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 //        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){

@@ -35,12 +35,12 @@
                 android:layout_marginBottom="18dp"
                 android:backgroundTint="?attr/colorPrimary"
                 android:ems="10"
-                android:windowSoftInputMode="stateHidden"
                 android:hint="@string/hintTitle"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:paddingStart="8dp"
-                android:paddingEnd="8dp" />
+                android:paddingEnd="8dp"
+                android:windowSoftInputMode="stateHidden" />
 
             <EditText
                 android:id="@+id/eventLocation2"
@@ -78,7 +78,7 @@
                 android:layout_marginBottom="38dp">
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textColor2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -98,6 +98,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/textPriority2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -105,7 +106,7 @@
                     android:text="@string/priorityIcon"
                     android:textColor="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintTop_toBottomOf="@+id/textColor2" />
 
                 <TextView
                     android:id="@+id/priority2"
@@ -117,6 +118,31 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/eventColor2" />
 
+                <TextView
+                    android:id="@+id/created"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="32dp"
+                    android:drawablePadding="6dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_created"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textPriority2" />
+
+                <TextView
+                    android:id="@+id/modified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:drawablePadding="6dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_modified"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/created" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
