@@ -1,14 +1,31 @@
+/*
+ * Copyright (c) 2022 Martin Atanasov. All rights reserved.
+ *
+ * IMPORTANT!
+ * Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+ * is excluded from this license. Any use of these file types or logos requires
+ * prior permission from the respective owner or copyright holder.
+ *
+ * This work is licensed under the terms of the MIT license.
+ * For a copy, see <https://opensource.org/licenses/MIT>.
+ */
+
 package com.martinatanasov.colornotebook.view.update;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,6 +53,7 @@ import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.services.AlarmReceiver;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.Tools;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
@@ -55,6 +73,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+
     private static Calendar calendar, calendar1;
     public static String id, title, location, input;
     private static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
@@ -142,6 +163,19 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             }
         });
     }
+    private void initiateAlarm(){
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,pendingIntent);
+
+        //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
+        Log.d("ALARM", "This is alarm");
+    }
 
     private void onUpdateBtn(){
         //Update DB
@@ -162,6 +196,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
                 dayEventBool,
                 soundNotificationBool,
                 silentNotificationBool);
+        if(soundNotificationBool == 1){
+            initiateAlarm();
+        }
 
 //        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input
 //        + " Start Hour " + HOUR +" Start min " + MINUTES + " CreatedDate " + eventCreatedDate);
@@ -403,6 +440,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
         }
     }
+    @SuppressLint("SimpleDateFormat")
     private String timestampToDate(long timestamp, boolean is24format){
         Date date = new Date(timestamp);
         Format formatter;

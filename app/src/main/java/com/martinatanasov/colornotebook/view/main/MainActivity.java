@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2022 Martin Atanasov. All rights reserved.
+ *
+ * IMPORTANT!
+ * Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+ * is excluded from this license. Any use of these file types or logos requires
+ * prior permission from the respective owner or copyright holder.
+ *
+ * This work is licensed under the terms of the MIT license.
+ * For a copy, see <https://opensource.org/licenses/MIT>.
+ */
+
 package com.martinatanasov.colornotebook.view.main;
 
 import android.animation.Animator;
@@ -21,7 +33,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +43,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
@@ -84,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String SWITCH_DARK_MODE = "switchDarkMode";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
     private static final String TAG = "MainActivity";
+    private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //List<UserEvent> dataItems = storeDataInObjects();
         customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
 
+        //Swipe to delete
+        swipeAction();
         //SimpleCallback - Drag and Drop function
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
@@ -201,10 +214,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Start Foreground Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!isForegroundServiceRunning()) {
-                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
-                startForegroundService(serviceIntent);
-            }
+//            if (!isForegroundServiceRunning()) {
+//                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
+//                startForegroundService(serviceIntent);
+//            }
         }
     }
 
@@ -430,29 +443,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.create().show();
     }
 
-    //Drag and Drop Items
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
+    private void swipeAction(){
+        //Drag and Drop Items
+        itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
 
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            long id = viewHolder.getAbsoluteAdapterPosition();
-            String idS = String.valueOf(id);
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                long id = viewHolder.getAbsoluteAdapterPosition();
+                String idS = String.valueOf(id);
 
-            MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
+                MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
 
-            myDB.deleteDataOnOneRow(idS);
+                myDB.deleteDataOnOneRow(idS);
 //            txtBookId
 
-            event_id.remove(viewHolder.getAbsoluteAdapterPosition());
-            String delItem = String.valueOf(event_id);
+                event_id.remove(viewHolder.getAbsoluteAdapterPosition());
+                String delItem = String.valueOf(event_id);
 //            swipeDeleteItem(delItem);
-            customAdapter.notifyDataSetChanged();
-        }
-    };
+                customAdapter.notifyDataSetChanged();
+            }
+        };
+    }
 
     private void loadTutorial() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);

@@ -1,3 +1,15 @@
+<!--
+  ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
+  ~
+  ~ IMPORTANT!
+  ~ Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+  ~ is excluded from this license. Any use of these file types or logos requires
+  ~ prior permission from the respective owner or copyright holder.
+  ~
+  ~ This work is licensed under the terms of the MIT license.
+  ~ For a copy, see <https://opensource.org/licenses/MIT>.
+  -->
+
 <vector android:height="24dp" android:viewportHeight="24"
     android:viewportWidth="24" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="?attr/colorOnPrimary" android:pathData="M16,2H8C7.47,2 6.961,2.211 6.586,2.586C6.211,2.961 6,3.47 6,4H15V9H20V20H6C6,20.53 6.211,21.039 6.586,21.414C6.961,21.789 7.47,22 8,22H20C20.53,22 21.039,21.789 21.414,21.414C21.789,21.039 22,20.53 22,20V8L16,2Z"/>

@@ -10,7 +10,19 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.controller;
+package com.martinatanasov.colornotebook.view.custom;
 
-public class AddActivityController {
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.martinatanasov.colornotebook.R;
+
+public class CustomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_custom);
+    }
 }

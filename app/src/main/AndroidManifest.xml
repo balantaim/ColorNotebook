@@ -4,8 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DefaultColorNotebook"
         tools:targetApi="tiramisu">
+        <activity
+            android:name="view.custom.CustomActivity"
+            android:exported="false" />
         <activity
             android:name=".view.main.MainActivity"
             android:exported="true"
@@ -30,10 +35,10 @@
         </activity>
         <activity
             android:name=".view.chart.ChartActivity"
-            android:parentActivityName=".view.main.MainActivity"
-            android:label="@string/chart"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:label="@string/chart"
+            android:parentActivityName=".view.main.MainActivity"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".view.option.OptionActivity"
@@ -74,6 +79,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".services.AlarmReceiver"/>
     </application>
 
 </manifest>

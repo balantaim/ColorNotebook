@@ -1,3 +1,15 @@
+<!--
+  ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
+  ~
+  ~ IMPORTANT!
+  ~ Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+  ~ is excluded from this license. Any use of these file types or logos requires
+  ~ prior permission from the respective owner or copyright holder.
+  ~
+  ~ This work is licensed under the terms of the MIT license.
+  ~ For a copy, see <https://opensource.org/licenses/MIT>.
+  -->
+
 <vector android:height="24dp" android:viewportHeight="471.17"
     android:viewportWidth="471.17" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="?attr/colorOnPrimary" android:pathData="M402.8,121.73c-7.94,-9.85 -22.36,-11.39 -32.2,-3.45c-9.85,7.94 -11.39,22.36 -3.45,32.2c24.44,30.3 37.36,66.94 37.36,105.97c0,93.14 -75.78,168.92 -168.92,168.92c-93.14,0 -168.92,-75.78 -168.92,-168.92c0,-87.06 66.21,-158.94 150.92,-167.96l-6.84,33.94c-0.98,4.88 0.95,9.89 4.95,12.85c4,2.96 9.36,3.34 13.74,0.97l78.56,-42.51c3.35,-1.81 5.72,-5.02 6.47,-8.75s-0.19,-7.6 -2.58,-10.57L255.92,4.79c-3.12,-3.88 -8.2,-5.61 -13.04,-4.43c-4.84,1.18 -8.56,5.05 -9.54,9.93l-6.37,31.62C112.55,46.46 20.86,140.94 20.86,256.45c0,118.4 96.32,214.72 214.72,214.72c118.4,0 214.72,-96.32 214.72,-214.72C450.31,207.56 433.43,159.71 402.8,121.73z"/>
