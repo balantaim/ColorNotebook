@@ -93,8 +93,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:drawablePadding="6dp"
                     android:text="@string/pickColor"
                     android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_color_picker"
+                    app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,12 +112,16 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="32dp"
+                    android:drawablePadding="6dp"
                     android:text="@string/priorityIcon"
                     android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_priority"
+                    app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textColor" />
 
@@ -122,12 +129,12 @@
                     android:id="@+id/priority"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="10dp"
                     android:text="@string/set_regular"
                     android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventColor" />
+                    app:layout_constraintTop_toTopOf="@+id/textView4" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -254,14 +261,14 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="32dp"
                                 android:layout_marginEnd="10dp"
-                                app:track="@drawable/my_switch_body"
-                                android:thumb="@drawable/ic_thumb"
                                 android:checked="false"
                                 android:text="@string/allDay"
+                                android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintBottom_toTopOf="@+id/soundNotSw"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txtTo" />
+                                app:layout_constraintTop_toBottomOf="@+id/txtTo"
+                                app:track="@drawable/my_switch_body" />
 
                             <androidx.appcompat.widget.SwitchCompat
                                 android:id="@+id/soundNotSw"
@@ -270,13 +277,13 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="32dp"
                                 android:layout_marginEnd="10dp"
-                                app:track="@drawable/my_switch_body"
-                                android:thumb="@drawable/ic_thumb"
                                 android:checked="false"
                                 android:text="@string/alarmNotifications"
+                                android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/allDaySw" />
+                                app:layout_constraintTop_toBottomOf="@+id/allDaySw"
+                                app:track="@drawable/my_switch_body" />
 
                             <androidx.appcompat.widget.SwitchCompat
                                 android:id="@+id/silentNotificationSw"
@@ -286,14 +293,14 @@
                                 android:layout_marginTop="32dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="24dp"
-                                app:track="@drawable/my_switch_body"
-                                android:thumb="@drawable/ic_thumb"
                                 android:checked="false"
                                 android:text="@string/silentNotifications"
+                                android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw" />
+                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw"
+                                app:track="@drawable/my_switch_body" />
 
                             <androidx.constraintlayout.widget.Guideline
                                 android:id="@+id/guideline6"
@@ -319,13 +326,13 @@
                 android:id="@+id/btnAdd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/btn_delete"
                 android:minHeight="50dp"
                 android:text="@string/done"
                 android:textColor="?attr/customColorValue"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="24dp"/>
+                android:textStyle="bold"/>
 
         </LinearLayout>
     </ScrollView>

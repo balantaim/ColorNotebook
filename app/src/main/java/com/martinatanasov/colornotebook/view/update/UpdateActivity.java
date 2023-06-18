@@ -168,7 +168,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
 
         Intent intent = new Intent(this, AlarmReceiver.class);
 
-        pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY,pendingIntent);

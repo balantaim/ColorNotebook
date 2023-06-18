@@ -31,7 +31,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent customIntent = new Intent(context, CustomActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, customIntent, 0);
+        //error
+        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, customIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, customIntent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "foxandroid")
                 .setSmallIcon(R.drawable.ic_alarm_2)
@@ -51,8 +53,13 @@ public class AlarmReceiver extends BroadcastReceiver {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+
+            //requestPermissions(new String[] {Manifest.permission.POST_NOTIFICATIONS}, 1);
+
             return;
         }
         notificationManagerCompat.notify(123, builder.build());
     }
+
+
 }

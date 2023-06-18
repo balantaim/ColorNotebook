@@ -94,10 +94,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:drawablePadding="6dp"
                     android:text="@string/pickColor"
                     android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_color_picker"
+                    app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/eventColor2"
@@ -115,8 +118,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="32dp"
+                    android:drawablePadding="6dp"
                     android:text="@string/priorityIcon"
                     android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_priority"
+                    app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textColor2" />
 
@@ -124,11 +130,11 @@
                     android:id="@+id/priority2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="10dp"
                     android:textColor="?attr/colorOnPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/textPriority2"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventColor2" />
+                    app:layout_constraintTop_toTopOf="@+id/textPriority2" />
 
                 <TextView
                     android:id="@+id/created"
@@ -139,6 +145,7 @@
                     android:drawablePadding="6dp"
                     android:textColor="?attr/colorOnPrimary"
                     app:drawableStartCompat="@drawable/ic_created"
+                    app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textPriority2" />
 
@@ -152,9 +159,10 @@
                     android:drawablePadding="6dp"
                     android:textColor="?attr/colorOnPrimary"
                     app:drawableStartCompat="@drawable/ic_modified"
+                    app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/created" />
+                    app:layout_constraintTop_toBottomOf="@+id/created"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
