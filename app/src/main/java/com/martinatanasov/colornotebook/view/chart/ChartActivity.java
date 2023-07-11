@@ -15,6 +15,7 @@ package com.martinatanasov.colornotebook.view.chart;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,9 +34,7 @@ import java.util.Objects;
 
 public class ChartActivity extends AppCompatActivity {
     PieChart pieChart;
-    private static String important = "", regular = "", unimportant = "";
     private ChartActivityController controller;
-    boolean filledData = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,47 +51,33 @@ public class ChartActivity extends AppCompatActivity {
         tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
         controller = new ChartActivityController(this);
 
-        filledData = checkForResources();
-        if(!important.equals("") && !regular.equals("") && !unimportant.equals("")){
-            controller.setValues(important, regular, unimportant);
-        }
-        if(filledData){
-            initiatePieChart();
-        }else{
-            String[] data = new String[3];
-            data = controller.getDataValues();
-            important = data[0];
-            regular = data[1];
-            unimportant = data[2];
-            if((!important.equals("") && !regular.equals("") && !unimportant.equals("")) &&
-                    (!important.equals("0") && !regular.equals("0") && !unimportant.equals("0"))
-            ){
-                initiatePieChart();
-            }
-        }
+        checkForResources();
+
+        controller.calcPieChartData();
+        initiatePieChart();
+
     }
-    private boolean checkForResources(){
+    private void checkForResources(){
+        String important = "", regular = "", unimportant = "";
         if(getIntent().hasExtra("important") &&
                 getIntent().hasExtra("regular") &&
                 getIntent().hasExtra("unimportant")){
             important = getIntent().getStringExtra("important");
             regular = getIntent().getStringExtra("regular");
             unimportant = getIntent().getStringExtra("unimportant");
-            //TODO
 
-            return true;
+            controller.setValues(important, regular, unimportant);
         }else{
-            //Toast.makeText(this, "Not enough data!", Toast.LENGTH_SHORT).show();
-            return false;
+            Toast.makeText(this, "Not enough data!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void initiatePieChart() {
         pieChart = findViewById(R.id.pieChart);
         ArrayList<PieEntry> data = new ArrayList<>();
-        data.add(new PieEntry(Float.parseFloat(important), getResources().getString(R.string.drawer_one_priority)));
-        data.add(new PieEntry(Float.parseFloat(regular), getResources().getString(R.string.drawer_two_priority)));
-        data.add(new PieEntry(Float.parseFloat(unimportant), getResources().getString(R.string.drawer_three_priority)));
+        data.add(new PieEntry(controller.getImportantPercent(), getResources().getString(R.string.drawer_one_priority)));
+        data.add(new PieEntry(controller.getRegularPercent(), getResources().getString(R.string.drawer_two_priority)));
+        data.add(new PieEntry(controller.getUnimportantDouble(), getResources().getString(R.string.drawer_three_priority)));
 
         PieDataSet pieDataSet = new PieDataSet(data, getResources().getString(R.string.events));
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);

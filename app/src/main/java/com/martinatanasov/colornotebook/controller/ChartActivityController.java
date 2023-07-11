@@ -19,6 +19,7 @@ public class ChartActivityController {
     private ChartActivity chartActivity;
     private final PreferencesManager preferencesManager;
     private static String important = "", regular = "", unimportant = "";
+    private static float importantDouble = 0.0F, regularDouble = 0.0F, unimportantDouble = 0.0F;
 
     public ChartActivityController(ChartActivity chartActivity){
         this.chartActivity = chartActivity;
@@ -29,8 +30,22 @@ public class ChartActivityController {
         regular = reg;
         unimportant = uni;
     }
-    public String[] getDataValues(){
-        String[] data = {important, regular, unimportant};
-        return data;
+    public void calcPieChartData(){
+        int importantCount = Integer.parseInt(important);
+        int regularCount = Integer.parseInt(regular);
+        int unimportantCount = Integer.parseInt(unimportant);
+        float percentPerPart = (float) 100 / (importantCount + regularCount + unimportantCount);
+        importantDouble = (float) percentPerPart * importantCount;
+        regularDouble = (float) percentPerPart * regularCount;
+        unimportantDouble = (float) percentPerPart * unimportantCount;
+    }
+    public float getImportantPercent(){
+        return importantDouble;
+    }
+    public float getRegularPercent(){
+        return regularDouble;
+    }
+    public float getUnimportantDouble(){
+        return unimportantDouble;
     }
 }
