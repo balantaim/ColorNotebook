@@ -77,10 +77,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_END_DAY + " INTEGER, " +
                         COLUMN_END_HOUR + " INTEGER, " +
                         COLUMN_END_MINUTES + " INTEGER, " +
-
                         COLUMN_CREATED_DATE + " INTEGER, " +
                         COLUMN_MODIFIED_DATE + " INTEGER, " +
-
                         COLUMN_DAY_EVENT + " INTEGER, " +
                         COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
                         COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
@@ -117,10 +115,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_END_DAY, endDay);
         cv.put(COLUMN_END_HOUR, endHour);
         cv.put(COLUMN_END_MINUTES, endMinutes);
-
         cv.put(COLUMN_CREATED_DATE, createdDate);
         cv.put(COLUMN_MODIFIED_DATE, modifiedDate);
-
         cv.put(COLUMN_DAY_EVENT, allDay);
         cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);

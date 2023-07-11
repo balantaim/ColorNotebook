@@ -20,8 +20,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,19 +44,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.controller.MainActivityController;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.services.MyForegroundServices;
+import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.view.add.AddActivity;
 import com.martinatanasov.colornotebook.view.chart.ChartActivity;
 import com.martinatanasov.colornotebook.view.option.OptionActivity;
 import com.martinatanasov.colornotebook.view.tutorial.TutorialActivity;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private MainActivityController controller;
     RecyclerView recyclerView;
     FloatingActionButton add_button, scroll_top;
     CustomAdapter customAdapter;
@@ -67,54 +66,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MyDatabaseHelper myDB;
     TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
     private static ArrayList<String> event_id;
-    private static ArrayList<String> event_title;
-    private static ArrayList<String> event_location;
-    private static ArrayList<String> event_note;
-    //Secondary data parameters
-    private static ArrayList<Integer> event_color_picker;
-    private static ArrayList<Integer> event_priority_picker;
-    private static ArrayList<Integer> event_start_year;
-    private static ArrayList<Byte> event_start_month;
-    private static ArrayList<Byte> event_start_day;
-    private static ArrayList<Byte> event_start_hour;
-    private static ArrayList<Byte> event_start_minutes;
-    private static ArrayList<Integer> event_end_year;
-    private static ArrayList<Byte> event_end_month;
-    private static ArrayList<Byte> event_end_day;
-    private static ArrayList<Byte> event_end_hour;
-    private static ArrayList<Byte> event_end_minutes;
-    private static ArrayList<Long> event_created_date;
-    private static ArrayList<Long> event_modified_date;
-    private static ArrayList<Integer> event_all_day;
-    private static ArrayList<Integer> event_sound_notifications;
-    private static ArrayList<Integer> event_silent_notifications;
-    private static int alarm = 0, important = 0, regular = 0, unimportant = 0;
-    private static final String SHARED_PREF = "sharedPref";
-    private static final String THEME = "theme";
-    private static final String SWITCH_DARK_MODE = "switchDarkMode";
-    private static final String DISABLE_TUTORIAL = "disableTutorial";
-    private static final String TAG = "MainActivity";
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //hide Status Bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //Load tutorial status
-        loadTutorial();
         //Load skin resource
         skinTheme();
-        setContentView(R.layout.activity_main);
-//        Day and Night modes
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-//        getDelegate().applyDayNight();
 
+        setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+
         recyclerView = findViewById(R.id.recyclerView);
         add_button = findViewById(R.id.add_button);
         scroll_top = findViewById(R.id.scrollTop);
         drawerLayout = findViewById(R.id.layoutDrawer);
         navigationView = findViewById(R.id.navDrawer);
+        controller = new MainActivityController(this);
         setNavigationViewListener();
 
         add_button.setOnClickListener(new View.OnClickListener() {
@@ -129,33 +98,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         myDB = new MyDatabaseHelper(MainActivity.this);
         event_id = new ArrayList<>();
-        event_title = new ArrayList<>();
-        event_location = new ArrayList<>();
-        event_note = new ArrayList<>();
-        //Secondary data parameters
-        event_color_picker = new ArrayList<>();
-        event_priority_picker = new ArrayList<>();
-        event_start_year = new ArrayList<>();
-        event_start_month = new ArrayList<>();
-        event_start_day = new ArrayList<>();
-        event_start_hour = new ArrayList<>();
-        event_start_minutes = new ArrayList<>();
-        event_end_year = new ArrayList<>();
-        event_end_month = new ArrayList<>();
-        event_end_day = new ArrayList<>();
-        event_end_hour = new ArrayList<>();
-        event_end_minutes = new ArrayList<>();
-        event_created_date = new ArrayList<>();
-        event_modified_date = new ArrayList<>();
-        event_all_day = new ArrayList<>();
-        event_sound_notifications = new ArrayList<>();
-        event_silent_notifications = new ArrayList<>();
 
-        storeDataInArrays();
-        //List<UserEvent> dataItems = storeDataInObjects();
-        customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
+
+        //storeDataInArrays();
+        //customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
 
         //Swipe to delete
+        /*
         swipeAction();
         //SimpleCallback - Drag and Drop function
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
@@ -180,6 +129,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+         */
+
+        //createDrawerCounters();
+    }
+    public void createDrawerCounters(int important, int regular, int unimportant, int  sound_notifications, int sizeCount){
         //Create drawer menu counters
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
         counter = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
@@ -192,33 +146,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.importantEvents).setActionView(importantEvents);
         navigationView.getMenu().findItem(R.id.regularEvents).setActionView(regularEvents);
         navigationView.getMenu().findItem(R.id.lowPriorityEvents).setActionView(lowPriorityEvents);
-        updateDrawerCounter(counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents);
+        updateDrawerCounter(counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents, //view
+                important, regular, unimportant,  sound_notifications, sizeCount ); //variables
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            final Animator animStart = AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.rotate_back);
-            final Animator animEnd = AnimatorInflater.loadAnimator(getApplicationContext(),R.animator.rotate_start);
+            final Animator animStart = AnimatorInflater.loadAnimator(getApplicationContext(), R.animator.rotate_back);
+            final Animator animEnd = AnimatorInflater.loadAnimator(getApplicationContext(), R.animator.rotate_start);
+
             @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            }
+
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 animStart.setTarget(recyclerView);
                 animStart.start();
             }
+
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 animEnd.setTarget(recyclerView);
                 animEnd.start();
             }
-            @Override
-            public void onDrawerStateChanged(int newState) {}
-        });
 
-        //Start Foreground Services
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            if (!isForegroundServiceRunning()) {
-//                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
-//                startForegroundService(serviceIntent);
-//            }
-        }
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
     }
 
     //Initiate Navigation item selection
@@ -234,32 +187,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tv.setText(index + "");
         }
     }
-
-    public static void updateDrawerCounter(TextView counter,
-                                           TextView activeAlarms,
-                                           TextView importantEvents,
-                                           TextView regularEvents,
-                                           TextView lowPriorityEvents) {
-        if(unimportant == 0 && regular == 0 && important == 0){
-            for (int i = 0; i < event_id.size(); i++) {
-                if (event_sound_notifications.get(i) > 0) {
-                    alarm++;
-                }
-                switch (event_priority_picker.get(i)){
-                    case 1:
-                        regular++;
-                        break;
-                    case 2:
-                        unimportant++;
-                        break;
-                    default:
-                        important++;
-                        break;
-                }
-            }
-        }
-        formatCount(counter, event_id.size());
-        formatCount(activeAlarms, alarm);
+    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
+                                           TextView regularEvents, TextView lowPriorityEvents,
+                                           int important, int regular, int unimportant,
+                                           int sound_notifications, int sizeCount) {
+        formatCount(counter, sizeCount);
+        formatCount(activeAlarms, sound_notifications);
         formatCount(importantEvents, important);
         formatCount(regularEvents, regular);
         formatCount(lowPriorityEvents, unimportant);
@@ -273,68 +206,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recreate();
         }
     }
-
-    void storeDataInArrays() {
-        Cursor cursor = myDB.readAllData();
-        if (cursor.getCount() == 0) {
-//            Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "storeDataInArrays: There is no data");
-        } else {
-            while (cursor.moveToNext()) {
-                event_id.add(cursor.getString(0));
-                event_title.add(cursor.getString(1));
-                event_location.add(cursor.getString(2));
-                event_note.add(cursor.getString(3));
-                event_color_picker.add(Integer.parseInt(cursor.getString(4)));
-                event_priority_picker.add(Integer.parseInt(cursor.getString(5)));
-                event_start_year.add(Integer.parseInt(cursor.getString(6)));
-                event_start_month.add(Byte.parseByte(cursor.getString(7)));
-                event_start_day.add(Byte.parseByte(cursor.getString(8)));
-                event_start_hour.add(Byte.parseByte(cursor.getString(9)));
-                event_start_minutes.add(Byte.parseByte(cursor.getString(10)));
-                event_end_year.add(Integer.parseInt(cursor.getString(11)));
-                event_end_month.add(Byte.parseByte(cursor.getString(12)));
-                event_end_day.add(Byte.parseByte(cursor.getString(13)));
-                event_end_hour.add(Byte.parseByte(cursor.getString(14)));
-                event_end_minutes.add(Byte.parseByte(cursor.getString(15)));
-                event_created_date.add(Long.parseLong(cursor.getString(16)));
-                event_modified_date.add(Long.parseLong(cursor.getString(17)));
-                event_all_day.add(Integer.parseInt(cursor.getString(18)));
-                event_sound_notifications.add(Integer.parseInt(cursor.getString(19)));
-                event_silent_notifications.add(Integer.parseInt(cursor.getString(20)));
-            }
-        }
-    }
-    private List<UserEvent> storeDataInObjects(){
-        List<UserEvent> allDataInObjects = new ArrayList<>();
-        for (int i = 0; i < event_id.size(); i++){
-            allDataInObjects.add(new UserEvent(
-                    event_id.get(i),
-                    event_title.get(i),
-                    event_location.get(i),
-                    event_note.get(i),
-                    event_color_picker.get(i),
-                    event_priority_picker.get(i),
-                    event_start_year.get(i),
-                    event_end_year.get(i),
-                    event_all_day.get(i),
-                    event_sound_notifications.get(i),
-                    event_silent_notifications.get(i),
-                    event_start_month.get(i),
-                    event_start_day.get(i),
-                    event_start_hour.get(i),
-                    event_start_minutes.get(i),
-                    event_end_month.get(i),
-                    event_end_day.get(i),
-                    event_end_hour.get(i),
-                    event_end_minutes.get(i),
-                    event_created_date.get(i),
-                    event_modified_date.get(i)
-            ));
-        }
-        return allDataInObjects;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -349,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText != null){
+                if (newText != null) {
                     customAdapter.getFilter().filter(newText);
                 }
                 return false;
@@ -365,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.events_chart: {
-                openChartFragment();
+                controller.initiateChartFragment();
                 break;
             }
             case R.id.website: {
@@ -391,7 +262,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-    private void openChartFragment(){
+
+    public void openChartFragment(int important, int regular, int unimportant) {
         Intent intent = new Intent(this, ChartActivity.class);
         intent.putExtra("important", Integer.toString(important));
         intent.putExtra("regular", Integer.toString(regular));
@@ -417,17 +289,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    void confirmDialog() {
+    private void confirmDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.alert_dialog_title);
         builder.setMessage(R.string.alert_dialog_message_dell);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
-                myDB.deleteAllData();
-                alarm = important = regular = unimportant = 0;
+                controller.deleteBDRecords();
                 //Refresh activity
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -442,8 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         builder.create().show();
     }
-
-    private void swipeAction(){
+    private void swipeAction() {
         //Drag and Drop Items
         itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -469,15 +337,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
-    private void loadTutorial() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-        boolean checkTutorial = (sharedPreferences.getBoolean(DISABLE_TUTORIAL, false));
-        if (!checkTutorial) {
-            startActivity(new Intent(MainActivity.this, TutorialActivity.class));
+    public void loadTutorial() {
+        startActivity(new Intent(MainActivity.this, TutorialActivity.class));
+    }
+    //Start Foreground Services
+    public void startForegroundService(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            if (!isForegroundServiceRunning()) {
+//                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
+//                startForegroundService(serviceIntent);
+//            }
         }
     }
-
-    public boolean isForegroundServiceRunning() {
+    private boolean isForegroundServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
             if (MyForegroundServices.class.getName().equals(service.service.getClassName())) {
@@ -486,9 +358,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
+    public void setUpRecyclerView(ArrayList<UserEvent> data) {
+        customAdapter = new CustomAdapter(MainActivity.this, this, data);
+        runOnUiThread(() -> {
+            //Swipe to delete
+            swipeAction();
+            //SimpleCallback - Drag and Drop function
+            //new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+            //recycler view Layout
+            recyclerView.setAdapter(customAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        scroll_top.setVisibility(View.VISIBLE);
+                    } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                        scroll_top.setVisibility(View.GONE);
+                    }
+                }
+            });
+            scroll_top.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerView.smoothScrollToPosition(0);
+                }
+            });
+        });
+    }
+
+    public void emptyDB() {
+        Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
+        Log.d("MainActivityController", "storeDataInArrays: There is no data");
+    }
+
     //Check if Night mode is activated
-    private void darkModeChecker(SharedPreferences sharedPreferences){
-        if (sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)) {
+    private void darkModeChecker(PreferencesManager preferencesManager){
+        if (preferencesManager.getForceDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -496,12 +403,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getDelegate().applyDayNight();
     }
     //Load Theme Setting
-    private void skinTheme() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-        darkModeChecker(sharedPreferences);
-
-        int theme = sharedPreferences.getInt(THEME, 0);
-        switch (theme) {
+    private void skinTheme(){
+        PreferencesManager preferencesManager = new PreferencesManager(this, true, false);
+        darkModeChecker(preferencesManager);
+                switch (preferencesManager.getCurrentTheme()) {
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;

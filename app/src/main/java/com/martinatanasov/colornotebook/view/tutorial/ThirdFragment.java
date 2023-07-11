@@ -12,9 +12,7 @@
 
 package com.martinatanasov.colornotebook.view.tutorial;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
 
 
@@ -86,15 +85,16 @@ public class ThirdFragment extends Fragment {
         btnPrevious=view.findViewById(R.id.btnPrevious);
         viewPager2 = getActivity().findViewById(R.id.viewPager);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        //checkBox.setChecked(sharedPreferences.getBoolean(DISABLE_TUTORIAL, false));
+//        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        PreferencesManager preferencesManager = new PreferencesManager(getActivity(), false, true);
 
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(DISABLE_TUTORIAL, true);
-                editor.apply();
+                preferencesManager.setTutorialOnDisc(true);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putBoolean(DISABLE_TUTORIAL, true);
+//                editor.apply();
                 Intent intent = new Intent(getActivity().getApplication(), MainActivity.class);
                 startActivity(intent);
             }

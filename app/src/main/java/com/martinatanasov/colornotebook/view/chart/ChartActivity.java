@@ -12,11 +12,9 @@
 
 package com.martinatanasov.colornotebook.view.chart;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +24,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.controller.ChartActivityController;
+import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.tools.Tools;
 
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ import java.util.Objects;
 public class ChartActivity extends AppCompatActivity {
     PieChart pieChart;
     private static String important = "", regular = "", unimportant = "";
-    public static final String SHARED_PREF = "sharedPref";
-    public static final String THEME = "theme";
+    private ChartActivityController controller;
+    boolean filledData = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +50,40 @@ public class ChartActivity extends AppCompatActivity {
         //Change Back arrow button
         Tools tools = new Tools();
         tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
+        controller = new ChartActivityController(this);
 
-        checkForResources();
+        filledData = checkForResources();
+        if(!important.equals("") && !regular.equals("") && !unimportant.equals("")){
+            controller.setValues(important, regular, unimportant);
+        }
+        if(filledData){
+            initiatePieChart();
+        }else{
+            String[] data = new String[3];
+            data = controller.getDataValues();
+            important = data[0];
+            regular = data[1];
+            unimportant = data[2];
+            if((!important.equals("") && !regular.equals("") && !unimportant.equals("")) &&
+                    (!important.equals("0") && !regular.equals("0") && !unimportant.equals("0"))
+            ){
+                initiatePieChart();
+            }
+        }
     }
-    private void checkForResources(){
+    private boolean checkForResources(){
         if(getIntent().hasExtra("important") &&
                 getIntent().hasExtra("regular") &&
                 getIntent().hasExtra("unimportant")){
             important = getIntent().getStringExtra("important");
             regular = getIntent().getStringExtra("regular");
             unimportant = getIntent().getStringExtra("unimportant");
-            initiatePieChart();
+            //TODO
+
+            return true;
         }else{
-            Toast.makeText(this, "Not enough data!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Not enough data!", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
@@ -86,10 +107,8 @@ public class ChartActivity extends AppCompatActivity {
         pieChart.animate();
     }
     private void skinTheme(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-
-        int theme = sharedPreferences.getInt(THEME, 0);
-        switch (theme){
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        switch (preferencesManager.getCurrentTheme()){
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;

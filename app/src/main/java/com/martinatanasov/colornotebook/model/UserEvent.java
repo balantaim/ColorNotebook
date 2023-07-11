@@ -35,7 +35,14 @@ public class UserEvent {
     long long_created_date;
     long long_modified_date;
 
-    public UserEvent(String txtEventId, String txtEventTitle, String txtEventLocation, String txtNode, int int_color_picker, int int_avatar_picker, int int_start_year, int int_end_year, int int_all_day, int int_sound_notifications, int int_silent_notifications, byte byte_start_month, byte byte_start_day, byte byte_start_hour, byte byte_start_minutes, byte byte_end_month, byte byte_end_day, byte byte_end_hour, byte byte_end_minutes, long long_created_date, long long_modified_date) {
+    public UserEvent(String txtEventId, String txtEventTitle, String txtEventLocation,
+                     String txtNode, int int_color_picker, int int_avatar_picker,
+                     int int_start_year, int int_end_year, int int_all_day,
+                     int int_sound_notifications, int int_silent_notifications,
+                     byte byte_start_month, byte byte_start_day, byte byte_start_hour,
+                     byte byte_start_minutes, byte byte_end_month, byte byte_end_day,
+                     byte byte_end_hour, byte byte_end_minutes, long long_created_date,
+                     long long_modified_date) {
         this.txtEventId = txtEventId;
         this.txtEventTitle = txtEventTitle;
         this.txtEventLocation = txtEventLocation;
