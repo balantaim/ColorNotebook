@@ -45,7 +45,7 @@
             android:exported="true"
             android:label="@string/my_menu_options"
             android:parentActivityName=".view.main.MainActivity"
-            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.DefaultColorNotebook"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -59,7 +59,7 @@
             android:name=".view.add.AddActivity"
             android:label="@string/add_event"
             android:parentActivityName=".view.main.MainActivity"
-            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.DefaultColorNotebook"
             android:windowSoftInputMode="stateVisible|adjustResize"
             tools:ignore="LockedOrientationActivity" />

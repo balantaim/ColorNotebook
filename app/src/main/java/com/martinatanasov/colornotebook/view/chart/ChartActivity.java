@@ -75,9 +75,9 @@ public class ChartActivity extends AppCompatActivity {
     private void initiatePieChart() {
         pieChart = findViewById(R.id.pieChart);
         ArrayList<PieEntry> data = new ArrayList<>();
-        data.add(new PieEntry(controller.getImportantPercent(), getResources().getString(R.string.drawer_one_priority)));
-        data.add(new PieEntry(controller.getRegularPercent(), getResources().getString(R.string.drawer_two_priority)));
-        data.add(new PieEntry(controller.getUnimportantDouble(), getResources().getString(R.string.drawer_three_priority)));
+        data.add(new PieEntry(controller.getImportantPercent(), getResources().getString(R.string.drawer_one_priority) + " %"));
+        data.add(new PieEntry(controller.getRegularPercent(), getResources().getString(R.string.drawer_two_priority) + " %"));
+        data.add(new PieEntry(controller.getUnimportantDouble(), getResources().getString(R.string.drawer_three_priority) + " %"));
 
         PieDataSet pieDataSet = new PieDataSet(data, getResources().getString(R.string.events));
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);

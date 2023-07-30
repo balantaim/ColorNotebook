@@ -14,18 +14,20 @@ package com.martinatanasov.colornotebook.controller;
 
 
 import android.database.Cursor;
-import android.util.Log;
+
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivityController {
 
     private MainActivity mainView;
     private MyDatabaseHelper myDB;
-    private ArrayList<UserEvent> userEvent;
+    private List<UserEvent> userEvent;
     private int unimportant = 0, regular = 0, important = 0, event_sound_notifications = 0;
     private PreferencesManager themeManager;
 
@@ -93,7 +95,8 @@ public class MainActivityController {
             }
             //Update UI
             mainView.setUpRecyclerView(userEvent);
-            Log.d("debugME", "storeDataInArrays: " + userEvent.get(0).getTxtEventTitle());
+            //shrink FAB
+            mainView.shrinkMenuButton();
         }
         //Update drawer count/statistic
         mainView.createDrawerCounters(important, regular, unimportant, event_sound_notifications, userEvent.size());

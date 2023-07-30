@@ -12,18 +12,16 @@
 
 package com.martinatanasov.colornotebook.controller;
 
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.view.chart.ChartActivity;
 
 public class ChartActivityController {
     private ChartActivity chartActivity;
-    private final PreferencesManager preferencesManager;
     private static String important = "", regular = "", unimportant = "";
     private static float importantDouble = 0.0F, regularDouble = 0.0F, unimportantDouble = 0.0F;
 
     public ChartActivityController(ChartActivity chartActivity){
         this.chartActivity = chartActivity;
-        preferencesManager = new PreferencesManager(this.chartActivity);
+        //PreferencesManager preferencesManager = new PreferencesManager(this.chartActivity);
     }
     public void setValues(String imp, String reg, String uni){
         important = imp;

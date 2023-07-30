@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
@@ -53,13 +56,16 @@ import com.martinatanasov.colornotebook.view.add.AddActivity;
 import com.martinatanasov.colornotebook.view.chart.ChartActivity;
 import com.martinatanasov.colornotebook.view.option.OptionActivity;
 import com.martinatanasov.colornotebook.view.tutorial.TutorialActivity;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private MainActivityController controller;
     RecyclerView recyclerView;
-    FloatingActionButton add_button, scroll_top;
+    FloatingActionButton scroll_top;
+    ExtendedFloatingActionButton add_button;
     CustomAdapter customAdapter;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -78,25 +84,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        add_button = findViewById(R.id.add_button);
-        scroll_top = findViewById(R.id.scrollTop);
-        drawerLayout = findViewById(R.id.layoutDrawer);
-        navigationView = findViewById(R.id.navDrawer);
-        controller = new MainActivityController(this);
+        initViews();
         setNavigationViewListener();
 
-        add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                startActivity(intent);
-            }
+        add_button.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddActivity.class);
+            startActivity(intent);
         });
         //Make navigation drawer responsive
         navigationView.bringToFront();
 
         myDB = new MyDatabaseHelper(MainActivity.this);
+        //TODO remove unused List
         event_id = new ArrayList<>();
 
 
@@ -324,8 +323,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 long id = viewHolder.getAbsoluteAdapterPosition();
                 String idS = String.valueOf(id);
 
+                //TODO
                 MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
-
                 myDB.deleteDataOnOneRow(idS);
 //            txtBookId
 
@@ -358,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
-    public void setUpRecyclerView(ArrayList<UserEvent> data) {
+    public void setUpRecyclerView(List<UserEvent> data) {
         customAdapter = new CustomAdapter(MainActivity.this, this, data);
         runOnUiThread(() -> {
             //Swipe to delete
@@ -387,12 +386,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         });
     }
-
     public void emptyDB() {
-        Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
+        //TODO shine animation
         Log.d("MainActivityController", "storeDataInArrays: There is no data");
     }
-
+    public void shrinkMenuButton() {
+        add_button.shrink();
+    }
+    private void initViews() {
+        recyclerView = findViewById(R.id.recyclerView);
+        add_button = findViewById(R.id.add_button);
+        scroll_top = findViewById(R.id.scrollTop);
+        drawerLayout = findViewById(R.id.layoutDrawer);
+        navigationView = findViewById(R.id.navDrawer);
+        controller = new MainActivityController(this);
+    }
     //Check if Night mode is activated
     private void darkModeChecker(PreferencesManager preferencesManager){
         if (preferencesManager.getForceDarkMode()) {
@@ -418,7 +426,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
     }
-
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -53,10 +53,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         LayoutInflater inflater=LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_row, parent, false);
-        return new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view);
+        //New version W/O recyclable items
+        holder.setIsRecyclable(false);
+
+        return holder;
     }
 
     @Override
