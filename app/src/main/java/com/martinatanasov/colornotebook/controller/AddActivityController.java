@@ -69,7 +69,6 @@ public class AddActivityController {
                     public void run() {
                         addView.updateOnConfigurationChanges();
                         addView.checkIfCardIsExpanded();
-                        //addView.initAdvancedOptions();
                         Log.d("ADD", "200 ms update: ");
                     }
                 });
