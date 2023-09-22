@@ -12,5 +12,69 @@
 
 package com.martinatanasov.colornotebook.controller;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.view.add.AddActivity;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class AddActivityController {
+    private final AddActivity addView;
+    private final Handler handler;
+    private final ExecutorService executorService;
+
+    public AddActivityController(AddActivity addView){
+        this.addView = addView;
+        executorService = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
+
+        timerEventUpdate();
+
+        //themeManager = new PreferencesManager(this.addView, true, false);
+    }
+    public void addRecord(String title,
+                String location,
+                String node,
+                int color, int priority,
+    int YEAR, int MONTH, int DAY, int HOUR, int MINUTES,
+    int YEAR2, int MONTH2, int DAY2, int HOUR2, int MINUTES2,
+    long timestamp, int allDay, int soundNotification, int silentNotification){
+        MyDatabaseHelper db = new MyDatabaseHelper(addView.getApplicationContext());
+        db.addEvent(title,
+                location,
+                node,
+                color,
+                priority,
+                YEAR, MONTH, DAY, HOUR, MINUTES,
+                YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
+                timestamp,
+                timestamp,
+                allDay,
+                soundNotification,
+                silentNotification);
+    }
+    private void timerEventUpdate(){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(200);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        addView.updateOnConfigurationChanges();
+                        addView.checkIfCardIsExpanded();
+                        //addView.initAdvancedOptions();
+                        Log.d("ADD", "200 ms update: ");
+                    }
+                });
+            }
+        });
+    }
+
 }

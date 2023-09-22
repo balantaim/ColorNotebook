@@ -18,9 +18,9 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "LOADING_IMAGE", "\"${properties.getProperty("LOADING_IMAGE")}\""
         buildConfigField "String", "CHECK_DEV", "\"${properties.getProperty("CHECK_DEV")}\""
-        resConfigs 'en'
 
         //Set supported per-app language
+        resConfigs 'en'
 
         //Support library for vector animations
         vectorDrawables.useSupportLibrary = true

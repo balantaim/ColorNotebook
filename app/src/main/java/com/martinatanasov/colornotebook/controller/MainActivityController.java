@@ -27,7 +27,6 @@ public class MainActivityController {
 
     private MainActivity mainView;
     private MyDatabaseHelper myDB;
-    private List<UserEvent> userEvent;
     private int unimportant = 0, regular = 0, important = 0, event_sound_notifications = 0;
     private PreferencesManager themeManager;
 
@@ -40,7 +39,6 @@ public class MainActivityController {
             mainView.loadTutorial();
         } else {
             myDB = new MyDatabaseHelper(mainView.getApplicationContext());
-            userEvent = new ArrayList<>();
             //Get the data from SQLite and update recyclerView
             storeDataInArrays();
             mainView.startForegroundService();
@@ -51,6 +49,7 @@ public class MainActivityController {
 
     void storeDataInArrays() {
         Cursor cursor = myDB.readAllData();
+        List<UserEvent> userEvent = new ArrayList<>();
         if (cursor.getCount() == 0) {
             mainView.emptyDB();
         } else {

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     MyDatabaseHelper myDB;
     TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
-    private static ArrayList<String> event_id;
+    private static List<String> event_id;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
     @Override
