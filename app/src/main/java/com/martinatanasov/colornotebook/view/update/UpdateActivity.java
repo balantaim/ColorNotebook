@@ -21,7 +21,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -48,6 +48,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.controller.UpdateActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
@@ -55,6 +56,7 @@ import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.services.AlarmReceiver;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
+import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.tools.Tools;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
 
@@ -73,20 +75,17 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
+    public String id, title, location, input;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-
-    private static Calendar calendar, calendar1;
-    public static String id, title, location, input;
-    private static ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
-
-    public static final String TAG = "UpdateActivity";
-    public static final String SHARED_PREF = "sharedPref";
-    public static final String THEME = "theme";
-    public static int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
-    public static int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
-    public static int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker =0;
-    public static long eventCreatedDate=0, eventModifiedDate=0;
+    private boolean isExpanded = false;
+    private Calendar calendar, calendar1;
+    private ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
+    private UpdateActivityController controller;
+    public int YEAR=0, MONTH=0, DAY=0, HOUR=0, MINUTES=0;
+    public int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
+    public int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker=0;
+    public long eventCreatedDate=0, eventModifiedDate=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,29 +101,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         Tools tools = new Tools();
         tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
 
-        advOptions = findViewById(R.id.advOptions2);
-        dateStart = findViewById(R.id.startDate2);
-        dateEnd = findViewById(R.id.endDate2);
-        timeStart = findViewById(R.id.startTime2);
-        timeEnd = findViewById(R.id.endTime2);
-        cardView = findViewById(R.id.cardView2);
-        expandableLayout = findViewById(R.id.expandableLayout2);
-        eventTitle = findViewById(R.id.eventTitle2);
-        eventLocation = findViewById(R.id.eventLocation2);
-        eventInput = findViewById(R.id.eventInput2);
-        btnUpdate = findViewById(R.id.btnUpdate);
-        btnDelete = findViewById(R.id.btnDelete);
-        allDaySw = findViewById(R.id.allDaySw2);
-        soundNotSw = findViewById(R.id.soundNotSw2);
-        silentNotSw = findViewById(R.id.silentNotificationSw2);
-        eventColor = findViewById(R.id.eventColor2);
-        priority = findViewById(R.id.priority2);
-        createdDate = findViewById(R.id.created);
-        modifiedDate = findViewById(R.id.modified);
+        //Find view resources
+        initViews();
 
         //First before update DB
-        calendar = Calendar.getInstance();
-        calendar1 = Calendar.getInstance();
         getAndSetIntentData();
 
         //Set actionbar title after getAndSetIntentData method
@@ -136,7 +116,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             expandView();
         }
         btnUpdate.setOnClickListener(v -> onUpdateBtn());
-
         btnDelete.setOnClickListener(v -> confirmDialog());
 
         advOptions.setOnClickListener(view -> expandView());
@@ -163,7 +142,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             }
         });
     }
-    private void initiateAlarm(){
+    private boolean initiateAlarm(){
+        final int ALARM_CODE = 1;
+        boolean checker = false;
+
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
@@ -175,18 +157,35 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
 
         //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
         Log.d("ALARM", "This is alarm");
+        return checker;
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
     private void onUpdateBtn(){
+        boolean checkAlarmState = true;
+        if(soundNotificationBool == 1){
+            checkAlarmState = initiateAlarm();
+        }
+        if(checkAlarmState == false){
+            Toast.makeText(this, "No permission", Toast.LENGTH_SHORT).show();
+            soundNotSw.setChecked(false);
+            return;
+        }
         //Update DB
-        MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
-        title = eventTitle.getText().toString().trim();
-        location = eventLocation.getText().toString().trim();
-        input = eventInput.getText().toString().trim();
-        //Update modifier date
-        eventModifiedDate = Calendar.getInstance().getTimeInMillis();
-
-        myDB.updateData(id, title, location, input,
+        controller.updateRecord(id,
+                eventTitle.getText().toString(),
+                eventLocation.getText().toString(),
+                eventInput.getText().toString(),
                 colorPicker,
                 priorityPicker,
                 YEAR, MONTH, DAY, HOUR, MINUTES,
@@ -196,9 +195,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
                 dayEventBool,
                 soundNotificationBool,
                 silentNotificationBool);
-        if(soundNotificationBool == 1){
-            initiateAlarm();
-        }
 
 //        Log.d(TAG, "onClick: " +id+" title: "+ title+" location: "+ location+" event_text: "+ input
 //        + " Start Hour " + HOUR +" Start min " + MINUTES + " CreatedDate " + eventCreatedDate);
@@ -208,6 +204,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     }
 
     void getAndSetIntentData(){
+        calendar = Calendar.getInstance();
+        calendar1 = Calendar.getInstance();
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title")){
             // Getting data from Intent
             id = getIntent().getStringExtra("id");
@@ -301,7 +299,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
                 break;
         }
     }
-
     private void setEndDate(){
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
@@ -412,14 +409,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         });
         builder.create().show();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.update_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menuUpdate) {
@@ -428,7 +423,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         }
         return super.onOptionsItemSelected(item);
     }
-
     public void expandView(){
         if (expandableLayout.getVisibility() == View.GONE){
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
@@ -452,18 +446,32 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         }
         return formatter.format(date);
     }
+    private void initViews(){
+        advOptions = findViewById(R.id.advOptions2);
+        dateStart = findViewById(R.id.startDate2);
+        dateEnd = findViewById(R.id.endDate2);
+        timeStart = findViewById(R.id.startTime2);
+        timeEnd = findViewById(R.id.endTime2);
+        cardView = findViewById(R.id.cardView2);
+        expandableLayout = findViewById(R.id.expandableLayout2);
+        eventTitle = findViewById(R.id.eventTitle2);
+        eventLocation = findViewById(R.id.eventLocation2);
+        eventInput = findViewById(R.id.eventInput2);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        btnDelete = findViewById(R.id.btnDelete);
+        allDaySw = findViewById(R.id.allDaySw2);
+        soundNotSw = findViewById(R.id.soundNotSw2);
+        silentNotSw = findViewById(R.id.silentNotificationSw2);
+        eventColor = findViewById(R.id.eventColor2);
+        priority = findViewById(R.id.priority2);
+        createdDate = findViewById(R.id.created);
+        modifiedDate = findViewById(R.id.modified);
+        controller = new UpdateActivityController(this);
+    }
     private void skinTheme(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-//        if(sharedPreferences.getBoolean(SWITCH_DARK_MODE, false)){
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//            getDelegate().applyDayNight();
-//        }else{
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-//            getDelegate().applyDayNight();
-//        }
-
-        int theme = sharedPreferences.getInt(THEME, 0);
-        switch (theme){
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        int theme = preferencesManager.getCurrentTheme();
+        switch (theme) {
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;
@@ -483,5 +491,53 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     public void setColor(int color) {
         colorPicker = color;
         updateColorText(color);
+    }
+    //Save Instance when you rotate the device or use recreate
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        //Set up Start/End time
+        outState.putInt("key_year", YEAR);
+        outState.putInt("key_year2", YEAR2);
+        outState.putInt("key_month", MONTH);
+        outState.putInt("key_month2", MONTH2);
+        outState.putInt("key_day", DAY);
+        outState.putInt("key_day2", DAY2);
+        outState.putInt("key_hour", HOUR);
+        outState.putInt("key_hour2", HOUR2);
+        outState.putInt("key_minutes", MINUTES);
+        outState.putInt("key_minutes2", MINUTES2);
+
+        outState.putBoolean("key_expanded_card", isExpanded);
+        outState.putInt("key_day_event", dayEventBool);
+        outState.putInt("key_sound_notification", soundNotificationBool);
+        outState.putInt("key_silent_notification", silentNotificationBool);
+        outState.putInt("key_color", colorPicker);
+        outState.putInt("key_priority", priorityPicker);
+
+        super.onSaveInstanceState(outState);
+    }
+    //Restore the instance settings
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        //Set up Start/End time
+        YEAR = savedInstanceState.getInt("key_year", 0);
+        YEAR2 = savedInstanceState.getInt("key_year2", 0);
+        MONTH = savedInstanceState.getInt("key_month", 0);
+        MONTH2 = savedInstanceState.getInt("key_month2", 0);
+        DAY = savedInstanceState.getInt("key_day", 0);
+        DAY2 = savedInstanceState.getInt("key_day2", 0);
+        HOUR = savedInstanceState.getInt("key_hour", 0);
+        HOUR2 = savedInstanceState.getInt("key_hour2", 0);
+        MINUTES = savedInstanceState.getInt("key_minutes", 0);
+        MINUTES2 = savedInstanceState.getInt("key_minutes2", 0);
+
+        isExpanded = savedInstanceState.getBoolean("key_expanded_card", false);
+        dayEventBool = savedInstanceState.getInt("key_day_event", 0);
+        soundNotificationBool = savedInstanceState.getInt("key_sound_notification", 0);
+        silentNotificationBool = savedInstanceState.getInt("key_silent_notification", 0);
+        colorPicker = savedInstanceState.getInt("key_color");
+        priorityPicker = savedInstanceState.getInt("key_priority");
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }
