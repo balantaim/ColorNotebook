@@ -14,9 +14,10 @@ package com.martinatanasov.colornotebook.controller;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.view.add.AddActivity;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,7 +32,6 @@ public class AddActivityController {
         handler = new Handler(Looper.getMainLooper());
 
         timerEventUpdate();
-
         //themeManager = new PreferencesManager(this.addView, true, false);
     }
     public void addRecord(String title,
@@ -69,7 +69,9 @@ public class AddActivityController {
                     public void run() {
                         addView.updateOnConfigurationChanges();
                         addView.checkIfCardIsExpanded();
-                        Log.d("ADD", "200 ms update: ");
+                        addView.initAdvancedOptions();
+                        addView.updateSwValues();
+                        //Log.d("ADD", "200 ms update: ");
                     }
                 });
             }

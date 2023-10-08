@@ -30,14 +30,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
-
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controller.AddActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
@@ -47,7 +45,6 @@ import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.tools.Tools;
-
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -60,7 +57,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
     CardView cardView;
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
-    //private static Calendar calendar, calendar1;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private AddActivityController controller;
 
@@ -68,11 +64,11 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
     //Dialog colorDialog;
     //ConstraintLayout setImportant, setRegular, setUnimportant;
 
-    public static int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
-    public static int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
+    private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
+    private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
     private Calendar calendar, calendar1;
-    public boolean firstTimeFocusText = true, isExpanded = false;
-    public int dayEvent = 0, soundNotification = 0, silentNotification = 0, colorPicker = 0, priorityPicker = 1;
+    private boolean firstTimeFocusText = true, isExpanded = false;
+    private int dayEvent = 0, soundNotification = 0, silentNotification = 0, colorPicker = 0, priorityPicker = 1;
 
 
     @Override
@@ -95,30 +91,17 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         Tools tools = new Tools();
         tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
 
-//        Log.d("ADD", "onCreate: color: " + colorPicker);
-//        Log.d("ADD", "onCreate: priority: " + priorityPicker);
-//        Log.d("ADD", "onCreate: expand: " + isExpanded);
-//        Log.d("ADD", "onCreate: dayEvent: " + dayEvent);
-//        Log.d("ADD", "onCreate: focused: " + "--------");
-
         //Focus first edit text
         if(firstTimeFocusText){
             eventTitle.requestFocus();
             firstTimeFocusText = false;
         }
 
-        if ((dateStart.getText().toString().equals("") || dateStart == null)
-                && (dateEnd.getText().toString().equals("") || dateEnd == null)) {
-            //TODO wrong if
-            //initAdvancedOptions();
-        }
-        initAdvancedOptions();
+        calendar = Calendar.getInstance();
+        calendar1 = Calendar.getInstance();
+
         //Custom dialog set event priority
         //colorDialog = new Dialog(this);
-
-        //updateOnConfigurationChanges();
-
-        //checkIfCardIsExpanded();
 
         //Set up On Click Listeners
         btnAdd.setOnClickListener(v -> onAddBtn());
@@ -215,10 +198,13 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
             Toast.makeText(this, "Header should contain at least 2 symbols!", Toast.LENGTH_SHORT).show();
         }
     }
+//    public static Fragment newInstance()
+//    {
+//        MyFragment myFragment = new MyFragment();
+//        return myFragment;
+//    }
 
-    private void initAdvancedOptions() {
-        calendar = Calendar.getInstance();
-        calendar1 = Calendar.getInstance();
+    public void initAdvancedOptions() {
         if((YEAR == 0) || (YEAR2 == 0)){
             //Get the values from the calendar instance from now
             HOUR = HOUR2 = calendar.get(Calendar.HOUR_OF_DAY);
@@ -240,6 +226,14 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
             calendar1.set(Calendar.HOUR_OF_DAY, HOUR2);
             calendar1.set(Calendar.MINUTE, MINUTES2);
         }
+        //Set up date and time pickers
+        manageDateAndTime();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            soundNotSw.setEnabled(false);
+            silentNotSw.setEnabled(false);
+        }
+    }
+    private void manageDateAndTime(){
         boolean is24format = DateFormat.is24HourFormat(this);
 
         CharSequence charSequenceStart = DateFormat.format("MMM d, yyyy", calendar);
@@ -254,10 +248,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
             CharSequence charSequenceEnd1 = DateFormat.format("hh:mm aa", calendar1);
             timeStart.setText(charSequenceStart1);
             timeEnd.setText(charSequenceEnd1);
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            soundNotSw.setEnabled(false);
-            silentNotSw.setEnabled(false);
         }
     }
 
@@ -432,16 +422,19 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         //Add controller
         controller = new AddActivityController(this);
     }
+    public void updateSwValues(){
+        dayEvent = allDaySw.isChecked() ? 1:0;
+        soundNotification = soundNotSw.isChecked() ? 1:0;
+        silentNotification = silentNotSw.isChecked() ? 1:0;
+    }
     public void updateOnConfigurationChanges(){
-        int color = colorPicker;
-        Log.d("ADD", "update On ConfigurationChanges Color: " + color);
-        int priority = priorityPicker;
-        Log.d("ADD", "update On ConfigurationChanges Priority: " + priority);
-        if(color != 0){
-            updateColorText(color);
+        //Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
+        //Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
+        if(colorPicker != 0){
+            updateColorText(colorPicker);
         }
-        if(priority != 1){
-            updatePriorityText(priority);
+        if(priorityPicker != 1){
+            updatePriorityText(priorityPicker);
         }
         //updateColorText(color);
         //updatePriorityText(priority);
@@ -497,9 +490,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
 
         outState.putBoolean("key_expanded_card", isExpanded);
         outState.putBoolean("key_focus_text", firstTimeFocusText);
-        outState.putInt("key_day_event", dayEvent);
-        outState.putInt("key_sound_notification", soundNotification);
-        outState.putInt("key_silent_notification", silentNotification);
+        //outState.putInt("key_day_event", dayEvent);
+        //outState.putInt("key_sound_notification", soundNotification);
+        //outState.putInt("key_silent_notification", silentNotification);
         outState.putInt("key_color", colorPicker);
         outState.putInt("key_priority", priorityPicker);
 
@@ -522,13 +515,17 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
 
         isExpanded = savedInstanceState.getBoolean("key_expanded_card", false);
         firstTimeFocusText = savedInstanceState.getBoolean("key_focus_text", false);
-        dayEvent = savedInstanceState.getInt("key_day_event", 0);
-        soundNotification = savedInstanceState.getInt("key_sound_notification", 0);
-        silentNotification = savedInstanceState.getInt("key_silent_notification", 0);
+        //dayEvent = savedInstanceState.getInt("key_day_event", 0);
+        //soundNotification = savedInstanceState.getInt("key_sound_notification", 0);
+        //silentNotification = savedInstanceState.getInt("key_silent_notification", 0);
         colorPicker = savedInstanceState.getInt("key_color");
         priorityPicker = savedInstanceState.getInt("key_priority");
 
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

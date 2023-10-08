@@ -3,8 +3,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "30.0.3"
+    compileSdk 34
+//    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.martinatanasov.colornotebook"

@@ -47,7 +47,7 @@ public class MainActivityController {
         }
     }
 
-    void storeDataInArrays() {
+    public void storeDataInArrays() {
         Cursor cursor = myDB.readAllData();
         List<UserEvent> userEvent = new ArrayList<>();
         if (cursor.getCount() == 0) {
@@ -108,6 +108,10 @@ public class MainActivityController {
     public void deleteBDRecords() {
         important = regular = unimportant = 0;
         myDB.deleteAllData();
+    }
+    public void removeRowOnSwipe(String idString){
+        MyDatabaseHelper myDB = new MyDatabaseHelper(this.mainView);
+        myDB.deleteDataOnOneRow(idString);
     }
 
     private boolean checkTutorial() {

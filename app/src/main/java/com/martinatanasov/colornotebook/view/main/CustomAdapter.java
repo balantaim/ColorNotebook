@@ -24,25 +24,22 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.view.update.UpdateActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> implements Filterable {
-    private Context context;
+    private final Context context;
     //private static final String TAG = "CustomAdapter";
     private List<UserEvent> userModelList;
     private List<UserEvent> userModelListFiltered;
-    private Activity activity;
+    private final Activity activity;
 
     public CustomAdapter(Activity activity, Context context, List<UserEvent> userModel){
         this.userModelList = userModel;

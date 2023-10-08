@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     MyDatabaseHelper myDB;
     TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
-    private static List<String> event_id;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
     @Override
@@ -95,9 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.bringToFront();
 
         myDB = new MyDatabaseHelper(MainActivity.this);
-        //TODO remove unused List
-        event_id = new ArrayList<>();
-
 
         //storeDataInArrays();
         //customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
@@ -320,14 +316,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                //ToDo empty list
+                List<String> event_id = new ArrayList<>();
+
                 long id = viewHolder.getAbsoluteAdapterPosition();
-                String idS = String.valueOf(id);
+                String idString = String.valueOf(id);
+                controller.removeRowOnSwipe(idString);
 
-                //TODO
-                MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
-                myDB.deleteDataOnOneRow(idS);
 //            txtBookId
-
                 event_id.remove(viewHolder.getAbsoluteAdapterPosition());
                 String delItem = String.valueOf(event_id);
 //            swipeDeleteItem(delItem);

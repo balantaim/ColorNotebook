@@ -25,7 +25,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:minHeight="80dp"
-        app:cardBackgroundColor="?attr/colorOnSecondary"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:cardCornerRadius="22dp"
         app:cardElevation="4dp">
 

@@ -30,6 +30,7 @@
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="Theme.BlueColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -50,6 +51,7 @@
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="Theme.DarkColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -70,6 +72,7 @@
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="Theme.Tutorial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
