@@ -54,6 +54,10 @@ public class UpdateActivityController {
                 soundNotification,
                 silentNotification);
     }
+    public void deleteCurrentEvent(String eventID){
+        MyDatabaseHelper db = new MyDatabaseHelper(updateView.getApplicationContext());
+        db.deleteDataOnOneRow(eventID);
+    }
     private void timerEventUpdate(){
         executorService.execute(new Runnable() {
             @Override
@@ -66,9 +70,10 @@ public class UpdateActivityController {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        //updateView.updateOnConfigurationChanges();
-                        //updateView.checkIfCardIsExpanded();
-                        //Log.d("ADD", "200 ms update: ");
+                        updateView.updateOnConfigurationChanges();
+                        updateView.checkIfCardIsExpanded();
+                        updateView.getAndSetIntentData();
+                        updateView.updateSwValues();
                     }
                 });
             }
