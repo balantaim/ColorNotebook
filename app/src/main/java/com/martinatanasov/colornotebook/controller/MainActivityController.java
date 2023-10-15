@@ -18,6 +18,7 @@ import android.database.Cursor;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.tools.events.NotificationCreator;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class MainActivityController {
             //Get the data from SQLite and update recyclerView
             storeDataInArrays();
             mainView.startForegroundService();
+            createNotification();
 
             themeManager = null;
         }
@@ -116,6 +118,17 @@ public class MainActivityController {
 
     private boolean checkTutorial() {
         return themeManager.getTutorialStatus();
+    }
+    private void createNotification(){
+        NotificationCreator notificationCreator = new NotificationCreator();
+        notificationCreator.createNotificationChannel(mainView);
+//        try {
+//            notificationCreator.createNotification(mainView);
+//        } catch (IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        } catch (InstantiationException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 }

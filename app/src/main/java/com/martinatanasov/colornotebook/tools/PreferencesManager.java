@@ -13,7 +13,6 @@
 package com.martinatanasov.colornotebook.tools;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 

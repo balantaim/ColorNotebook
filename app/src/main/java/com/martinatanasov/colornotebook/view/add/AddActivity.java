@@ -111,11 +111,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         dateEnd.setOnClickListener(view -> setEndDate());
         timeEnd.setOnClickListener(view -> setEndTime());
         eventColor.setOnClickListener(view -> selectColor());
+        priority.setOnClickListener(v -> managePriority());
         //Set up Switches
         allDaySw.setOnClickListener(view -> dayEvent = allDaySw.isChecked() ? 1 : 0);
         soundNotSw.setOnClickListener(view -> soundNotification = soundNotSw.isChecked() ? 1 : 0);
         silentNotSw.setOnClickListener(view -> silentNotification = silentNotSw.isChecked() ? 1 : 0);
-        priority.setOnClickListener(v -> managePriority());
+
         //Scale Text
         /*
         Scale fonts change getApplicationContext with context
@@ -524,8 +525,4 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

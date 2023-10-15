@@ -14,10 +14,8 @@ package com.martinatanasov.colornotebook.controller;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.view.add.AddActivity;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
