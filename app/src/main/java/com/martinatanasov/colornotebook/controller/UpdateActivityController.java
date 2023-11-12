@@ -53,10 +53,12 @@ public class UpdateActivityController {
                 allDay,
                 soundNotification,
                 silentNotification);
+        db.close();
     }
     public void deleteCurrentEvent(String eventID){
         MyDatabaseHelper db = new MyDatabaseHelper(updateView.getApplicationContext());
         db.deleteDataOnOneRow(eventID);
+        db.close();
     }
     private void timerEventUpdate(){
         executorService.execute(new Runnable() {

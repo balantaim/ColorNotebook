@@ -10,15 +10,11 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools;
+package com.martinatanasov.colornotebook.tools.events;
 
-import androidx.appcompat.app.ActionBar;
+import java.util.Calendar;
 
-import com.martinatanasov.colornotebook.R;
-
-public class Tools {
-    public void setArrowBackIcon(ActionBar supportActionBar) {
-        assert supportActionBar != null;
-        supportActionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
-    }
+public interface AlarmItems {
+    public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority);
+    public void cancelAlarm(String id);
 }

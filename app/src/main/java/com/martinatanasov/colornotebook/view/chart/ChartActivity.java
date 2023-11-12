@@ -27,7 +27,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controller.ChartActivityController;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
-import com.martinatanasov.colornotebook.tools.Tools;
+import com.martinatanasov.colornotebook.tools.ActionBarIconSetter;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -47,9 +47,7 @@ public class ChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chart);
 
         //Change Back arrow button
-        Tools tools = new Tools();
-        tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
-        controller = new ChartActivityController(this);
+        changeArrowBackBtn();
 
         checkForResources();
 
@@ -90,6 +88,11 @@ public class ChartActivity extends AppCompatActivity {
         pieChart.getDescription().setEnabled(false);
         pieChart.setCenterText(getResources().getString(R.string.events));
         pieChart.animate();
+    }
+    private void changeArrowBackBtn(){
+        ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
+        actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
+        controller = new ChartActivityController(this);
     }
     private void skinTheme(){
         PreferencesManager preferencesManager = new PreferencesManager(this);

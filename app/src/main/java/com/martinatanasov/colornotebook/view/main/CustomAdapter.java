@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,8 +188,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             @SuppressLint("NotifyDataSetChanged")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                userModelList = (List<UserEvent>) results.values;
-                notifyDataSetChanged();
+                if(results.count > 0){
+                    try{
+                        userModelList = (List<UserEvent>) results.values;
+                        notifyDataSetChanged();
+                    }catch (Exception e){
+                        Log.d("Adapter", "publishResults: " + e);
+                    }
+                }
             }
         };
         return filter;
@@ -196,7 +203,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView allDayIcon, soundNotificationsIcon, silentNotificationIcon;
-        TextView txtEventId, txtEventTitle, txtEventLocation, txtNode;
+        TextView txtEventId, txtEventTitle, txtNode; //txtEventLocation;
         LinearLayout mainLayout;
         CardView cardViewEvent;
 

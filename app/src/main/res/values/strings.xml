@@ -11,7 +11,7 @@
   -->
 
 <resources>
-    <string name="app_name">Rainbow Color Events</string>
+    <string name="app_name">Color Events</string>
     <string name="creator">Created by Rainbow Infinium</string>
 
     <string-array name="skin_array">
@@ -131,9 +131,14 @@
     <string name="blue_color">Blue color</string>
     <string name="purple_color">Purple color</string>
     <string name="grey_color">Gray color</string>
-    <string name="channel_description_important">Important notification</string>
-    <string name="channel_description_regular">Regular notification</string>
-    <string name="channel_description_unimportant">Unimportant notification</string>
+    <string name="channel_description_sound_notifications">Sound notification channel</string>
+<!--    <string name="channel_description_regular">Regular notification</string>-->
+    <string name="channel_description_silent_notifications">Silent notification channel</string>
+    <string name="cancel_alarm">Cancel Alarm</string>
+    <string name="alarm_information">Alarm information</string>
+    <string name="permission_reason">In order to show notifications permission is required!</string>
+    <string name="toast_fail_to_remove_alarm">Alarm is not removed!</string>
+    <string name="toast_alarm_cancel">Alarm cancel!</string>
 
 
 </resources>

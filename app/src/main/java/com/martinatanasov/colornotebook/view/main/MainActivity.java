@@ -52,6 +52,7 @@ import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.services.MyForegroundServices;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.tools.events.VibrationEvent;
 import com.martinatanasov.colornotebook.view.add.AddActivity;
 import com.martinatanasov.colornotebook.view.chart.ChartActivity;
 import com.martinatanasov.colornotebook.view.option.OptionActivity;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //createDrawerCounters();
     }
-    public void createDrawerCounters(int important, int regular, int unimportant, int  sound_notifications, int sizeCount){
+    public void createDrawerCounters(int important, int regular, int unimportant, int sound_notifications, int sizeCount) {
         //Create drawer menu counters
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
         counter = (TextView) layoutInflater.inflate(R.layout.drawer_counter, null);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.regularEvents).setActionView(regularEvents);
         navigationView.getMenu().findItem(R.id.lowPriorityEvents).setActionView(lowPriorityEvents);
         updateDrawerCounter(counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents, //view
-                important, regular, unimportant,  sound_notifications, sizeCount ); //variables
+                important, regular, unimportant, sound_notifications, sizeCount); //variables
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             final Animator animStart = AnimatorInflater.loadAnimator(getApplicationContext(), R.animator.rotate_back);
             final Animator animEnd = AnimatorInflater.loadAnimator(getApplicationContext(), R.animator.rotate_start);
@@ -168,12 +169,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
     //Initiate Navigation item selection
     private void setNavigationViewListener() {
         navigationView.setNavigationItemSelectedListener(this);
     }
-
     @SuppressLint("SetTextI18n")
     private static void formatCount(TextView tv, int index) {
         if (index > 99) {
@@ -192,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         formatCount(regularEvents, regular);
         formatCount(lowPriorityEvents, unimportant);
     }
-
     //Update date after move from UpdateAct to MainAct
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -223,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         return super.onCreateOptionsMenu(menu);
     }
-
     //Navigation menu
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -257,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
     public void openChartFragment(int important, int regular, int unimportant) {
         Intent intent = new Intent(this, ChartActivity.class);
         intent.putExtra("important", Integer.toString(important));
@@ -271,20 +267,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_button:
-                onBackPressed();
+                if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    onBackPressed();
+                } else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
                 return true;
             case R.id.delete_all:
                 confirmDialog();
                 return true;
             case R.id.options:
-                Intent intent = new Intent(MainActivity.this, OptionActivity.class);
-                startActivity(intent);
+                navigateToOptions();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+    private void navigateToOptions(){
+        //Todo transition animation
+        // Inside your activity (if you did not enable transitions in your theme)
+        //getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+        //getWindow().setExitTransition(R.anim.slide_in);
+
+        Intent intent = new Intent(MainActivity.this, OptionActivity.class);
+        startActivity(intent);
+        //overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.out, R.anim.in);
+        //overridePendingTransition(R.anim.out, R.anim.in);
+    }
     private void confirmDialog() {
+        //Add vibration effect
+        VibrationEvent vibration = new VibrationEvent();
+        vibration.startEffect(this);
+        //Create alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.alert_dialog_title);
         builder.setMessage(R.string.alert_dialog_message_dell);
@@ -336,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(new Intent(MainActivity.this, TutorialActivity.class));
     }
     //Start Foreground Services
-    public void startForegroundService(){
+    public void startForegroundService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            if (!isForegroundServiceRunning()) {
 //                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
@@ -398,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         controller = new MainActivityController(this);
     }
     //Check if Night mode is activated
-    private void darkModeChecker(PreferencesManager preferencesManager){
+    private void darkModeChecker(PreferencesManager preferencesManager) {
         if (preferencesManager.getForceDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
@@ -407,10 +421,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getDelegate().applyDayNight();
     }
     //Load Theme Setting
-    private void skinTheme(){
+    private void skinTheme() {
         PreferencesManager preferencesManager = new PreferencesManager(this, true, false);
         darkModeChecker(preferencesManager);
-                switch (preferencesManager.getCurrentTheme()) {
+        switch (preferencesManager.getCurrentTheme()) {
             case 1:
                 setTheme(R.style.Theme_BlueColorNotebook);
                 break;
@@ -425,11 +439,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            System.exit(0);
-            //drawerLayout.closeDrawer(GravityCompat.START);
+            super.onBackPressed();
         } else {
             drawerLayout.openDrawer(GravityCompat.START);
         }
-//        super.onBackPressed();
     }
+
 }

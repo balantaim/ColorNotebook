@@ -14,20 +14,17 @@ package com.martinatanasov.colornotebook.controller;
 
 
 import android.database.Cursor;
-
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.tools.events.NotificationCreator;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivityController {
 
-    private MainActivity mainView;
-    private MyDatabaseHelper myDB;
+    private final MainActivity mainView;
     private int unimportant = 0, regular = 0, important = 0, event_sound_notifications = 0;
     private PreferencesManager themeManager;
 
@@ -39,17 +36,21 @@ public class MainActivityController {
         if (!disableTutorial) {
             mainView.loadTutorial();
         } else {
-            myDB = new MyDatabaseHelper(mainView.getApplicationContext());
+            MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
             //Get the data from SQLite and update recyclerView
             storeDataInArrays();
             mainView.startForegroundService();
             createNotification();
 
+            //close DB
+            myDB.close();
             themeManager = null;
         }
     }
 
     public void storeDataInArrays() {
+        MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
+
         Cursor cursor = myDB.readAllData();
         List<UserEvent> userEvent = new ArrayList<>();
         if (cursor.getCount() == 0) {
@@ -101,6 +102,8 @@ public class MainActivityController {
         }
         //Update drawer count/statistic
         mainView.createDrawerCounters(important, regular, unimportant, event_sound_notifications, userEvent.size());
+        //close cursor object
+        cursor.close();
     }
 
     public void initiateChartFragment() {
@@ -108,12 +111,15 @@ public class MainActivityController {
     }
 
     public void deleteBDRecords() {
+        MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
         important = regular = unimportant = 0;
         myDB.deleteAllData();
+        myDB.close();
     }
     public void removeRowOnSwipe(String idString){
         MyDatabaseHelper myDB = new MyDatabaseHelper(this.mainView);
         myDB.deleteDataOnOneRow(idString);
+        myDB.close();
     }
 
     private boolean checkTutorial() {

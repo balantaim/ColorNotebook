@@ -17,6 +17,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -126,6 +127,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, R.string.toast_added, Toast.LENGTH_SHORT).show();
         }
+        //close connection
+        db.close();
     }
 
     public Cursor readAllData(){
@@ -136,8 +139,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         if(db != null){
             cursor = db.rawQuery(query, null);
         }
+        //close connection
+        //assert db != null;
+        //db.close();
         return cursor;
-
     }
 
     public void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
@@ -174,6 +179,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, R.string.toast_successfully_updated, Toast.LENGTH_SHORT).show();
         }
+        //close connection
+        db.close();
     }
 
     public void deleteDataOnOneRow(String row_id){
@@ -185,6 +192,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, R.string.toast_successfully_deleted, Toast.LENGTH_SHORT).show();
         }
+        //close connection
+        db.close();
     }
 
     public void deleteAllData(){
@@ -192,6 +201,40 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_NAME);
         //Delete DB file from the phone
         //db.deleteDatabase(new File(db.getPath()));
+        //close connection
+        db.close();
+    }
+
+    public void removeSoundNotification(String row_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SOUND_NOTIFICATION, 0);
+        long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
+
+        if (result == -1){
+            Toast.makeText(context, R.string.toast_fail_to_remove_alarm, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, R.string.toast_alarm_cancel, Toast.LENGTH_SHORT).show();
+        }
+        //close connection
+        db.close();
+    }
+
+    public void removeSilentNotification(String row_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SILENT_NOTIFICATIONS, 0);
+        long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
+
+        if (result == -1){
+            Log.d("SilentNotification", "removeSilentNotification: Not removed!");
+            //Toast.makeText(context, R.string.toast_fail_to_remove_alarm, Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d("SilentNotification", "removeSilentNotification: Removed");
+            //Toast.makeText(context, R.string.toast_alarm_cancel, Toast.LENGTH_SHORT).show();
+        }
+        //close connection
+        db.close();
     }
 
 //    public boolean swipeDeleteItem(String delItem){

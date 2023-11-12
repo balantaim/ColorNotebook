@@ -12,16 +12,13 @@
 
 package com.martinatanasov.colornotebook.view.update;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -29,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -38,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,24 +44,32 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
+
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controller.UpdateActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
-import com.martinatanasov.colornotebook.services.AlarmReceiver;
+import com.martinatanasov.colornotebook.tools.ActionBarIconSetter;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
-import com.martinatanasov.colornotebook.tools.Tools;
+import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
+import com.martinatanasov.colornotebook.tools.events.VibrationEvent;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
-public class UpdateActivity extends AppCompatActivity implements ApplyColor {
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class UpdateActivity extends AppCompatActivity implements ApplyColor, EasyPermissions.PermissionCallbacks {
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnUpdate, btnDelete;
@@ -72,8 +79,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     DatePickerDialog datePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private String id;
-    private AlarmManager alarmManager;
-    private PendingIntent pendingIntent;
+    //private AlarmManager alarmManager;
+    //private PendingIntent pendingIntent;
     private boolean isExpanded = false;
     private Calendar calendar, calendar1;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
@@ -82,7 +89,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     private int YEAR2=0, MONTH2=0, DAY2=0, HOUR2=0, MINUTES2=0;
     private int dayEventBool=0, soundNotificationBool=0, silentNotificationBool=0, colorPicker=0, priorityPicker=0;
     private long eventCreatedDate=0, eventModifiedDate=0;
+    private SelectColor selectColor = new SelectColor();
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //hide Status Bar
@@ -94,22 +103,20 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         setContentView(R.layout.activity_update);
 
         //Change Back arrow button
-        Tools tools = new Tools();
-        tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
+        changeArrowBackBtn();
 
         //Find view resources
         initViews();
 
-        //First before update DB
         calendar = Calendar.getInstance();
         calendar1 = Calendar.getInstance();
+        //Seconds is set to 0
+        calendar.set(Calendar.SECOND, 0);
+        calendar1.set(Calendar.SECOND, 0);
         //getAndSetIntentData();
 
         //Set actionbar title after getAndSetIntentData method
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(eventTitle.getText().toString());
-        }
+        setActionBarTitle();
 
         btnUpdate.setOnClickListener(v -> onUpdateBtn());
         btnDelete.setOnClickListener(v -> confirmDialog());
@@ -123,8 +130,45 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         priority.setOnClickListener(v -> managePriority());
 
         allDaySw.setOnClickListener(view -> dayEventBool = allDaySw.isChecked() ? 1:0);
-        soundNotSw.setOnClickListener(view -> soundNotificationBool = soundNotSw.isChecked() ? 1:0);
-        silentNotSw.setOnClickListener(view -> silentNotificationBool = silentNotSw.isChecked() ? 1:0);
+        soundNotSw.setOnClickListener(view -> {soundNotificationBool = soundNotSw.isChecked() ? 1:0;
+           if(soundNotificationBool == 1){
+               //Check for alarm permission
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                   managePermissionForNotifications();
+               }
+           }
+        });
+        silentNotSw.setOnClickListener(view -> {silentNotificationBool = silentNotSw.isChecked() ? 1:0;
+            if(silentNotificationBool == 1){
+                //Check for alarm permission
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    managePermissionForNotifications();
+                }
+            }
+        });
+        //Click event for edit text's icon
+        eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
+    }
+    private boolean locationEvent(MotionEvent motionEvent){
+        final int DRAWABLE_RIGHT = 2;
+
+        if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            if(motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
+        return false;
+    }
+    private void setActionBarTitle(){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(eventTitle.getText().toString());
+        }
+    }
+    private void changeArrowBackBtn(){
+        ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
+        actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
     }
 
     private void managePriority(){
@@ -138,44 +182,78 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             }
         });
     }
-    private boolean initiateAlarm(){
-        final int ALARM_CODE = 1;
-        boolean checker = false;
+//    private boolean initiateAlarm(){
+//        boolean checker = false;
+//
+//        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//
+//        Intent intent = new Intent(this, AlarmReceiver.class);
+//        intent.putExtra("id", id);
+//        intent.putExtra("title", eventTitle.getText().toString());
+//        intent.putExtra("node", eventInput.getText().toString());
+//
+//        int requestCode = Integer.parseInt(id);
+//        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+//
+//        Calendar calendarNow = Calendar.getInstance();
+////        if (pendingIntent != null && alarmManager != null) {
+////            alarmManager.cancel(pendingIntent);
+////            Log.d("ALARM", "The alarm is canceled");
+////        }
+//        if (calendarNow.compareTo(calendar) < 0){
+//            //Toast.makeText(this, "Time is valid", Toast.LENGTH_SHORT).show();
+//            Log.d("ALARM", "Time is valid");
+//            checker = true;
+//        }
+//
+//        boolean exactRequired = false;
+//        //Set alarm repeating
+//        if(exactRequired) {
+//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+//                    calendar.getTimeInMillis(),
+//                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+//                    pendingIntent);
+//        } else {
+//            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+//                    calendar.getTimeInMillis(),
+//                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+//                    pendingIntent);
+//        }
+//
+//        //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
+//        Log.d("ALARM", "The alarm is set to " + checker);
+//        return checker;
+//    }
+private boolean initiateAlarm(){
+    boolean checker = false;
 
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(this, AlarmReceiver.class);
-
-        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,pendingIntent);
-
-        //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
-        Log.d("ALARM", "This is alarm");
-        return checker;
+    Calendar calendarNow = Calendar.getInstance();
+    if (calendarNow.compareTo(calendar) < 0){
+        //Toast.makeText(this, "Time is valid", Toast.LENGTH_SHORT).show();
+        Log.d("ALARM", "Time is valid");
+        checker = true;
+        AlarmEvent alarm = new AlarmEvent(this);
+        alarm.setUpAlarm(id,
+                eventTitle.getText().toString(),
+                eventInput.getText().toString(),
+                calendar,
+                priorityPicker);
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+    //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
+    Log.d("ALARM", "The alarm is set to " + checker);
+    return checker;
+}
+
     private void onUpdateBtn(){
         boolean checkAlarmState = true;
         if(soundNotificationBool == 1){
             checkAlarmState = initiateAlarm();
         }
         if(checkAlarmState == false){
-            Toast.makeText(this, "No permission", Toast.LENGTH_SHORT).show();
-            soundNotSw.setChecked(false);
-            return;
+            //soundNotSw.setChecked(false);
+            soundNotificationBool = 0;
+            //return;
         }
         //Update DB
         long timestamp = Calendar.getInstance().getTimeInMillis();
@@ -198,6 +276,57 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    @AfterPermissionGranted(101)
+    private void managePermissionForNotifications(){
+        String[] permissionList;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            permissionList = new String[]{Manifest.permission.POST_NOTIFICATIONS
+                    //, Manifest.permission.READ_EXTERNAL_STORAGE //Example for multiple permissions
+            };
+            if (EasyPermissions.hasPermissions(this, permissionList)) {
+                Toast.makeText(this, "Permission OK", Toast.LENGTH_SHORT).show();
+            } else {
+                EasyPermissions.requestPermissions(this,
+                        getString(R.string.permission_reason),
+                        101,
+                        permissionList);
+                //Reset switchers
+                soundNotSw.setChecked(false);
+                silentNotSw.setChecked(false);
+                soundNotificationBool = 0;
+                silentNotificationBool = 0;
+            }
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        if(requestCode == 101){
+            //We have permission code: 101
+            Toast.makeText(this, getString(R.string.permission_reason), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            Log.d("Permission", "onActivityResult: returned from settings");
+        }
     }
 
     public void getAndSetIntentData(){
@@ -246,10 +375,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             Toast.makeText(this, R.string.toast_noData, Toast.LENGTH_SHORT).show();
         }
         getPriorityString();
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            soundNotSw.setEnabled(false);
-            silentNotSw.setEnabled(false);
-        }
     }
     private void manageDataAndTime(){
         //Import data to calendar 1 and 2
@@ -285,7 +410,11 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         }
     }
     private void selectColor(){
-        SelectColor selectColor = new SelectColor(colorPicker);
+        if(selectColor == null){
+            selectColor = new SelectColor();
+        }
+//        SelectColor selectColor = new SelectColor();
+        selectColor.colorInit(colorPicker);
         selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
     }
     private void getPriorityString(){
@@ -392,6 +521,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
     }
 
     void confirmDialog(){
+        //Add vibration effect
+        VibrationEvent vibration = new VibrationEvent();
+        vibration.startEffect(this);
+        //Create alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.delete) + " " + eventTitle.getText().toString() + "?");
         builder.setMessage(getString(R.string.alert_dialog_message_sure_to_dell) + " " + eventTitle.getText().toString() + "?");
@@ -456,9 +589,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
             expandView();
         }
     }
+
     public void updateOnConfigurationChanges(){
-        Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
-        Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
+//        Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
+//        Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
         updateColorText(colorPicker);
         updatePriorityText(priorityPicker);
     }
@@ -575,5 +709,14 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor {
         id = savedInstanceState.getString("key_id");
 
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        if(selectColor.is){
+//            selectColor.dismiss();
+//            selectColor = null;
+//        }
     }
 }

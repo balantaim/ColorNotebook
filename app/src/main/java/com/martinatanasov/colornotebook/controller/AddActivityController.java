@@ -52,6 +52,7 @@ public class AddActivityController {
                 allDay,
                 soundNotification,
                 silentNotification);
+        db.close();
     }
     private void timerEventUpdate(){
         executorService.execute(new Runnable() {

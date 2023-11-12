@@ -14,7 +14,6 @@ package com.martinatanasov.colornotebook.view.add;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -30,21 +29,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
+
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controller.AddActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
+import com.martinatanasov.colornotebook.tools.ActionBarIconSetter;
 import com.martinatanasov.colornotebook.tools.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
-import com.martinatanasov.colornotebook.tools.Tools;
+
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -59,6 +61,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private AddActivityController controller;
+    private SelectColor selectColor = new SelectColor();
 
     //private ApplyPriority listener;
     //Dialog colorDialog;
@@ -88,8 +91,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         initViews();
 
         //Change Back arrow button
-        Tools tools = new Tools();
-        tools.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
+        changeArrowBackBtn();
 
         //Focus first edit text
         if(firstTimeFocusText){
@@ -99,6 +101,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
 
         calendar = Calendar.getInstance();
         calendar1 = Calendar.getInstance();
+        //Seconds is set to 0
+        calendar.set(Calendar.SECOND, 0);
+        calendar1.set(Calendar.SECOND, 0);
 
         //Custom dialog set event priority
         //colorDialog = new Dialog(this);
@@ -125,11 +130,19 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         getApplicationContext().createConfigurationContext(configuration);
         */
     }
+    private void changeArrowBackBtn(){
+        ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
+        actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
+    }
     private void selectColor(){
         Log.d("ADD", "selectColor: " + colorPicker);
-        SelectColor selectColor = new SelectColor(colorPicker);
+//            SelectColor selectColor = new SelectColor(colorPicker);
+//            selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
+        if(selectColor == null){
+            selectColor = new SelectColor();
+        }
+        selectColor.colorInit(colorPicker);
         selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
-        //todo update color
     }
 
     private void managePriority() {
@@ -229,10 +242,10 @@ public class AddActivity extends AppCompatActivity implements ApplyColor {
         }
         //Set up date and time pickers
         manageDateAndTime();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            soundNotSw.setEnabled(false);
-            silentNotSw.setEnabled(false);
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+//            soundNotSw.setEnabled(false);
+//            silentNotSw.setEnabled(false);
+//        }
     }
     private void manageDateAndTime(){
         boolean is24format = DateFormat.is24HourFormat(this);

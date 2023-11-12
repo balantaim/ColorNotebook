@@ -23,6 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".view.custom.CustomActivity"
+            android:label="@string/alarm_information"
             android:exported="false" />
         <activity
             android:name=".view.main.MainActivity"
@@ -65,15 +66,16 @@
             android:theme="@style/Theme.Tutorial"
             tools:ignore="LockedOrientationActivity" />
 
-        <service android:name=".services.MyForegroundServices" />
+<!--        <service android:name=".services.MyForegroundServices" />-->
 
-        <receiver
-            android:name=".services.MyBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver-->
+<!--            android:name=".services.MyBroadcastReceiver"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
         <receiver android:name=".services.AlarmReceiver" />
     </application>
 
