@@ -15,6 +15,8 @@ package com.martinatanasov.colornotebook.tools.events;
 import java.util.Calendar;
 
 public interface AlarmItems {
-    public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority);
-    public void cancelAlarm(String id);
+    void setUpAlarm(String id, String title, String node, Calendar calendar, int priority);
+    void cancelAlarm(String id);
+    //For API 34
+    void cancelAllAlarms();
 }

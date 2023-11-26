@@ -31,6 +31,8 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <!-- Transition Animation -->
+        <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
 
     <style name="Theme.BlueColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -52,6 +54,8 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <!-- Transition Animation -->
+        <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
 
     <style name="Theme.DarkColorNotebook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -73,6 +77,15 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <!-- Transition Animation -->
+        <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
+    </style>
+
+    <style name="CustomAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_slide_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_slide_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_slide_in_back</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_slide_out_back</item>
     </style>
 
     <style name="Theme.Tutorial" parent="Theme.MaterialComponents.DayNight.NoActionBar">

@@ -17,6 +17,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.martinatanasov.colornotebook.services.AlarmReceiver;
@@ -76,4 +77,19 @@ public class AlarmEvent implements AlarmItems {
             Log.d("ALARM", "cancelAlarm: " + id);
         }
     }
+
+    @Override
+    public void cancelAllAlarms() {
+        if (alarmManager != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                alarmManager.cancelAll();
+                Log.d("ALARM", "cancelAllAlarms: true");
+            }
+        }
+    }
+    public long nextAlarmTriggerTime(){
+        AlarmManager.AlarmClockInfo result = alarmManager.getNextAlarmClock();
+        return result.getTriggerTime();
+    }
+
 }

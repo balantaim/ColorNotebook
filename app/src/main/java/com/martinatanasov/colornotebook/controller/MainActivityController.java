@@ -17,6 +17,7 @@ import android.database.Cursor;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
 import com.martinatanasov.colornotebook.tools.events.NotificationCreator;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
 import java.util.ArrayList;
@@ -111,10 +112,15 @@ public class MainActivityController {
     }
 
     public void deleteBDRecords() {
+        removeAllSoundAlarms();
         MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
         important = regular = unimportant = 0;
         myDB.deleteAllData();
         myDB.close();
+    }
+    private void removeAllSoundAlarms(){
+        AlarmEvent alarmEvent = new AlarmEvent(mainView);
+        alarmEvent.cancelAllAlarms();
     }
     public void removeRowOnSwipe(String idString){
         MyDatabaseHelper myDB = new MyDatabaseHelper(this.mainView);

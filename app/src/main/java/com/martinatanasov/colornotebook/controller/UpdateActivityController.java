@@ -15,6 +15,7 @@ package com.martinatanasov.colornotebook.controller;
 import android.os.Handler;
 import android.os.Looper;
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
 import com.martinatanasov.colornotebook.view.update.UpdateActivity;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,9 +57,14 @@ public class UpdateActivityController {
         db.close();
     }
     public void deleteCurrentEvent(String eventID){
+        cancelSoundNotification(eventID);
         MyDatabaseHelper db = new MyDatabaseHelper(updateView.getApplicationContext());
         db.deleteDataOnOneRow(eventID);
         db.close();
+    }
+    private void cancelSoundNotification(String eventID){
+        AlarmEvent alarmEvent = new AlarmEvent(updateView);
+        alarmEvent.cancelAlarm(eventID);
     }
     private void timerEventUpdate(){
         executorService.execute(new Runnable() {

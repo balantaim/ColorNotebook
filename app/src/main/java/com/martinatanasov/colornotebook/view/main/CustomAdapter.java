@@ -60,14 +60,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return holder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         UserEvent userEvent = userModelList.get(position);
-        holder.txtEventId.setText(userEvent.getTxtEventId());
+        //holder.txtEventId.setText(userEvent.getTxtEventId());
         //SetUp title and length
         if(userEvent.getTxtEventTitle().length() >= 11){
-            holder.txtEventTitle.setText(userEvent.getTxtEventTitle().substring(0,10));
+            holder.txtEventTitle.setText(userEvent.getTxtEventTitle().substring(0, 10) + "..");
         }else{
             holder.txtEventTitle.setText(userEvent.getTxtEventTitle());
         }
@@ -203,13 +204,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView allDayIcon, soundNotificationsIcon, silentNotificationIcon;
-        TextView txtEventId, txtEventTitle, txtNode; //txtEventLocation;
+        TextView txtEventTitle, txtNode; //txtEventId, txtEventLocation;
         LinearLayout mainLayout;
         CardView cardViewEvent;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtEventId = itemView.findViewById(R.id.txtEventId);
+            //txtEventId = itemView.findViewById(R.id.txtEventId);
             txtEventTitle = itemView.findViewById(R.id.txtEventTitle);
             //txtEventLocation = itemView.findViewById(R.id.txtEventLocation);
             txtNode = itemView.findViewById(R.id.txtNode);
