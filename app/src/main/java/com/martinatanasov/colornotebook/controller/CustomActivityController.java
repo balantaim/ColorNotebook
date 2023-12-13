@@ -13,6 +13,7 @@
 package com.martinatanasov.colornotebook.controller;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
@@ -27,6 +28,8 @@ public class CustomActivityController {
     public void cancelCurrentAlarm(String id){
         AlarmEvent alarm = new AlarmEvent(this.view);
         alarm.cancelAlarm(id);
+
+        Log.d("Alarm", "onNextAlarm: " + alarm.nextAlarmTriggerTime());
         //Toast.makeText(this.view, "Alarm is canceled", Toast.LENGTH_SHORT).show();
     }
 

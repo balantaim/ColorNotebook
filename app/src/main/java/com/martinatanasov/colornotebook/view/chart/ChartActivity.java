@@ -16,9 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -26,9 +24,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controller.ChartActivityController;
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.tools.ActionBarIconSetter;
-
+import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -53,7 +50,6 @@ public class ChartActivity extends AppCompatActivity {
 
         controller.calcPieChartData();
         initiatePieChart();
-
     }
     private void checkForResources(){
         String important = "", regular = "", unimportant = "";

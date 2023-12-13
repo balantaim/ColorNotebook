@@ -4,8 +4,6 @@ plugins {
 
 android {
     compileSdk 34
-//    buildToolsVersion "30.0.3"
-
     defaultConfig {
         applicationId "com.martinatanasov.colornotebook"
         minSdkVersion 21
@@ -42,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding false
+        //buildConfig true
     }
     //Generate archived APK
     bundle {
@@ -98,5 +97,12 @@ dependencies {
 
     //Shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //WorkManager Java
+    implementation "androidx.work:work-runtime:2.9.0"
+    //Optional - Multiprocess support for WorkManager
+    implementation "androidx.work:work-multiprocess:2.9.0"
+
+
 
 }

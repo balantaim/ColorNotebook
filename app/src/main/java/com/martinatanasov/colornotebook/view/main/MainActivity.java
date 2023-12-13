@@ -268,7 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.navigation_button:
                 if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    onBackPressed();
+                    //onBackPressed();
+                    drawerLayout.openDrawer(GravityCompat.START);
                 } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
@@ -288,6 +289,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inside your activity (if you did not enable transitions in your theme)
         //getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         //getWindow().setExitTransition(R.anim.slide_in);
+
+
 
         Intent intent = new Intent(MainActivity.this, OptionActivity.class);
         startActivity(intent);
@@ -436,13 +439,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
     }
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            super.onBackPressed();
-        } else {
-            drawerLayout.openDrawer(GravityCompat.START);
-        }
-    }
+
+//    @Override
+//    public void onBackPressed() {
+//        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+//            super.onBackPressed();
+//        } else {
+//            drawerLayout.openDrawer(GravityCompat.START);
+//        }
+//    }
 
 }

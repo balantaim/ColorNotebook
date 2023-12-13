@@ -96,6 +96,7 @@ public class ThirdFragment extends Fragment {
 //                editor.putBoolean(DISABLE_TUTORIAL, true);
 //                editor.apply();
                 Intent intent = new Intent(getActivity().getApplication(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });

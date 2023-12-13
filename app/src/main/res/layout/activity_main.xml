@@ -18,21 +18,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.main.MainActivity"
-    tools:openDrawer="start">
+    tools:context=".view.main.MainActivity">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navDrawer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/header_drawer"
-        app:menu="@menu/drawer_menu" />
+<!--    Add to DrawerLayout to preview-->
+<!--    tools:openDrawer="start">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:defaultNavHost="true">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -68,12 +62,12 @@
             android:layout_marginBottom="18dp"
             android:clickable="true"
             android:contentDescription="@string/add_item"
-            android:text="@string/add_event"
             android:elevation="6dp"
             android:focusable="true"
+            android:text="@string/add_event"
+            app:icon="@drawable/ic_add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:icon="@drawable/ic_add" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -92,4 +86,14 @@
             app:srcCompat="@drawable/ic_arrow_up" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navDrawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/header_drawer"
+        app:menu="@menu/drawer_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

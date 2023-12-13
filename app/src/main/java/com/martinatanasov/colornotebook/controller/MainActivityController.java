@@ -14,14 +14,22 @@ package com.martinatanasov.colornotebook.controller;
 
 
 import android.database.Cursor;
+
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+
 import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.model.UserEvent;
 import com.martinatanasov.colornotebook.tools.PreferencesManager;
 import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
 import com.martinatanasov.colornotebook.tools.events.NotificationCreator;
+import com.martinatanasov.colornotebook.tools.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.view.main.MainActivity;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivityController {
 
@@ -46,6 +54,19 @@ public class MainActivityController {
             //close DB
             myDB.close();
             themeManager = null;
+
+            WorkRequest myWorkRequest =
+                    new OneTimeWorkRequest.Builder(SilentNotificationWorker.class)
+                            .setInitialDelay(5, TimeUnit.SECONDS)
+                            .addTag("123")
+                            .build();
+
+            WorkManager.getInstance(mainView).enqueue(myWorkRequest);
+
+
+
+
+
         }
     }
 
