@@ -21,12 +21,21 @@ Tools/library: SQLite,  Glide, Volley, Espresso, Shimmer, MPAndroidChart, Easype
 
 <table>
   <tr>
-    <td>
     <td><img src="images/Capture.PNG" width=270 height=480></td>
     <td><img src="images/Capture1.PNG" width=270 height=480></td>
     <td><img src="images/Capture2.PNG" width=270 height=480></td>
   </tr>
   <tr>
-  		![Final result on the phone](images/realistic.PNG)
+  	<td><img src="images/Capture3.PNG" width=270 height=480></td>
+    <td><img src="images/Capture4.PNG" width=270 height=480></td>
+    <td><img src="images/Capture5.PNG" width=270 height=480></td>
+  </tr>
+  <tr>
+  	<td><img src="images/Capture6.PNG" width=270 height=480></td>
+    <td><img src="images/Capture9.PNG" width=270 height=480></td>
+    <td><img src="images/Capture8.PNG" width=270 height=480></td>
+  </tr>
+  <tr>
+  	<td><img src="images/realistic.PNG" width=270 height=480></td>
   </tr>
  </table>
