@@ -17,7 +17,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -54,6 +53,7 @@ public class SilentNotificationWorker extends Worker {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+                Log.d("NotificationWorker", "doWork Error: No permission");
                 return Result.failure();
             }
             notificationManager.notify(123, builder.build());
