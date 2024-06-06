@@ -74,6 +74,7 @@
 
             <ImageView
                 android:id="@+id/allDayIcon"
+                android:contentDescription="@string/allDay"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
@@ -85,6 +86,7 @@
 
             <ImageView
                 android:id="@+id/soundNotificationsIcon"
+                android:contentDescription="@string/alarmNotifications"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
@@ -96,6 +98,7 @@
 
             <ImageView
                 android:id="@+id/silentNotificationIcon"
+                android:contentDescription="@string/silentNotifications"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="16dp"

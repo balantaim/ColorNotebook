@@ -18,7 +18,7 @@ public class ConvertTimeToTxt {
         if(h<10){
             s+="0" + h;
         }else{
-            s+="" + h;
+            s+=h;
         }
         if(m<10){
             s+=":0" + m;

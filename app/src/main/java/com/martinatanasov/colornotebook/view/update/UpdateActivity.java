@@ -526,13 +526,18 @@ private boolean initiateAlarm(){
         vibration.startEffect(this);
         //Create alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.delete) + " " + eventTitle.getText().toString() + "?");
-        builder.setMessage(getString(R.string.alert_dialog_message_sure_to_dell) + " " + eventTitle.getText().toString() + "?");
+        //Format text character max size
+        String displayTitle = eventTitle.getText().toString();
+        if(displayTitle.length() > 9){
+            displayTitle = getString(R.string.delete) + " " + displayTitle.substring(0, 9) + "..";
+        }else{
+            displayTitle = getString(R.string.delete) + " " + displayTitle;
+        }
+        builder.setTitle(displayTitle);
+        builder.setMessage(getString(R.string.alert_dialog_message_sure_to_dell));
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
-//                myDB.deleteDataOnOneRow(eventID);
                 controller.deleteCurrentEvent(id);
                 finish();
             }
