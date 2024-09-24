@@ -203,6 +203,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                         userModelList = (List<UserEvent>) results.values;
                         notifyDataSetChanged();
                     }
+                } catch (ClassCastException e){
+                    Log.d("Adapter", "publishResults: ClassCastException: " + e);
                 } catch (Exception e) {
                     Log.d("Adapter", "publishResults: " + e);
                 }
