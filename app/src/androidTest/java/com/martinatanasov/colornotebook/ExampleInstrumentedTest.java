@@ -27,7 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.martinatanasov.colornotebook.view.main.MainActivity;
+import com.martinatanasov.colornotebook.views.main.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

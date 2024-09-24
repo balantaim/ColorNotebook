@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.martinatanasov.colornotebook.view.tutorial.FirstFragment"
+        android:name="com.martinatanasov.colornotebook.views.tutorial.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first" >
 
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.martinatanasov.colornotebook.view.tutorial.SecondFragment"
+        android:name="com.martinatanasov.colornotebook.views.tutorial.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second" >
 

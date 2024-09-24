@@ -23,7 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.view.custom.CustomActivity;
+import com.martinatanasov.colornotebook.views.custom.CustomActivity;
 import java.util.Objects;
 
 public class AlarmReceiver extends BroadcastReceiver {

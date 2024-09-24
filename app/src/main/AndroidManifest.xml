@@ -19,14 +19,14 @@
         android:theme="@style/Theme.DefaultColorNotebook"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".view.details.DetailsActivity"
+            android:name=".views.details.DetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.custom.CustomActivity"
+            android:name=".views.custom.CustomActivity"
             android:label="@string/alarm_information"
             android:exported="false" />
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".views.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.DefaultColorNotebook"
@@ -38,30 +38,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.chart.ChartActivity"
+            android:name=".views.chart.ChartActivity"
             android:exported="false"
             android:label="@string/chart"
-            android:parentActivityName=".view.main.MainActivity"
+            android:parentActivityName=".views.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.option.OptionActivity"
+            android:name=".views.option.OptionActivity"
             android:exported="true"
             android:label="@string/my_menu_options"
-            android:parentActivityName=".view.main.MainActivity"
+            android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/Theme.DefaultColorNotebook" />
         <activity
-            android:name=".view.update.UpdateActivity"
-            android:parentActivityName=".view.main.MainActivity"
+            android:name=".views.update.UpdateActivity"
+            android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/Theme.DefaultColorNotebook"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".view.add.AddActivity"
+            android:name=".views.add.AddActivity"
             android:label="@string/add_event"
-            android:parentActivityName=".view.main.MainActivity"
+            android:parentActivityName=".views.main.MainActivity"
             android:theme="@style/Theme.DefaultColorNotebook"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".view.tutorial.TutorialActivity"
+            android:name=".views.tutorial.TutorialActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Tutorial"

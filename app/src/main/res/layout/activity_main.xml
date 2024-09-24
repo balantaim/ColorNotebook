@@ -18,7 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.main.MainActivity">
+    tools:context=".views.main.MainActivity">
 
 <!--    Add to DrawerLayout to preview-->
 <!--    tools:openDrawer="start">-->

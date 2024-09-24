@@ -16,7 +16,7 @@ package com.martinatanasov.colornotebook;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-import com.martinatanasov.colornotebook.view.tutorial.TutorialActivity;
+import com.martinatanasov.colornotebook.views.tutorial.TutorialActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

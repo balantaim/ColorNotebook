@@ -18,7 +18,7 @@
     android:layout_height="match_parent"
     android:background="?attr/badgeStyle"
     android:fitsSystemWindows="true"
-    tools:context=".view.add.AddActivity">
+    tools:context=".views.add.AddActivity">
 
     <ScrollView
         android:layout_width="match_parent"
