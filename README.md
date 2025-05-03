@@ -2,7 +2,10 @@
 
 # [MIT License](LICENSE)
 
-Software architecture: MVC
+> [!IMPORTANT]
+> Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos, is excluded from this license. Any use of these file types or logos requires prior permission from the respective owner or copyright holder.
+
+Software architecture: Layered (n-tier) architecture using the MVC design pattern in the presentation layer
 
 Project status: in development
 

@@ -87,12 +87,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 userEvent.getInt_all_day(),
                 userEvent.getInt_sound_notifications(),
                 userEvent.getInt_silent_notifications());
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToSelectedEvent(userEvent);
-            }
-        });
+        holder.mainLayout.setOnClickListener(v -> navigateToSelectedEvent(userEvent));
     }
 
     private void navigateToSelectedEvent(UserEvent userEvent) {
