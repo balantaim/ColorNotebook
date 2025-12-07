@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
   ~
   ~ IMPORTANT!
@@ -20,10 +19,11 @@
     android:fitsSystemWindows="true"
     tools:context=".views.main.MainActivity">
 
-<!--    Add to DrawerLayout to preview-->
-<!--    tools:openDrawer="start">-->
+    <!--    Add to DrawerLayout to preview-->
+    <!--    tools:openDrawer="start">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true">
@@ -43,58 +43,57 @@
             app:titleTextColor="?attr/customColorValue" />
 
         <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+            android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-        android:layoutAnimation="@anim/layout_animation"
+            android:layoutAnimation="@anim/layout_animation"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/add_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginBottom="18dp"-->
-<!--            android:clickable="true"-->
-<!--            android:contentDescription="@string/add_item"-->
-<!--            android:elevation="6dp"-->
-<!--            android:focusable="true"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:srcCompat="@drawable/ic_add" />-->
+        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--            android:id="@+id/add_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginEnd="8dp"-->
+        <!--            android:layout_marginBottom="18dp"-->
+        <!--            android:clickable="true"-->
+        <!--            android:contentDescription="@string/add_item"-->
+        <!--            android:elevation="6dp"-->
+        <!--            android:focusable="true"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:srcCompat="@drawable/ic_add" />-->
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginEnd="58dp"
+            android:layout_marginBottom="64dp"
             android:clickable="true"
             android:contentDescription="@string/add_item"
             android:elevation="6dp"
             android:focusable="true"
             android:text="@string/add_event"
             app:icon="@drawable/ic_add"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/mainContainer"
             app:layout_constraintEnd_toEndOf="parent" />
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/scrollTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="38dp"
+            android:layout_marginEnd="58dp"
             android:clickable="true"
             android:contentDescription="@string/scroll_top"
             android:elevation="6dp"
             android:focusable="true"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:srcCompat="@drawable/ic_arrow_up" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
