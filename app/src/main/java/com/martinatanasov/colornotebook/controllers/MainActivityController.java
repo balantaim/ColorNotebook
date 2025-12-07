@@ -12,19 +12,24 @@
 
 package com.martinatanasov.colornotebook.controllers;
 
-
 import android.database.Cursor;
+import android.os.Build;
+
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
-import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
-import com.martinatanasov.colornotebook.model.UserEvent;
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
-import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
-import com.martinatanasov.colornotebook.tools.events.NotificationCreator;
-import com.martinatanasov.colornotebook.tools.events.SilentNotificationWorker;
+
+import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.dto.UserEvent;
+import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
+import com.martinatanasov.colornotebook.utils.events.NotificationCreator;
+import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -32,25 +37,20 @@ public class MainActivityController {
 
     private final MainActivity mainView;
     private int unimportant = 0, regular = 0, important = 0, event_sound_notifications = 0;
-    private PreferencesManager themeManager;
-
+    private final PreferencesManager preferencesManager;
+    private boolean isAvailableData = false;
+    private List<UserEvent> events;
 
     public MainActivityController(MainActivity mainView) {
         this.mainView = mainView;
-        themeManager = new PreferencesManager(this.mainView, false, true);
+        preferencesManager = new PreferencesManager(this.mainView, false, true);
         boolean disableTutorial = checkTutorial();
         if (!disableTutorial) {
             mainView.loadTutorial();
         } else {
-            MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
-            //Get the data from SQLite and update recyclerView
             storeDataInArrays();
             mainView.startForegroundService();
             createNotification();
-
-            //close DB
-            myDB.close();
-            themeManager = null;
 
             WorkRequest myWorkRequest =
                     new OneTimeWorkRequest.Builder(SilentNotificationWorker.class)
@@ -59,11 +59,6 @@ public class MainActivityController {
                             .build();
 
             WorkManager.getInstance(mainView).enqueue(myWorkRequest);
-
-
-
-
-
         }
     }
 
@@ -73,22 +68,16 @@ public class MainActivityController {
         Cursor cursor = myDB.readAllData();
         List<UserEvent> userEvent = new ArrayList<>();
         if (cursor.getCount() == 0) {
-            mainView.emptyDB();
+            mainView.printDatabaseEmpty();
         } else {
             while (cursor.moveToNext()) {
                 if (Integer.parseInt(cursor.getString(19)) > 0) {
                     event_sound_notifications++;
                 }
                 switch (Integer.parseInt(cursor.getString(5))) {
-                    case 1:
-                        regular++;
-                        break;
-                    case 2:
-                        unimportant++;
-                        break;
-                    default:
-                        important++;
-                        break;
+                    case 1 -> regular++;
+                    case 2 -> unimportant++;
+                    default -> important++;
                 }
                 userEvent.add(new UserEvent(
                         cursor.getString(0), //id
@@ -114,8 +103,10 @@ public class MainActivityController {
                         Long.parseLong(cursor.getString(17)) //modified_date
                 ));
             }
+            //Update the events
+            events = userEvent;
             //Update UI
-            mainView.setUpRecyclerView(userEvent);
+            setInitialRecyclerView();
             //shrink FAB
             mainView.shrinkMenuButton();
         }
@@ -123,6 +114,20 @@ public class MainActivityController {
         mainView.createDrawerCounters(important, regular, unimportant, event_sound_notifications, userEvent.size());
         //close cursor object
         cursor.close();
+
+        //set isAvailableData boolean
+        isAvailableData = userEvent.isEmpty();
+    }
+
+    private void setInitialRecyclerView() {
+        mainView.setUpRecyclerView(events);
+    }
+
+    public void updateRecyclerView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(events, Comparator.comparing(UserEvent::txtEventTitle).reversed());
+            mainView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     public void initiateChartFragment() {
@@ -136,20 +141,23 @@ public class MainActivityController {
         myDB.deleteAllData();
         myDB.close();
     }
-    private void removeAllSoundAlarms(){
+
+    private void removeAllSoundAlarms() {
         AlarmEvent alarmEvent = new AlarmEvent(mainView);
         alarmEvent.cancelAllAlarms();
     }
-    public void removeRowOnSwipe(String idString){
+
+    public void removeRowOnSwipe(String idString) {
         MyDatabaseHelper myDB = new MyDatabaseHelper(this.mainView);
         myDB.deleteDataOnOneRow(idString);
         myDB.close();
     }
 
     private boolean checkTutorial() {
-        return themeManager.getTutorialStatus();
+        return preferencesManager.getTutorialStatus();
     }
-    private void createNotification(){
+
+    private void createNotification() {
         NotificationCreator notificationCreator = new NotificationCreator();
         notificationCreator.createNotificationChannel(mainView);
 //        try {
@@ -159,6 +167,10 @@ public class MainActivityController {
 //        } catch (InstantiationException e) {
 //            throw new RuntimeException(e);
 //        }
+    }
+
+    public boolean isAvailableData() {
+        return !isAvailableData;
     }
 
 }

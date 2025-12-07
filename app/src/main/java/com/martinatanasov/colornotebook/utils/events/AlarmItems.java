@@ -10,10 +10,15 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.dialog_views;
+package com.martinatanasov.colornotebook.utils.events;
 
-public interface ApplyPriority {
+import java.util.Calendar;
 
-    void setPriority(int status);
+public interface AlarmItems {
+    void setUpAlarm(String id, String title, String node, Calendar calendar, int priority);
 
+    void cancelAlarm(String id);
+
+    //For API 34
+    void cancelAllAlarms();
 }

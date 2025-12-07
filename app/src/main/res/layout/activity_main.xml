@@ -28,17 +28,29 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true">
 
-    <androidx.recyclerview.widget.RecyclerView
+        <!--    Navigation bar -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIconTint="?attr/customColorValue"
+            app:title="@string/app_name"
+            app:titleTextColor="?attr/customColorValue" />
+
+        <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
         android:layoutAnimation="@anim/layout_animation"
+            app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--            android:id="@+id/add_button"-->

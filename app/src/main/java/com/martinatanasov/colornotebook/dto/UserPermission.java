@@ -10,15 +10,18 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools;
+package com.martinatanasov.colornotebook.dto;
 
-import androidx.appcompat.app.ActionBar;
+public enum UserPermission {
+    NOTIFICATION_PERMISSION(101);
+    private final int value;
 
-import com.martinatanasov.colornotebook.R;
-
-public class ActionBarIconSetter {
-    public void setArrowBackIcon(ActionBar supportActionBar) {
-        assert supportActionBar != null;
-        supportActionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
+    UserPermission(int value) {
+        this.value = value;
     }
+
+    public int getValue() {
+        return value;
+    }
+
 }

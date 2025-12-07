@@ -27,16 +27,11 @@ public class IntroAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
-            case 0:
-                return new FirstFragment();
-            case 1:
-                return new SecondFragment();
-            case 2:
-                return new ThirdFragment();
-            default:
-                return null;
-        }
+        return switch (position) {
+            case 1 -> new SecondFragment();
+            case 2 -> new ThirdFragment();
+            default -> new FirstFragment();
+        };
     }
 
     @Override

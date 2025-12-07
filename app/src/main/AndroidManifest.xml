@@ -78,6 +78,12 @@
 <!--        </receiver>-->
 
         <receiver android:name=".services.AlarmReceiver" />
+
+        <!-- test service added for android 12+ -->
+        <service
+            android:name=".services.MyForegroundServices"
+            android:exported="true"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

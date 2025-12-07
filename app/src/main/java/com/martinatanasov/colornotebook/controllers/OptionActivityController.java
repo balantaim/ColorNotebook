@@ -12,27 +12,32 @@
 
 package com.martinatanasov.colornotebook.controllers;
 
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.PreferencesManager;
 import com.martinatanasov.colornotebook.views.option.OptionActivity;
 
 public class OptionActivityController {
-    private OptionActivity optionView;
+
+    private final OptionActivity optionView;
     private final PreferencesManager preferencesManager;
 
-    public OptionActivityController(OptionActivity optionView){
+    public OptionActivityController(OptionActivity optionView) {
         this.optionView = optionView;
         preferencesManager = new PreferencesManager(this.optionView);
     }
-    public int getTheme(){
+
+    public int getTheme() {
         return preferencesManager.getCurrentTheme();
     }
-    public boolean getForceDarkValue(){
-        return preferencesManager.getForceDarkMode();
-    }
-    public void setTheme(int value){
+
+    public void setTheme(int value) {
         preferencesManager.setThemeOnDisc(value);
     }
-    public void setForceDarkValue(boolean value){
+
+    public boolean getForceDarkValue() {
+        return preferencesManager.getForceDarkMode();
+    }
+
+    public void setForceDarkValue(boolean value) {
         preferencesManager.setForceDarkOnDisc(value);
     }
 

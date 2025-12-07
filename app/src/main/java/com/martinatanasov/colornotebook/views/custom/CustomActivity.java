@@ -13,7 +13,6 @@
 package com.martinatanasov.colornotebook.views.custom;
 
 import android.os.Bundle;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,9 +22,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.CustomActivityController;
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.utils.AppSettings;
 
-public class CustomActivity extends AppCompatActivity {
+public class CustomActivity extends AppCompatActivity implements AppSettings {
     Button cancelBtn;
     TextView titleTxt, nodeTxt;
     CustomActivityController controller;
@@ -34,13 +35,13 @@ public class CustomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Load skin resource
-        skinTheme();
+        updateAppSettings();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
 
         //hide Status Bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        initScreenManager();
 
         initViews();
 
@@ -51,6 +52,12 @@ public class CustomActivity extends AppCompatActivity {
         updateTextFields(title, node);
         //Cancel alarm
         cancelBtn.setOnClickListener(view -> cancel(id));
+    }
+
+    private void initScreenManager() {
+        new ScreenManager(findViewById(R.id.root_layout_custom),
+                getWindow(),
+                false);
     }
 
     private void updateTextFields(String title, String node) {
@@ -73,21 +80,17 @@ public class CustomActivity extends AppCompatActivity {
         }
         getDelegate().applyDayNight();
     }
-    private void skinTheme() {
+
+    @Override
+    public void updateAppSettings() {
         PreferencesManager preferencesManager = new PreferencesManager(this, true, false);
         darkModeChecker(preferencesManager);
 
         int theme = preferencesManager.getCurrentTheme();
         switch (theme) {
-            case 1:
-                setTheme(R.style.Theme_BlueColorNotebook);
-                break;
-            case 2:
-                setTheme(R.style.Theme_DarkColorNotebook);
-                break;
-            default:
-                setTheme(R.style.Theme_DefaultColorNotebook);
-                break;
+            case 1 -> setTheme(R.style.Theme_BlueColorNotebook);
+            case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
+            default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
     }
     private void initViews(){

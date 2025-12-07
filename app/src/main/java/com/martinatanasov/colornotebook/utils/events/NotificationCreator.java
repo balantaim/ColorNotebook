@@ -10,7 +10,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools.events;
+package com.martinatanasov.colornotebook.utils.events;
 
 import android.app.Activity;
 import android.app.NotificationChannel;

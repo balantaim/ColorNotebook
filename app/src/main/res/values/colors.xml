@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
   ~
   ~ IMPORTANT!
@@ -38,8 +37,5 @@
     <color name="pick_yellow">#FFEB3B</color>
     <color name="pick_blue">#062EBD</color>
     <color name="gray_new">#797878</color>
-
-
-
 
 </resources>

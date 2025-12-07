@@ -19,11 +19,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.views.custom.CustomActivity;
+
 import java.util.Objects;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -35,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String node = intent.getStringExtra("node");
         int priorityValue = intent.getIntExtra("priority", 0);
         String channelIdName = "sound_notifications_channel";
-        if(priorityValue == 0){
+        if (priorityValue == 0) {
             priorityValue = NotificationCompat.PRIORITY_HIGH;
             //channelIdName = "sound_notifications_channel";
         } else if (priorityValue == 1) {

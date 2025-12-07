@@ -15,17 +15,18 @@ package com.martinatanasov.colornotebook.controllers;
 import android.app.Activity;
 import android.util.Log;
 
-import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
-import com.martinatanasov.colornotebook.tools.events.AlarmEvent;
+import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.views.custom.CustomActivity;
 
 public class CustomActivityController {
     final Activity view;
 
-    public CustomActivityController(CustomActivity view){
+    public CustomActivityController(CustomActivity view) {
         this.view = view;
     }
-    public void cancelCurrentAlarm(String id){
+
+    public void cancelCurrentAlarm(String id) {
         AlarmEvent alarm = new AlarmEvent(this.view);
         alarm.cancelAlarm(id);
 
@@ -33,7 +34,7 @@ public class CustomActivityController {
         //Toast.makeText(this.view, "Alarm is canceled", Toast.LENGTH_SHORT).show();
     }
 
-    public void removeSoundNotificationFrom(String id){
+    public void removeSoundNotificationFrom(String id) {
         MyDatabaseHelper myDB = new MyDatabaseHelper(view.getApplicationContext());
         myDB.removeSoundNotification(id);
         myDB.close();

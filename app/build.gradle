@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdkVersion 36
     defaultConfig {
         applicationId "com.martinatanasov.colornotebook"
         minSdkVersion 21
-        targetSdk 33
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0.0-ALPHA"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -49,36 +49,44 @@ android {
             enable = false
         }
     }
+    lint {
+        checkReleaseBuilds = true
+    }
+    // Check for deprecations
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+
     namespace 'com.martinatanasov.colornotebook'
 }
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment:2.8.1'
-    implementation 'androidx.navigation:navigation-ui:2.8.1'
-    implementation 'androidx.fragment:fragment:1.8.3'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.navigation:navigation-fragment:2.9.6'
+    implementation 'androidx.navigation:navigation-ui:2.9.6'
+    implementation 'androidx.fragment:fragment:1.8.9'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     //RecyclerView
-    implementation "androidx.recyclerview:recyclerview:1.3.2"
-    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.4.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.2.0"
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
     implementation 'junit:junit:4.13.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
 
     //Volley: http library
     implementation 'com.android.volley:volley:1.2.1'
 
     //NotificationCompat used for foreground services
-    implementation "androidx.core:core:1.13.1"
+    implementation "androidx.core:core:1.17.0"
     //implementation "androidx.core:core:1.9.0"
 
     //LeakCanary

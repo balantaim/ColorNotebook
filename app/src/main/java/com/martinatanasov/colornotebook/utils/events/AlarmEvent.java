@@ -10,7 +10,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools.events;
+package com.martinatanasov.colornotebook.utils.events;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -27,13 +27,14 @@ import java.util.Calendar;
 public class AlarmEvent implements AlarmItems {
     private AlarmManager alarmManager;
     private final Activity activity;
-    public AlarmEvent(Activity activity){
+
+    public AlarmEvent(Activity activity) {
         this.activity = activity;
         alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
     }
 
     @Override
-    public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority){
+    public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority) {
         int requestCode = Integer.parseInt(id);
         Intent intent = new Intent(activity, AlarmReceiver.class);
         intent.putExtra("id", id);
@@ -45,7 +46,7 @@ public class AlarmEvent implements AlarmItems {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         //Set alarm repeating
-        if(priority == 0) {
+        if (priority == 0) {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_FIFTEEN_MINUTES,
@@ -64,15 +65,15 @@ public class AlarmEvent implements AlarmItems {
     }
 
     @Override
-    public void cancelAlarm(String id){
-        if (alarmManager == null){
+    public void cancelAlarm(String id) {
+        if (alarmManager == null) {
             alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
         }
         int requestCode = Integer.parseInt(id);
         Intent intent = new Intent(activity, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        if (alarmManager != null){
+        if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
             Log.d("ALARM", "cancelAlarm: " + id);
         }
@@ -80,14 +81,15 @@ public class AlarmEvent implements AlarmItems {
 
     @Override
     public void cancelAllAlarms() {
-        if (alarmManager != null){
+        if (alarmManager != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 alarmManager.cancelAll();
                 Log.d("ALARM", "cancelAllAlarms: true");
             }
         }
     }
-    public long nextAlarmTriggerTime(){
+
+    public long nextAlarmTriggerTime() {
         AlarmManager.AlarmClockInfo result = alarmManager.getNextAlarmClock();
         return result.getTriggerTime();
     }

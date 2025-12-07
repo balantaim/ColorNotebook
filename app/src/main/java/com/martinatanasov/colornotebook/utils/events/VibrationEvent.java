@@ -10,7 +10,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools.events;
+package com.martinatanasov.colornotebook.utils.events;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -24,7 +24,7 @@ public class VibrationEvent {
     public void startEffect(Activity activity) {
         Vibrator vibrator = (Vibrator) activity.getSystemService(VIBRATOR_SERVICE);
         //Check if the device has vibrator hardware
-        if(vibrator.hasVibrator()) {
+        if (vibrator.hasVibrator()) {
             //Check if the Android version is 8 or newer
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 

@@ -10,10 +10,12 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.dialog_views;
+package com.martinatanasov.colornotebook.utils;
 
-public interface ApplyPriority {
+public interface EventValidator {
 
-    void setPriority(int status);
+    default boolean isEventTitleValid(String title) {
+        return title != null && !title.isEmpty() && title.length() >= 2;
+    }
 
 }

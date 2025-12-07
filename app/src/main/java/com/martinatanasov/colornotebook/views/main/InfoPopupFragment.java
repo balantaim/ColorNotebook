@@ -52,9 +52,9 @@ public class InfoPopupFragment extends DialogFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.popup_info_fragment, container, false);
         Objects.requireNonNull(getDialog()).getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        txtDevelopers= (TextView) view.findViewById(R.id.txtDevelopers);
-        checkDev= (Button) view.findViewById(R.id.checkDev);
-        layoutPopup= (ConstraintLayout) view.findViewById(R.id.layoutPopup);
+        txtDevelopers = (TextView) view.findViewById(R.id.txtDevelopers);
+        checkDev = (Button) view.findViewById(R.id.checkDev);
+        layoutPopup = (ConstraintLayout) view.findViewById(R.id.layoutPopup);
 
         final String url = BuildConfig.CHECK_DEV + ".json";
 
@@ -63,9 +63,9 @@ public class InfoPopupFragment extends DialogFragment {
             public void onClick(View view) {
                 //Create http GET request for data using Volley library
                 //RequestQueue queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>(){
+                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONArray response){
+                    public void onResponse(JSONArray response) {
                         //Toast.makeText(getActivity().getApplicationContext(), ""+response, Toast.LENGTH_SHORT).show();
                         try {
                             JSONObject objectAppList = response.getJSONObject(0);
@@ -84,6 +84,7 @@ public class InfoPopupFragment extends DialogFragment {
                     }
                 });
                 //queue.add(request);
+                assert getActivity() != null;
                 MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(request);
             }
         });
@@ -91,7 +92,6 @@ public class InfoPopupFragment extends DialogFragment {
 
         return view;
     }
-
 
 
 }

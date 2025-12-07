@@ -14,6 +14,7 @@
     <string name="app_name">Oasis</string>
     <string name="app_name_full">Oasis - Color Events</string>
     <string name="creator">Created by Rainbow Infinium</string>
+    <string name="app_logo">Application logo</string>
 
     <string-array name="skin_array">
         <item>Teal</item>
@@ -133,13 +134,17 @@
     <string name="purple_color">Purple color</string>
     <string name="grey_color">Gray color</string>
     <string name="channel_description_sound_notifications">Sound notification channel</string>
-<!--    <string name="channel_description_regular">Regular notification</string>-->
+    <!--    <string name="channel_description_regular">Regular notification</string>-->
     <string name="channel_description_silent_notifications">Silent notification channel</string>
     <string name="cancel_alarm">Cancel Alarm</string>
     <string name="alarm_information">Alarm information</string>
     <string name="permission_reason">In order to show notifications permission is required!</string>
+    <string name="permission_granted">Permission Granted!</string>
     <string name="toast_fail_to_remove_alarm">Alarm is not removed!</string>
     <string name="toast_alarm_cancel">Alarm cancel!</string>
+    <string name="no_data_to_show">You don\'t have any events!</string>
+    <!-- Validation -->
+    <string name="event_title_empty">Title should contain at least 2 symbols!</string>
 
 
 </resources>

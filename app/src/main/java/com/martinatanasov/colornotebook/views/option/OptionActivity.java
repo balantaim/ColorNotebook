@@ -18,7 +18,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -26,9 +25,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,12 +38,15 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.OptionActivityController;
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.utils.AppSettings;
 
-public class OptionActivity extends AppCompatActivity {
+public class OptionActivity extends AppCompatActivity implements AppSettings {
 
     private OptionActivityController controller;
     Switch switchDarkMode;
@@ -54,15 +59,33 @@ public class OptionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //hide Status Bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        skinTheme();
+        updateAppSettings();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
 
+//        Toolbar toolbar = findViewById(R.id.toolbar_option);
+//        setSupportActionBar(toolbar);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_option);
+        setSupportActionBar(toolbar);
+
+        // Enable back button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);// show back arrow
+//            Drawable arrow = getResources().getDrawable(R.drawable.ic_custom_arrow);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                arrow.setTint(getResources().getColor(R.color.white, getTheme())); // set color
+//            }
+//            getSupportActionBar().setHomeAsUpIndicator(arrow);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
+        }
+
+        //hide Status Bar
+        initScreenManager();
+
         //Change Back arrow button
-        setupActionBar();
+//        setupActionBar();
         //Find units by ID
         initViews();
 
@@ -77,7 +100,7 @@ public class OptionActivity extends AppCompatActivity {
 
         switchDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
                 controller.setForceDarkValue(switchDarkMode.isChecked());
             }
         });
@@ -92,6 +115,7 @@ public class OptionActivity extends AppCompatActivity {
 ////                    String item = parent.getItemAtPosition(position).toString();
 //                }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -104,7 +128,14 @@ public class OptionActivity extends AppCompatActivity {
         });
 
     }
-    private void initiateGlideResource(){
+
+    private void initScreenManager() {
+        new ScreenManager(findViewById(R.id.root_layout_option),
+                getWindow(),
+                false);
+    }
+
+    private void initiateGlideResource() {
         final String imgUrl = BuildConfig.LOADING_IMAGE + ".png";
         Glide.with(OptionActivity.this)
                 .load(imgUrl)
@@ -132,14 +163,17 @@ public class OptionActivity extends AppCompatActivity {
                 .error(R.drawable.ic_logo)
                 .into(loadImage);
     }
-    private void updateSwitchPosition(){
+
+    private void updateSwitchPosition() {
         switchDarkMode.setChecked(controller.getForceDarkValue());
     }
-    private void updateVersionTxt(){
+
+    private void updateVersionTxt() {
         final String versionApp = "v." + BuildConfig.VERSION_NAME;
         txtVersion.setText(versionApp);
     }
-    private void setupActionBar(){
+
+    private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
@@ -147,30 +181,27 @@ public class OptionActivity extends AppCompatActivity {
         ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#201E1E"));
         actionBar.setBackgroundDrawable(colorDrawable);
     }
-    private void initViews(){
-        txtVersion=findViewById(R.id.version);
-        loadImage=findViewById(R.id.loadImage);
-        switchDarkMode=findViewById(R.id.switchDarkMode);
-        txtSize=findViewById(R.id.txtSize);
-        spinner=findViewById(R.id.spinnerSkins);
-        btnApply=findViewById(R.id.btnApply);
-        shimmerView=findViewById(R.id.shimmerView);
+
+    private void initViews() {
+        txtVersion = findViewById(R.id.version);
+        loadImage = findViewById(R.id.loadImage);
+        switchDarkMode = findViewById(R.id.switchDarkMode);
+        txtSize = findViewById(R.id.txtSize);
+        spinner = findViewById(R.id.spinnerSkins);
+        btnApply = findViewById(R.id.btnApply);
+        shimmerView = findViewById(R.id.shimmerView);
         //init Shimmer container
         shimmer = findViewById(R.id.shimmerFrameLayout);
     }
-    private void skinTheme(){
+
+    @Override
+    public void updateAppSettings() {
         PreferencesManager preferencesManager = new PreferencesManager(this);
         theme = preferencesManager.getCurrentTheme();
         switch (theme) {
-            case 1:
-                setTheme(R.style.Theme_BlueColorNotebook);
-                break;
-            case 2:
-                setTheme(R.style.Theme_DarkColorNotebook);
-                break;
-            default:
-                setTheme(R.style.Theme_DefaultColorNotebook);
-                break;
+            case 1 -> setTheme(R.style.Theme_BlueColorNotebook);
+            case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
+            default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
     }
 

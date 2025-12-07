@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -35,7 +36,7 @@ public class SelectColor extends AppCompatDialogFragment {
     private int colorPosition = 0;
     private ApplyColor listener;
 
-//    public SelectColor(int color) {
+    //    public SelectColor(int color) {
 //        this.colorPosition = color;
 //    }
     public void colorInit(int color) {
@@ -46,6 +47,7 @@ public class SelectColor extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        assert getActivity() != null;
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.pickup_color, null);
 
@@ -108,14 +110,15 @@ public class SelectColor extends AppCompatDialogFragment {
             colorPosition = 8;
         });
     }
-    private void setFocusedPosition(int newPosition, int lastPosition){
+
+    private void setFocusedPosition(int newPosition, int lastPosition) {
         ImageView imageView;
-        if(lastPosition == -1){
+        if (lastPosition == -1) {
             imageView = getSelectedView(newPosition);
             imageView.setBackgroundResource(R.drawable.rounded_bg_transparent);
             return;
         }
-        if(newPosition != lastPosition){
+        if (newPosition != lastPosition) {
             imageView = getSelectedView(lastPosition);
             imageView.setBackgroundResource(android.R.color.transparent);
             imageView = getSelectedView(newPosition);
@@ -139,37 +142,18 @@ public class SelectColor extends AppCompatDialogFragment {
     }
     */
 
-    private ImageView getSelectedView(int status){
-        ImageView result;
-        switch (status){
-            case 1:
-                result = boxTwo;
-                break;
-            case 2:
-                result = boxThree;
-                break;
-            case 3:
-                result = boxFour;
-                break;
-            case 4:
-                result = boxFive;
-                break;
-            case 5:
-                result = boxSix;
-                break;
-            case 6:
-                result = boxSeven;
-                break;
-            case 7:
-                result = boxEight;
-                break;
-            case 8:
-                result = boxNine;
-                break;
-            default:
-                result = boxOne;
-        }
-        return result;
+    private ImageView getSelectedView(int status) {
+        return switch (status) {
+            case 1 -> boxTwo;
+            case 2 -> boxThree;
+            case 3 -> boxFour;
+            case 4 -> boxFive;
+            case 5 -> boxSix;
+            case 6 -> boxSeven;
+            case 7 -> boxEight;
+            case 8 -> boxNine;
+            default -> boxOne;
+        };
     }
 
     private void initView(View view) {

@@ -10,20 +10,21 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools;
+package com.martinatanasov.colornotebook.utils;
 
 public class ConvertTimeToTxt {
-    public String intToTxtTime(int h, int m){
-        String s ="";
-        if(h<10){
-            s+="0" + h;
-        }else{
-            s+=h;
+
+    public String intToTxtTime(int h, int m) {
+        String s = "";
+        if (h < 10) {
+            s += "0" + h;
+        } else {
+            s += h;
         }
-        if(m<10){
-            s+=":0" + m;
-        }else{
-            s+=":" + m;
+        if (m < 10) {
+            s += ":0" + m;
+        } else {
+            s += ":" + m;
         }
         return s;
     }

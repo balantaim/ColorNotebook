@@ -10,13 +10,10 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools.events;
+package com.martinatanasov.colornotebook.utils;
 
-import java.util.Calendar;
+public interface AppSettings {
 
-public interface AlarmItems {
-    void setUpAlarm(String id, String title, String node, Calendar calendar, int priority);
-    void cancelAlarm(String id);
-    //For API 34
-    void cancelAllAlarms();
+    void updateAppSettings();
+
 }

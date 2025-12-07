@@ -10,13 +10,14 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.tools.events;
+package com.martinatanasov.colornotebook.utils.events;
 
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -60,7 +61,7 @@ public class SilentNotificationWorker extends Worker {
 
             Log.d("NotificationWorker", "doWork: Success");
             return Result.success();
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.d("NotificationWorker", "doWork Error: " + e);
             return Result.failure();
         }

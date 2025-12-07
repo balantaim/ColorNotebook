@@ -10,10 +10,16 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.dialog_views;
+package com.martinatanasov.colornotebook.utils;
 
-public interface ApplyPriority {
+import androidx.appcompat.app.ActionBar;
 
-    void setPriority(int status);
+import com.martinatanasov.colornotebook.R;
+
+public class ActionBarIconSetter {
+    public void setArrowBackIcon(ActionBar supportActionBar) {
+        assert supportActionBar != null;
+        supportActionBar.setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
+    }
 
 }

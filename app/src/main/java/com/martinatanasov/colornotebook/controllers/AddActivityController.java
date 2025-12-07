@@ -14,8 +14,11 @@ package com.martinatanasov.colornotebook.controllers;
 
 import android.os.Handler;
 import android.os.Looper;
-import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
+import android.util.Log;
+
+import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.views.add.AddActivity;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,21 +27,21 @@ public class AddActivityController {
     private final Handler handler;
     private final ExecutorService executorService;
 
-    public AddActivityController(AddActivity addView){
+    public AddActivityController(AddActivity addView) {
         this.addView = addView;
         executorService = Executors.newSingleThreadExecutor();
         handler = new Handler(Looper.getMainLooper());
 
         timerEventUpdate();
-        //themeManager = new PreferencesManager(this.addView, true, false);
     }
+
     public void addRecord(String title,
-                String location,
-                String node,
-                int color, int priority,
-    int YEAR, int MONTH, int DAY, int HOUR, int MINUTES,
-    int YEAR2, int MONTH2, int DAY2, int HOUR2, int MINUTES2,
-    long timestamp, int allDay, int soundNotification, int silentNotification){
+            String location,
+            String node,
+            int color, int priority,
+            int YEAR, int MONTH, int DAY, int HOUR, int MINUTES,
+            int YEAR2, int MONTH2, int DAY2, int HOUR2, int MINUTES2,
+            long timestamp, int allDay, int soundNotification, int silentNotification) {
         MyDatabaseHelper db = new MyDatabaseHelper(addView.getApplicationContext());
         db.addEvent(title,
                 location,
@@ -54,14 +57,16 @@ public class AddActivityController {
                 silentNotification);
         db.close();
     }
-    private void timerEventUpdate(){
+
+    private void timerEventUpdate() {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     Thread.sleep(200);
-                }catch (InterruptedException e){
+                } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Log.e(getClass().getName(), "Error: " + e);
                 }
                 handler.post(new Runnable() {
                     @Override

@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,29 +27,32 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.MainActivityController;
-import com.martinatanasov.colornotebook.model.MyDatabaseHelper;
-import com.martinatanasov.colornotebook.model.UserEvent;
+import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.services.MyForegroundServices;
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
-import com.martinatanasov.colornotebook.tools.events.VibrationEvent;
+import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.utils.AppSettings;
+import com.martinatanasov.colornotebook.utils.events.VibrationEvent;
 import com.martinatanasov.colornotebook.views.add.AddActivity;
 import com.martinatanasov.colornotebook.views.chart.ChartActivity;
 import com.martinatanasov.colornotebook.views.option.OptionActivity;
@@ -59,7 +61,7 @@ import com.martinatanasov.colornotebook.views.tutorial.TutorialActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AppSettings {
 
     private MainActivityController controller;
     RecyclerView recyclerView;
@@ -68,31 +70,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CustomAdapter customAdapter;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    MyDatabaseHelper myDB;
     TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
+    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
+            TextView regularEvents, TextView lowPriorityEvents,
+            int important, int regular, int unimportant,
+            int sound_notifications, int sizeCount) {
+        formatCount(counter, sizeCount);
+        formatCount(activeAlarms, sound_notifications);
+        formatCount(importantEvents, important);
+        formatCount(regularEvents, regular);
+        formatCount(lowPriorityEvents, unimportant);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //hide Status Bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //Load skin resource
-        skinTheme();
+        updateAppSettings();
 
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-
+        //Set top toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //hide Status Bar
+        initScreenManager();
         initViews();
         setNavigationViewListener();
-
-        add_button.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddActivity.class);
-            startActivity(intent);
-        });
+        addClickListeners();
         //Make navigation drawer responsive
         navigationView.bringToFront();
-
-        myDB = new MyDatabaseHelper(MainActivity.this);
 
         //storeDataInArrays();
         //customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
@@ -127,6 +135,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //createDrawerCounters();
     }
+
+    public CustomAdapter getAdapter() {
+        return customAdapter;
+    }
+
+    private void initScreenManager() {
+        new ScreenManager(findViewById(R.id.layoutDrawer),
+                getWindow(),
+                true);
+    }
+
+    private void addClickListeners() {
+        add_button.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddActivity.class);
+            startActivity(intent);
+        });
+    }
+
     public void createDrawerCounters(int important, int regular, int unimportant, int sound_notifications, int sizeCount) {
         //Create drawer menu counters
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
@@ -167,10 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-    //Initiate Navigation item selection
-    private void setNavigationViewListener() {
-        navigationView.setNavigationItemSelectedListener(this);
-    }
+
     @SuppressLint("SetTextI18n")
     private static void formatCount(TextView tv, int index) {
         if (index > 99) {
@@ -179,16 +202,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tv.setText(index + "");
         }
     }
-    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
-                                           TextView regularEvents, TextView lowPriorityEvents,
-                                           int important, int regular, int unimportant,
-                                           int sound_notifications, int sizeCount) {
-        formatCount(counter, sizeCount);
-        formatCount(activeAlarms, sound_notifications);
-        formatCount(importantEvents, important);
-        formatCount(regularEvents, regular);
-        formatCount(lowPriorityEvents, unimportant);
+
+    //Initiate Navigation item selection
+    private void setNavigationViewListener() {
+        navigationView.setNavigationItemSelectedListener(this);
     }
+
     //Update date after move from UpdateAct to MainAct
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -197,61 +216,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recreate();
         }
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText != null) {
-                    customAdapter.getFilter().filter(newText);
-                }
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
     //Navigation menu
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-            case R.id.events_chart: {
-                controller.initiateChartFragment();
-                break;
+            case R.id.events_chart -> {
+                if (controller.isAvailableData()) {
+                    controller.initiateChartFragment();
+                } else {
+                    Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
+                }
             }
-            case R.id.website: {
+            case R.id.website -> {
                 Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
-                break;
             }
-            case R.id.about: {
+            case R.id.about -> {
                 InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
                 infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
-                break;
             }
-            case R.id.exit: {
+            case R.id.exit -> {
                 finish();
                 System.exit(0);
-                break;
             }
-            default: {
-                //drawerLayout.closeDrawer(GravityCompat.START);
-                break;
+            default -> {
+                Log.e(getClass().getName(), "onNavigationItemSelected: Method NOT implemented!");
             }
         }
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public void openChartFragment(int important, int regular, int unimportant) {
         Intent intent = new Intent(this, ChartActivity.class);
         intent.putExtra("important", Integer.toString(important));
@@ -260,11 +258,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+    //Create top nav menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        assert searchView != null;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText != null && customAdapter != null) {
+                    customAdapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //Disable and Hide Menu buttons if there are no events
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (!controller.isAvailableData()) {
+            MenuItem deleteAll = menu.findItem(R.id.delete_all);
+            deleteAll.setEnabled(false);
+            deleteAll.setVisible(false);
+            MenuItem search = menu.findItem(R.id.search);
+            search.setEnabled(false);
+            search.setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.navigation_button:
+            case R.id.navigation_button -> {
                 if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     //onBackPressed();
                     drawerLayout.openDrawer(GravityCompat.START);
@@ -272,29 +309,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
                 return true;
-            case R.id.delete_all:
+            }
+            case R.id.delete_all -> {
                 confirmDialog();
                 return true;
-            case R.id.options:
+            }
+            case R.id.options -> {
                 navigateToOptions();
                 return true;
-            default:
+            }
+            default -> {
                 return super.onOptionsItemSelected(item);
+            }
         }
     }
-    private void navigateToOptions(){
-        //Todo transition animation
+
+    private void navigateToOptions() {
         // Inside your activity (if you did not enable transitions in your theme)
         //getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         //getWindow().setExitTransition(R.anim.slide_in);
-
-
-
         Intent intent = new Intent(MainActivity.this, OptionActivity.class);
         startActivity(intent);
         //overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.out, R.anim.in);
         //overridePendingTransition(R.anim.out, R.anim.in);
     }
+
     private void confirmDialog() {
         //Add vibration effect
         VibrationEvent vibration = new VibrationEvent();
@@ -303,24 +342,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.alert_dialog_title);
         builder.setMessage(R.string.alert_dialog_message_dell);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                controller.deleteBDRecords();
-                //Refresh activity
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+            controller.deleteBDRecords();
+            //Refresh activity
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton(R.string.no, (dialog, which) -> {
 
-            }
         });
         builder.create().show();
     }
+
     private void swipeAction() {
         //Drag and Drop Items
         itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -350,15 +384,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void loadTutorial() {
         startActivity(new Intent(MainActivity.this, TutorialActivity.class));
     }
+
     //Start Foreground Services
     public void startForegroundService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //Todo
 //            if (!isForegroundServiceRunning()) {
 //                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
 //                startForegroundService(serviceIntent);
 //            }
         }
     }
+
     private boolean isForegroundServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
@@ -368,6 +405,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
+
     public void setUpRecyclerView(List<UserEvent> data) {
         customAdapter = new CustomAdapter(MainActivity.this, this, data);
         runOnUiThread(() -> {
@@ -397,21 +435,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         });
     }
-    public void emptyDB() {
-        //TODO shine animation
+
+    public void printDatabaseEmpty() {
         Log.d("MainActivityController", "storeDataInArrays: There is no data");
     }
+
     public void shrinkMenuButton() {
         add_button.shrink();
     }
-    private void initViews() {
-        recyclerView = findViewById(R.id.recyclerView);
-        add_button = findViewById(R.id.add_button);
-        scroll_top = findViewById(R.id.scrollTop);
-        drawerLayout = findViewById(R.id.layoutDrawer);
-        navigationView = findViewById(R.id.navDrawer);
-        controller = new MainActivityController(this);
-    }
+
     //Check if Night mode is activated
     private void darkModeChecker(PreferencesManager preferencesManager) {
         if (preferencesManager.getForceDarkMode()) {
@@ -421,30 +453,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         getDelegate().applyDayNight();
     }
+
     //Load Theme Setting
-    private void skinTheme() {
+    @Override
+    public void updateAppSettings() {
         PreferencesManager preferencesManager = new PreferencesManager(this, true, false);
         darkModeChecker(preferencesManager);
         switch (preferencesManager.getCurrentTheme()) {
-            case 1:
-                setTheme(R.style.Theme_BlueColorNotebook);
-                break;
-            case 2:
-                setTheme(R.style.Theme_DarkColorNotebook);
-                break;
-            default:
-                setTheme(R.style.Theme_DefaultColorNotebook);
-                break;
+            case 1 -> setTheme(R.style.Theme_BlueColorNotebook);
+            case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
+            default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//            super.onBackPressed();
-//        } else {
-//            drawerLayout.openDrawer(GravityCompat.START);
-//        }
-//    }
+    private void initViews() {
+        recyclerView = findViewById(R.id.recyclerView);
+        add_button = findViewById(R.id.add_button);
+        scroll_top = findViewById(R.id.scrollTop);
+        drawerLayout = findViewById(R.id.layoutDrawer);
+        navigationView = findViewById(R.id.navDrawer);
+        controller = new MainActivityController(this);
+    }
 
 }

@@ -10,7 +10,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.model;
+package com.martinatanasov.colornotebook.repositories;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,7 +52,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private final static String COLUMN_PICKED_COLOR = "picked_color";
     private final static String COLUMN_PICKED_AVATAR = "picked_avatar";
 
-
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -61,27 +60,27 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME +
-                        " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_TITLE + " TEXT, " +
-                        COLUMN_LOCATION + " TEXT, " +
-                        COLUMN_EVENT + " TEXT, " +
-                        COLUMN_PICKED_COLOR + " INTEGER, " +
-                        COLUMN_PICKED_AVATAR + " INTEGER, " +
-                        COLUMN_START_YEAR + " INTEGER, " +
-                        COLUMN_START_MONTH + " INTEGER, " +
-                        COLUMN_START_DAY + " INTEGER, " +
-                        COLUMN_START_HOUR + " INTEGER, " +
-                        COLUMN_START_MINUTES + " INTEGER, " +
-                        COLUMN_END_YEAR + " INTEGER, " +
-                        COLUMN_END_MONTH + " INTEGER, " +
-                        COLUMN_END_DAY + " INTEGER, " +
-                        COLUMN_END_HOUR + " INTEGER, " +
-                        COLUMN_END_MINUTES + " INTEGER, " +
-                        COLUMN_CREATED_DATE + " INTEGER, " +
-                        COLUMN_MODIFIED_DATE + " INTEGER, " +
-                        COLUMN_DAY_EVENT + " INTEGER, " +
-                        COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
-                        COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
+                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TITLE + " TEXT, " +
+                COLUMN_LOCATION + " TEXT, " +
+                COLUMN_EVENT + " TEXT, " +
+                COLUMN_PICKED_COLOR + " INTEGER, " +
+                COLUMN_PICKED_AVATAR + " INTEGER, " +
+                COLUMN_START_YEAR + " INTEGER, " +
+                COLUMN_START_MONTH + " INTEGER, " +
+                COLUMN_START_DAY + " INTEGER, " +
+                COLUMN_START_HOUR + " INTEGER, " +
+                COLUMN_START_MINUTES + " INTEGER, " +
+                COLUMN_END_YEAR + " INTEGER, " +
+                COLUMN_END_MONTH + " INTEGER, " +
+                COLUMN_END_DAY + " INTEGER, " +
+                COLUMN_END_HOUR + " INTEGER, " +
+                COLUMN_END_MINUTES + " INTEGER, " +
+                COLUMN_CREATED_DATE + " INTEGER, " +
+                COLUMN_MODIFIED_DATE + " INTEGER, " +
+                COLUMN_DAY_EVENT + " INTEGER, " +
+                COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
+                COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
 
         db.execSQL(query);
     }
@@ -93,10 +92,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addEvent(String title, String location, String input, int color, int avatar, int startYear,
-                         int startMonth, int startDay, int startHour, int startMinutes,
-                         int endYear, int endMonth, int endDay, int endHour, int endMinutes,
-                         long createdDate, long modifiedDate,
-                         int allDay, int soundNotifications, int silentNotifications){
+            int startMonth, int startDay, int startHour, int startMinutes,
+            int endYear, int endMonth, int endDay, int endHour, int endMinutes,
+            long createdDate, long modifiedDate,
+            int allDay, int soundNotifications, int silentNotifications) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -122,7 +121,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
 
         long result = db.insert(TABLE_NAME, null, cv);
-        if (result == -1){
+        if (result == -1) {
             Toast.makeText(context, R.string.toast_failed, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, R.string.toast_added, Toast.LENGTH_SHORT).show();
@@ -131,12 +130,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor readAllData(){
+    public Cursor readAllData() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
-        if(db != null){
+        if (db != null) {
             cursor = db.rawQuery(query, null);
         }
         //close connection
@@ -146,10 +145,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
-                    int startMonth, int startDay, int startHour, int startMinutes,
-                    int endYear, int endMonth, int endDay, int endHour, int endMinutes,
-                    long createdDate, long modifiedDate,
-                    int allDay , int soundNotifications, int silentNotifications){
+            int startMonth, int startDay, int startHour, int startMinutes,
+            int endYear, int endMonth, int endDay, int endHour, int endMinutes,
+            long createdDate, long modifiedDate,
+            int allDay, int soundNotifications, int silentNotifications) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
@@ -173,8 +172,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
         cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
 
-        long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
-        if (result == -1){
+        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
+        if (result == -1) {
             Toast.makeText(context, R.string.toast_failed_to_update, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, R.string.toast_successfully_updated, Toast.LENGTH_SHORT).show();
@@ -183,11 +182,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteDataOnOneRow(String row_id){
+    public void deleteDataOnOneRow(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
-        
-        if (result == -1){
+
+        if (result == -1) {
             Toast.makeText(context, R.string.toast_fail_to_delete, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, R.string.toast_successfully_deleted, Toast.LENGTH_SHORT).show();
@@ -196,7 +195,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteAllData(){
+    public void deleteAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
         //Delete DB file from the phone
@@ -205,13 +204,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void removeSoundNotification(String row_id){
+    public void removeSoundNotification(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_SOUND_NOTIFICATION, 0);
-        long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
+        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
 
-        if (result == -1){
+        if (result == -1) {
             Toast.makeText(context, R.string.toast_fail_to_remove_alarm, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, R.string.toast_alarm_cancel, Toast.LENGTH_SHORT).show();
@@ -220,13 +219,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void removeSilentNotification(String row_id){
+    public void removeSilentNotification(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_SILENT_NOTIFICATIONS, 0);
-        long result = db.update(TABLE_NAME, cv, "_id=?", new String []{row_id});
+        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
 
-        if (result == -1){
+        if (result == -1) {
             Log.d("SilentNotification", "removeSilentNotification: Not removed!");
             //Toast.makeText(context, R.string.toast_fail_to_remove_alarm, Toast.LENGTH_SHORT).show();
         } else {

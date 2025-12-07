@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.tools.PreferencesManager;
+import com.martinatanasov.colornotebook.utils.PreferencesManager;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 
 
@@ -81,8 +81,8 @@ public class ThirdFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_third, container, false);
 
         //Initialize viewPager2 from MainActivity
-        btnDone=view.findViewById(R.id.btnDone);
-        btnPrevious=view.findViewById(R.id.btnPrevious);
+        btnDone = view.findViewById(R.id.btnDone);
+        btnPrevious = view.findViewById(R.id.btnPrevious);
         viewPager2 = getActivity().findViewById(R.id.viewPager);
 
 //        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);

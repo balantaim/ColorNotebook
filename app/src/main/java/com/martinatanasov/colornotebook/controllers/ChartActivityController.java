@@ -15,20 +15,23 @@ package com.martinatanasov.colornotebook.controllers;
 import com.martinatanasov.colornotebook.views.chart.ChartActivity;
 
 public class ChartActivityController {
-    private ChartActivity chartActivity;
+
+    private final ChartActivity chartActivity;
     private static String important = "", regular = "", unimportant = "";
     private static float importantDouble = 0.0F, regularDouble = 0.0F, unimportantDouble = 0.0F;
 
-    public ChartActivityController(ChartActivity chartActivity){
+    public ChartActivityController(ChartActivity chartActivity) {
         this.chartActivity = chartActivity;
         //PreferencesManager preferencesManager = new PreferencesManager(this.chartActivity);
     }
-    public void setValues(String imp, String reg, String uni){
+
+    public void setValues(String imp, String reg, String uni) {
         important = imp;
         regular = reg;
         unimportant = uni;
     }
-    public void calcPieChartData(){
+
+    public void calcPieChartData() {
         int importantCount = Integer.parseInt(important);
         int regularCount = Integer.parseInt(regular);
         int unimportantCount = Integer.parseInt(unimportant);
@@ -37,13 +40,16 @@ public class ChartActivityController {
         regularDouble = (float) percentPerPart * regularCount;
         unimportantDouble = (float) percentPerPart * unimportantCount;
     }
-    public float getImportantPercent(){
+
+    public float getImportantPercent() {
         return importantDouble;
     }
-    public float getRegularPercent(){
+
+    public float getRegularPercent() {
         return regularDouble;
     }
-    public float getUnimportantDouble(){
+
+    public float getUnimportantDouble() {
         return unimportantDouble;
     }
 }

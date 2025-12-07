@@ -76,7 +76,7 @@ public class FirstFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
 
         //Initialize viewPager2 from MainActivity
-        btnNext=view.findViewById(R.id.btnNext);
+        btnNext = view.findViewById(R.id.btnNext);
         viewPager2 = getActivity().findViewById(R.id.viewPager);
 
         btnNext.setOnClickListener(new View.OnClickListener() {

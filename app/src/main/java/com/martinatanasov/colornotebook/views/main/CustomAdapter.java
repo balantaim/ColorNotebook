@@ -32,7 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.model.UserEvent;
+import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.views.update.UpdateActivity;
 
 import java.util.ArrayList;
@@ -71,48 +71,48 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         UserEvent userEvent = userModelList.get(position);
         //holder.txtEventId.setText(userEvent.getTxtEventId());
         //SetUp title and length
-        if (userEvent.getTxtEventTitle().length() >= 11) {
-            holder.txtEventTitle.setText(userEvent.getTxtEventTitle().substring(0, 10) + "..");
+        if (userEvent.txtEventTitle().length() >= 11) {
+            holder.txtEventTitle.setText(userEvent.txtEventTitle().substring(0, 10) + "..");
         } else {
-            holder.txtEventTitle.setText(userEvent.getTxtEventTitle());
+            holder.txtEventTitle.setText(userEvent.txtEventTitle());
         }
         //SetUp background color
-        if (userEvent.getInt_color_picker() != 0) {
+        if (userEvent.int_color_picker() != 0) {
             holder.cardViewEvent.setCardBackgroundColor(
-                    ContextCompat.getColor(context, getCurrentBackgroundColor(userEvent.getInt_color_picker()))
+                    ContextCompat.getColor(context, getCurrentBackgroundColor(userEvent.int_color_picker()))
             );
         }
         //Show active reminder icon
         setUpActiveIconReminder(holder,
-                userEvent.getInt_all_day(),
-                userEvent.getInt_sound_notifications(),
-                userEvent.getInt_silent_notifications());
+                userEvent.int_all_day(),
+                userEvent.int_sound_notifications(),
+                userEvent.int_silent_notifications());
         holder.mainLayout.setOnClickListener(v -> navigateToSelectedEvent(userEvent));
     }
 
     private void navigateToSelectedEvent(UserEvent userEvent) {
         Intent intent = new Intent(context, UpdateActivity.class);
-        intent.putExtra("id", String.valueOf(userEvent.getTxtEventId()));
-        intent.putExtra("title", (userEvent.getTxtEventTitle()));
-        intent.putExtra("location", userEvent.getTxtEventLocation());
-        intent.putExtra("input", userEvent.getTxtNode());
-        intent.putExtra("color", userEvent.getInt_color_picker());
-        intent.putExtra("avatar", userEvent.getInt_avatar_picker());
-        intent.putExtra("start_year", userEvent.getInt_start_year());
-        intent.putExtra("start_mouth", Integer.valueOf(userEvent.getByte_start_month()));
-        intent.putExtra("start_day", Integer.valueOf(userEvent.getByte_start_day()));
-        intent.putExtra("start_hour", Integer.valueOf(userEvent.getByte_start_hour()));
-        intent.putExtra("start_minutes", Integer.valueOf(userEvent.getByte_start_minutes()));
-        intent.putExtra("end_year", userEvent.getInt_end_year());
-        intent.putExtra("end_month", Integer.valueOf(userEvent.getByte_end_month()));
-        intent.putExtra("end_day", Integer.valueOf(userEvent.getByte_end_day()));
-        intent.putExtra("end_hour", Integer.valueOf(userEvent.getByte_end_hour()));
-        intent.putExtra("end_minutes", Integer.valueOf(userEvent.getByte_end_minutes()));
-        intent.putExtra("created_date", userEvent.getLong_created_date());
-        intent.putExtra("modified_date", userEvent.getLong_modified_date());
-        intent.putExtra("all_day", userEvent.getInt_all_day());
-        intent.putExtra("sound_notifications", userEvent.getInt_sound_notifications());
-        intent.putExtra("silent_notifications", userEvent.getInt_silent_notifications());
+        intent.putExtra("id", String.valueOf(userEvent.txtEventId()));
+        intent.putExtra("title", (userEvent.txtEventTitle()));
+        intent.putExtra("location", userEvent.txtEventLocation());
+        intent.putExtra("input", userEvent.txtNode());
+        intent.putExtra("color", userEvent.int_color_picker());
+        intent.putExtra("avatar", userEvent.int_avatar_picker());
+        intent.putExtra("start_year", userEvent.int_start_year());
+        intent.putExtra("start_mouth", Integer.valueOf(userEvent.byte_start_month()));
+        intent.putExtra("start_day", Integer.valueOf(userEvent.byte_start_day()));
+        intent.putExtra("start_hour", Integer.valueOf(userEvent.byte_start_hour()));
+        intent.putExtra("start_minutes", Integer.valueOf(userEvent.byte_start_minutes()));
+        intent.putExtra("end_year", userEvent.int_end_year());
+        intent.putExtra("end_month", Integer.valueOf(userEvent.byte_end_month()));
+        intent.putExtra("end_day", Integer.valueOf(userEvent.byte_end_day()));
+        intent.putExtra("end_hour", Integer.valueOf(userEvent.byte_end_hour()));
+        intent.putExtra("end_minutes", Integer.valueOf(userEvent.byte_end_minutes()));
+        intent.putExtra("created_date", userEvent.long_created_date());
+        intent.putExtra("modified_date", userEvent.long_modified_date());
+        intent.putExtra("all_day", userEvent.int_all_day());
+        intent.putExtra("sound_notifications", userEvent.int_sound_notifications());
+        intent.putExtra("silent_notifications", userEvent.int_silent_notifications());
         activity.startActivityForResult(intent, 1);
     }
 
@@ -129,34 +129,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     private int getCurrentBackgroundColor(int color) {
-        int result = 0;
-        switch (color) {
-            case 1:
-                result = R.color.pick_sky_blue;
-                break;
-            case 2:
-                result = R.color.pick_green;
-                break;
-            case 3:
-                result = R.color.pick_yellow;
-                break;
-            case 4:
-                result = R.color.pick_orange;
-                break;
-            case 5:
-                result = R.color.error;
-                break;
-            case 6:
-                result = R.color.pick_blue;
-                break;
-            case 7:
-                result = R.color.pick_purple;
-                break;
-            default:
-                result = R.color.gray_new;
-                break;
-        }
-        return result;
+        return switch (color) {
+            case 1 -> R.color.pick_sky_blue;
+            case 2 -> R.color.pick_green;
+            case 3 -> R.color.pick_yellow;
+            case 4 -> R.color.pick_orange;
+            case 5 -> R.color.error;
+            case 6 -> R.color.pick_blue;
+            case 7 -> R.color.pick_purple;
+            default -> R.color.gray_new;
+        };
     }
 
     @Override
@@ -167,7 +149,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
@@ -178,9 +160,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                     String search = constraint.toString().toLowerCase();
                     List<UserEvent> userFilteredList = new ArrayList<>();
                     for (UserEvent userEvent : userModelListFiltered) {
-                        if (userEvent.getTxtEventTitle().toLowerCase().contains(search) ||
-                                userEvent.getTxtNode().toLowerCase().contains(search) ||
-                                userEvent.getTxtEventLocation().toLowerCase().contains(search)) {
+                        if (userEvent.txtEventTitle().toLowerCase().contains(search) ||
+                                userEvent.txtNode().toLowerCase().contains(search) ||
+                                userEvent.txtEventLocation().toLowerCase().contains(search)) {
                             userFilteredList.add(userEvent);
                         }
                     }
@@ -198,14 +180,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                         userModelList = (List<UserEvent>) results.values;
                         notifyDataSetChanged();
                     }
-                } catch (ClassCastException e){
+                } catch (ClassCastException e) {
                     Log.d("Adapter", "publishResults: ClassCastException: " + e);
                 } catch (Exception e) {
                     Log.d("Adapter", "publishResults: " + e);
                 }
             }
         };
-        return filter;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -217,9 +198,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            //txtEventId = itemView.findViewById(R.id.txtEventId);
+            // txtEventId = itemView.findViewById(R.id.txtEventId);
             txtEventTitle = itemView.findViewById(R.id.txtEventTitle);
-            //txtEventLocation = itemView.findViewById(R.id.txtEventLocation);
+            // txtEventLocation = itemView.findViewById(R.id.txtEventLocation);
             txtNode = itemView.findViewById(R.id.txtNode);
             mainLayout = itemView.findViewById(R.id.mainLayout);
             cardViewEvent = itemView.findViewById(R.id.cardViewEvent);

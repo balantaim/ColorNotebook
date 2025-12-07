@@ -14,6 +14,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout_option"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorOnSecondary"
@@ -26,6 +27,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <!--    Navigation bar -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_option"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/my_menu_options"
+            app:titleTextColor="?attr/colorOnSecondary" />
 
         <TextView
             android:id="@+id/txtHeader"
@@ -173,8 +187,8 @@
                         android:layout_height="120dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginBottom="24dp"
-                        android:src="@drawable/ic_default_image"
                         android:contentDescription="@string/loadWelcomeImage"
+                        android:src="@drawable/ic_default_image"
                         app:layout_constraintBottom_toTopOf="@+id/version"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
