@@ -43,12 +43,13 @@ import com.martinatanasov.colornotebook.controllers.AddActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
+import com.martinatanasov.colornotebook.dto.AddEvent;
 import com.martinatanasov.colornotebook.dto.UserPermission;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.ActionBarIconSetter;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 
@@ -221,18 +222,19 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
         if (eventTitle.getText().toString().length() > 1) {
             if (isEventTitleValid(eventTitle.getText().toString())) {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
-                controller.addRecord(
-                        eventTitle.getText().toString().trim(),
-                        eventLocation.getText().toString().trim(),
-                        eventInput.getText().toString().trim(),
-                        colorPicker,
-                        priorityPicker,
-                        YEAR, MONTH, DAY, HOUR, MINUTES,
-                        YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
-                        timestamp,
-                        dayEvent,
-                        soundNotification,
-                        silentNotification
+                controller.AddUserEvent(
+                        new AddEvent(eventTitle.getText().toString().trim(),
+                                eventLocation.getText().toString().trim(),
+                                eventInput.getText().toString().trim(),
+                                colorPicker,
+                                priorityPicker,
+                                YEAR, MONTH, DAY, HOUR, MINUTES,
+                                YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
+                                timestamp,
+                                timestamp,
+                                dayEvent,
+                                soundNotification,
+                                silentNotification)
                 );
 
                 //Redirect to Main Activity

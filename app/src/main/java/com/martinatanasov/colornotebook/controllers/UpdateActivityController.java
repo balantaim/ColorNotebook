@@ -16,7 +16,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.dto.UpdateEvent;
+import com.martinatanasov.colornotebook.services.EventService;
+import com.martinatanasov.colornotebook.services.EventServiceImpl;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.views.update.UpdateActivity;
 
@@ -28,46 +30,23 @@ public class UpdateActivityController {
     private final UpdateActivity updateView;
     private final Handler handler;
     private final ExecutorService executorService;
+    private final EventService eventService;
 
     public UpdateActivityController(UpdateActivity updateView) {
         this.updateView = updateView;
         executorService = Executors.newSingleThreadExecutor();
         handler = new Handler(Looper.getMainLooper());
-
         timerEventUpdate();
+        this.eventService = new EventServiceImpl(updateView.getApplicationContext());
     }
 
-    public void updateRecord(String id,
-            String title,
-            String location,
-            String node,
-            int color, int priority,
-            int YEAR, int MONTH, int DAY, int HOUR, int MINUTES,
-            int YEAR2, int MONTH2, int DAY2, int HOUR2, int MINUTES2,
-            long createdTimestamp, long modifiedTimestamp, int allDay,
-            int soundNotification, int silentNotification) {
-        MyDatabaseHelper db = new MyDatabaseHelper(updateView.getApplicationContext());
-        db.updateData(id,
-                title,
-                location,
-                node,
-                color,
-                priority,
-                YEAR, MONTH, DAY, HOUR, MINUTES,
-                YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
-                createdTimestamp,
-                modifiedTimestamp,
-                allDay,
-                soundNotification,
-                silentNotification);
-        db.close();
+    public void updateUserEvent(UpdateEvent updateEvent) {
+        eventService.updateEvent(updateEvent);
     }
 
     public void deleteCurrentEvent(String eventID) {
         cancelSoundNotification(eventID);
-        MyDatabaseHelper db = new MyDatabaseHelper(updateView.getApplicationContext());
-        db.deleteDataOnOneRow(eventID);
-        db.close();
+        eventService.deleteEventOnOneRow(eventID);
     }
 
     private void cancelSoundNotification(String eventID) {

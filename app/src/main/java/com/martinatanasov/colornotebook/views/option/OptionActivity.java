@@ -42,9 +42,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.OptionActivityController;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
-import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
 
 public class OptionActivity extends AppCompatActivity implements AppSettings {
 
@@ -126,7 +126,6 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
             startActivity(new Intent(OptionActivity.this, OptionActivity.class));
             finish();
         });
-
     }
 
     private void initScreenManager() {

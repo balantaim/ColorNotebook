@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 
 

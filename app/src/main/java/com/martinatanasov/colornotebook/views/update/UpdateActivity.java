@@ -46,12 +46,13 @@ import com.martinatanasov.colornotebook.controllers.UpdateActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
+import com.martinatanasov.colornotebook.dto.UpdateEvent;
 import com.martinatanasov.colornotebook.dto.UserPermission;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.ActionBarIconSetter;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.utils.events.VibrationEvent;
@@ -280,7 +281,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             }
             //Update DB
             long timestamp = Calendar.getInstance().getTimeInMillis();
-            controller.updateRecord(id,
+            controller.updateUserEvent(new UpdateEvent(
+                    id,
                     eventTitle.getText().toString(),
                     eventLocation.getText().toString(),
                     eventInput.getText().toString(),
@@ -292,7 +294,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                     timestamp,
                     dayEventBool,
                     soundNotificationBool,
-                    silentNotificationBool);
+                    silentNotificationBool
+            ));
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

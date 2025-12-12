@@ -22,7 +22,6 @@ public class ChartActivityController {
 
     public ChartActivityController(ChartActivity chartActivity) {
         this.chartActivity = chartActivity;
-        //PreferencesManager preferencesManager = new PreferencesManager(this.chartActivity);
     }
 
     public void setValues(String imp, String reg, String uni) {

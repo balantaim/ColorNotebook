@@ -26,9 +26,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.ChartActivityController;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
-import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
 
 import java.util.ArrayList;
 

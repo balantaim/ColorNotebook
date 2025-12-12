@@ -23,8 +23,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.martinatanasov.colornotebook.R;
+import com.martinatanasov.colornotebook.dto.AddEvent;
+import com.martinatanasov.colornotebook.dto.UpdateEvent;
 
-public class MyDatabaseHelper extends SQLiteOpenHelper {
+public class EventDatabaseRepository extends SQLiteOpenHelper {
 
     private final Context context;
     private final static String DATABASE_NAME = "ColorEventsLibrary.db";
@@ -52,7 +54,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private final static String COLUMN_PICKED_COLOR = "picked_color";
     private final static String COLUMN_PICKED_AVATAR = "picked_avatar";
 
-    public MyDatabaseHelper(@Nullable Context context) {
+    public EventDatabaseRepository(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -91,34 +93,32 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addEvent(String title, String location, String input, int color, int avatar, int startYear,
-            int startMonth, int startDay, int startHour, int startMinutes,
-            int endYear, int endMonth, int endDay, int endHour, int endMinutes,
-            long createdDate, long modifiedDate,
-            int allDay, int soundNotifications, int silentNotifications) {
+    public void addEvent(
+            AddEvent addEvent
+    ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_LOCATION, location);
-        cv.put(COLUMN_EVENT, input);
-        cv.put(COLUMN_PICKED_COLOR, color);
-        cv.put(COLUMN_PICKED_AVATAR, avatar);
-        cv.put(COLUMN_START_YEAR, startYear);
-        cv.put(COLUMN_START_MONTH, startMonth);
-        cv.put(COLUMN_START_DAY, startDay);
-        cv.put(COLUMN_START_HOUR, startHour);
-        cv.put(COLUMN_START_MINUTES, startMinutes);
-        cv.put(COLUMN_END_YEAR, endYear);
-        cv.put(COLUMN_END_MONTH, endMonth);
-        cv.put(COLUMN_END_DAY, endDay);
-        cv.put(COLUMN_END_HOUR, endHour);
-        cv.put(COLUMN_END_MINUTES, endMinutes);
-        cv.put(COLUMN_CREATED_DATE, createdDate);
-        cv.put(COLUMN_MODIFIED_DATE, modifiedDate);
-        cv.put(COLUMN_DAY_EVENT, allDay);
-        cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
-        cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
+        cv.put(COLUMN_TITLE, addEvent.title());
+        cv.put(COLUMN_LOCATION, addEvent.location());
+        cv.put(COLUMN_EVENT, addEvent.input());
+        cv.put(COLUMN_PICKED_COLOR, addEvent.color());
+        cv.put(COLUMN_PICKED_AVATAR, addEvent.avatar());
+        cv.put(COLUMN_START_YEAR, addEvent.startYear());
+        cv.put(COLUMN_START_MONTH, addEvent.startMonth());
+        cv.put(COLUMN_START_DAY, addEvent.startDay());
+        cv.put(COLUMN_START_HOUR, addEvent.startHour());
+        cv.put(COLUMN_START_MINUTES, addEvent.startMinutes());
+        cv.put(COLUMN_END_YEAR, addEvent.endYear());
+        cv.put(COLUMN_END_MONTH, addEvent.endMonth());
+        cv.put(COLUMN_END_DAY, addEvent.endDay());
+        cv.put(COLUMN_END_HOUR, addEvent.endHour());
+        cv.put(COLUMN_END_MINUTES, addEvent.endMinutes());
+        cv.put(COLUMN_CREATED_DATE, addEvent.createdDate());
+        cv.put(COLUMN_MODIFIED_DATE, addEvent.modifiedDate());
+        cv.put(COLUMN_DAY_EVENT, addEvent.allDay());
+        cv.put(COLUMN_SOUND_NOTIFICATION, addEvent.soundNotifications());
+        cv.put(COLUMN_SILENT_NOTIFICATIONS, addEvent.silentNotifications());
 
         long result = db.insert(TABLE_NAME, null, cv);
         if (result == -1) {
@@ -130,7 +130,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor readAllData() {
+    public Cursor readAllEvents() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -139,40 +139,36 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
         }
         //close connection
-        //assert db != null;
-        //db.close();
+//        assert db != null;
+//        db.close();
         return cursor;
     }
 
-    public void updateData(String row_id, String title, String location, String node, int color, int avatar, int startYear,
-            int startMonth, int startDay, int startHour, int startMinutes,
-            int endYear, int endMonth, int endDay, int endHour, int endMinutes,
-            long createdDate, long modifiedDate,
-            int allDay, int soundNotifications, int silentNotifications) {
+    public void updateEvent(UpdateEvent updateEvent) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_TITLE, title);
-        cv.put(COLUMN_LOCATION, location);
-        cv.put(COLUMN_EVENT, node);
-        cv.put(COLUMN_PICKED_COLOR, color);
-        cv.put(COLUMN_PICKED_AVATAR, avatar);
-        cv.put(COLUMN_START_YEAR, startYear);
-        cv.put(COLUMN_START_MONTH, startMonth);
-        cv.put(COLUMN_START_DAY, startDay);
-        cv.put(COLUMN_START_HOUR, startHour);
-        cv.put(COLUMN_START_MINUTES, startMinutes);
-        cv.put(COLUMN_END_YEAR, endYear);
-        cv.put(COLUMN_END_MONTH, endMonth);
-        cv.put(COLUMN_END_DAY, endDay);
-        cv.put(COLUMN_END_HOUR, endHour);
-        cv.put(COLUMN_END_MINUTES, endMinutes);
-        cv.put(COLUMN_CREATED_DATE, createdDate);
-        cv.put(COLUMN_MODIFIED_DATE, modifiedDate);
-        cv.put(COLUMN_DAY_EVENT, allDay);
-        cv.put(COLUMN_SOUND_NOTIFICATION, soundNotifications);
-        cv.put(COLUMN_SILENT_NOTIFICATIONS, silentNotifications);
+        cv.put(COLUMN_TITLE, updateEvent.title());
+        cv.put(COLUMN_LOCATION, updateEvent.location());
+        cv.put(COLUMN_EVENT, updateEvent.node());
+        cv.put(COLUMN_PICKED_COLOR, updateEvent.color());
+        cv.put(COLUMN_PICKED_AVATAR, updateEvent.avatar());
+        cv.put(COLUMN_START_YEAR, updateEvent.startYear());
+        cv.put(COLUMN_START_MONTH, updateEvent.startMonth());
+        cv.put(COLUMN_START_DAY, updateEvent.startDay());
+        cv.put(COLUMN_START_HOUR, updateEvent.startHour());
+        cv.put(COLUMN_START_MINUTES, updateEvent.startMinutes());
+        cv.put(COLUMN_END_YEAR, updateEvent.endYear());
+        cv.put(COLUMN_END_MONTH, updateEvent.endMonth());
+        cv.put(COLUMN_END_DAY, updateEvent.endDay());
+        cv.put(COLUMN_END_HOUR, updateEvent.endHour());
+        cv.put(COLUMN_END_MINUTES, updateEvent.endMinutes());
+        cv.put(COLUMN_CREATED_DATE, updateEvent.createdDate());
+        cv.put(COLUMN_MODIFIED_DATE, updateEvent.modifiedDate());
+        cv.put(COLUMN_DAY_EVENT, updateEvent.allDay());
+        cv.put(COLUMN_SOUND_NOTIFICATION, updateEvent.soundNotifications());
+        cv.put(COLUMN_SILENT_NOTIFICATIONS, updateEvent.silentNotifications());
 
-        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
+        long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{updateEvent.row_id()});
         if (result == -1) {
             Toast.makeText(context, R.string.toast_failed_to_update, Toast.LENGTH_SHORT).show();
         } else {
@@ -182,7 +178,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteDataOnOneRow(String row_id) {
+    public void deleteEventOnOneRow(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
 
@@ -195,7 +191,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteAllData() {
+    public void deleteAllEvents() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
         //Delete DB file from the phone

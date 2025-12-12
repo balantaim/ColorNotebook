@@ -25,7 +25,7 @@ import androidx.annotation.Nullable;
 
 import com.martinatanasov.colornotebook.R;
 
-public class MyForegroundServices extends Service {
+public class MyForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 

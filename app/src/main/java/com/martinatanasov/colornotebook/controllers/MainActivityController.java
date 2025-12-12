@@ -12,22 +12,21 @@
 
 package com.martinatanasov.colornotebook.controllers;
 
-import android.database.Cursor;
 import android.os.Build;
 
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
 import com.martinatanasov.colornotebook.dto.UserEvent;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
+import com.martinatanasov.colornotebook.services.EventService;
+import com.martinatanasov.colornotebook.services.EventServiceImpl;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.utils.events.NotificationCreator;
 import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -36,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivityController {
 
     private final MainActivity mainView;
+    private final EventService eventService;
     private int unimportant = 0, regular = 0, important = 0, event_sound_notifications = 0;
     private final PreferencesManager preferencesManager;
     private boolean isAvailableData = false;
@@ -43,6 +43,7 @@ public class MainActivityController {
 
     public MainActivityController(MainActivity mainView) {
         this.mainView = mainView;
+        this.eventService = new EventServiceImpl(this.mainView.getApplicationContext());
         preferencesManager = new PreferencesManager(this.mainView, false, true);
         boolean disableTutorial = checkTutorial();
         if (!disableTutorial) {
@@ -63,60 +64,30 @@ public class MainActivityController {
     }
 
     public void storeDataInArrays() {
-        MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
-
-        Cursor cursor = myDB.readAllData();
-        List<UserEvent> userEvent = new ArrayList<>();
-        if (cursor.getCount() == 0) {
+        //Update the events
+        events = eventService.getUserEventDto();
+        if (events.isEmpty()) {
             mainView.printDatabaseEmpty();
         } else {
-            while (cursor.moveToNext()) {
-                if (Integer.parseInt(cursor.getString(19)) > 0) {
+            for (UserEvent index : events) {
+                if (index.int_sound_notifications() > 0) {
                     event_sound_notifications++;
                 }
-                switch (Integer.parseInt(cursor.getString(5))) {
+                switch (index.int_avatar_picker()) {
                     case 1 -> regular++;
                     case 2 -> unimportant++;
                     default -> important++;
                 }
-                userEvent.add(new UserEvent(
-                        cursor.getString(0), //id
-                        cursor.getString(1), //title
-                        cursor.getString(2), //location
-                        cursor.getString(3), //event_node
-                        Integer.parseInt(cursor.getString(4)), //color
-                        Integer.parseInt(cursor.getString(5)), //avatar
-                        Integer.parseInt(cursor.getString(6)), //start_year
-                        Integer.parseInt(cursor.getString(11)), //end_year
-                        Integer.parseInt(cursor.getString(18)), //all_day
-                        Integer.parseInt(cursor.getString(19)), //sound_notifications
-                        Integer.parseInt(cursor.getString(20)), //silent_notifications
-                        Byte.parseByte(cursor.getString(7)), //start_mount
-                        Byte.parseByte(cursor.getString(8)), //start_day
-                        Byte.parseByte(cursor.getString(9)), //start_hour
-                        Byte.parseByte(cursor.getString(10)), //start_minutes
-                        Byte.parseByte(cursor.getString(12)), //end_mount
-                        Byte.parseByte(cursor.getString(13)), //end_day
-                        Byte.parseByte(cursor.getString(14)), //end_hour
-                        Byte.parseByte(cursor.getString(15)), //end_minutes
-                        Long.parseLong(cursor.getString(16)), //create_date
-                        Long.parseLong(cursor.getString(17)) //modified_date
-                ));
             }
-            //Update the events
-            events = userEvent;
-            //Update UI
-            setInitialRecyclerView();
-            //shrink FAB
-            mainView.shrinkMenuButton();
         }
+        //Update UI
+        setInitialRecyclerView();
+        //shrink FAB
+        mainView.shrinkMenuButton();
         //Update drawer count/statistic
-        mainView.createDrawerCounters(important, regular, unimportant, event_sound_notifications, userEvent.size());
-        //close cursor object
-        cursor.close();
-
+        mainView.createDrawerCounters(important, regular, unimportant, event_sound_notifications, events.size());
         //set isAvailableData boolean
-        isAvailableData = userEvent.isEmpty();
+        isAvailableData = events.isEmpty();
     }
 
     private void setInitialRecyclerView() {
@@ -136,10 +107,8 @@ public class MainActivityController {
 
     public void deleteBDRecords() {
         removeAllSoundAlarms();
-        MyDatabaseHelper myDB = new MyDatabaseHelper(mainView.getApplicationContext());
         important = regular = unimportant = 0;
-        myDB.deleteAllData();
-        myDB.close();
+        eventService.deleteAllEvents();
     }
 
     private void removeAllSoundAlarms() {
@@ -148,9 +117,7 @@ public class MainActivityController {
     }
 
     public void removeRowOnSwipe(String idString) {
-        MyDatabaseHelper myDB = new MyDatabaseHelper(this.mainView);
-        myDB.deleteDataOnOneRow(idString);
-        myDB.close();
+        eventService.deleteEventOnOneRow(idString);
     }
 
     private boolean checkTutorial() {

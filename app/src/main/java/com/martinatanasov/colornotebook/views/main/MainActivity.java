@@ -48,10 +48,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.MainActivityController;
 import com.martinatanasov.colornotebook.dto.UserEvent;
-import com.martinatanasov.colornotebook.services.MyForegroundServices;
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
-import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
+import com.martinatanasov.colornotebook.services.MyForegroundService;
 import com.martinatanasov.colornotebook.utils.AppSettings;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.VibrationEvent;
 import com.martinatanasov.colornotebook.views.add.AddActivity;
 import com.martinatanasov.colornotebook.views.chart.ChartActivity;
@@ -92,8 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
         //Set top toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initToolbar();
         //hide Status Bar
         initScreenManager();
         initViews();
@@ -134,6 +133,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
 
         //createDrawerCounters();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     public CustomAdapter getAdapter() {
@@ -263,8 +267,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.my_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
+        MenuItem menuItemSearch = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItemSearch.getActionView();
         assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -286,13 +290,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Disable and Hide Menu buttons if there are no events
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (!controller.isAvailableData()) {
-            MenuItem deleteAll = menu.findItem(R.id.delete_all);
-            deleteAll.setEnabled(false);
-            deleteAll.setVisible(false);
-            MenuItem search = menu.findItem(R.id.search);
-            search.setEnabled(false);
-            search.setVisible(false);
+        if (controller != null) {
+            if (!controller.isAvailableData()) {
+                if (menu != null) {
+                    MenuItem deleteAll = menu.findItem(R.id.delete_all);
+                    if (deleteAll != null) {
+                        deleteAll.setEnabled(false);
+                        deleteAll.setVisible(false);
+                    }
+                    MenuItem search = menu.findItem(R.id.search);
+                    if (search != null) {
+                        search.setEnabled(false);
+                        search.setVisible(false);
+                    }
+                }
+            }
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -399,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isForegroundServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
-            if (MyForegroundServices.class.getName().equals(service.service.getClassName())) {
+            if (MyForegroundService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -427,12 +439,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
             });
-            scroll_top.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerView.smoothScrollToPosition(0);
-                }
-            });
+            scroll_top.setOnClickListener(v -> recyclerView.smoothScrollToPosition(0));
         });
     }
 

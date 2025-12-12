@@ -16,7 +16,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.dto.AddEvent;
+import com.martinatanasov.colornotebook.services.EventService;
+import com.martinatanasov.colornotebook.services.EventServiceImpl;
 import com.martinatanasov.colornotebook.views.add.AddActivity;
 
 import java.util.concurrent.ExecutorService;
@@ -35,27 +37,9 @@ public class AddActivityController {
         timerEventUpdate();
     }
 
-    public void addRecord(String title,
-            String location,
-            String node,
-            int color, int priority,
-            int YEAR, int MONTH, int DAY, int HOUR, int MINUTES,
-            int YEAR2, int MONTH2, int DAY2, int HOUR2, int MINUTES2,
-            long timestamp, int allDay, int soundNotification, int silentNotification) {
-        MyDatabaseHelper db = new MyDatabaseHelper(addView.getApplicationContext());
-        db.addEvent(title,
-                location,
-                node,
-                color,
-                priority,
-                YEAR, MONTH, DAY, HOUR, MINUTES,
-                YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
-                timestamp,
-                timestamp,
-                allDay,
-                soundNotification,
-                silentNotification);
-        db.close();
+    public void AddUserEvent(AddEvent addEvent) {
+        EventService eventService = new EventServiceImpl(addView.getApplicationContext());
+        eventService.addEvent(addEvent);
     }
 
     private void timerEventUpdate() {

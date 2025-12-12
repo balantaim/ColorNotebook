@@ -15,7 +15,8 @@ package com.martinatanasov.colornotebook.controllers;
 import android.app.Activity;
 import android.util.Log;
 
-import com.martinatanasov.colornotebook.repositories.MyDatabaseHelper;
+import com.martinatanasov.colornotebook.services.EventService;
+import com.martinatanasov.colornotebook.services.EventServiceImpl;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.views.custom.CustomActivity;
 
@@ -35,9 +36,8 @@ public class CustomActivityController {
     }
 
     public void removeSoundNotificationFrom(String id) {
-        MyDatabaseHelper myDB = new MyDatabaseHelper(view.getApplicationContext());
-        myDB.removeSoundNotification(id);
-        myDB.close();
+        EventService eventService = new EventServiceImpl(view.getApplicationContext());
+        eventService.removeSoundNotification(id);
     }
 
 

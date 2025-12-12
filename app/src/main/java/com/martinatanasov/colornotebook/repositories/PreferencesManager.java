@@ -10,7 +10,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.colornotebook.utils;
+package com.martinatanasov.colornotebook.repositories;
 
 import static android.content.Context.MODE_PRIVATE;
 

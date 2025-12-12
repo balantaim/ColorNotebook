@@ -12,7 +12,7 @@
 
 package com.martinatanasov.colornotebook.controllers;
 
-import com.martinatanasov.colornotebook.utils.PreferencesManager;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.views.option.OptionActivity;
 
 public class OptionActivityController {
