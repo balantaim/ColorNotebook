@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,12 +22,18 @@
         android:theme="@style/Theme.DefaultColorNotebook"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".views.map.MapTwoActivity"
+            android:exported="false" />
+        <!--        <activity-->
+        <!--            android:name=".views.map.MapActivity"-->
+        <!--            android:exported="false" />-->
+        <activity
             android:name=".views.details.DetailsActivity"
             android:exported="false" />
         <activity
             android:name=".views.custom.CustomActivity"
-            android:label="@string/alarm_information"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/alarm_information" />
         <activity
             android:name=".views.main.MainActivity"
             android:exported="true"
@@ -67,21 +76,17 @@
             android:theme="@style/Theme.Tutorial"
             tools:ignore="LockedOrientationActivity" />
 
-<!--        <service android:name=".services.MyForegroundServices" />-->
-
-<!--        <receiver-->
-<!--            android:name=".services.MyBroadcastReceiver"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
-
+        <!-- <receiver -->
+        <!-- android:name=".services.MyBroadcastReceiver" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
         <receiver android:name=".services.AlarmReceiver" />
-
         <!-- test service added for android 12+ -->
         <service
-            android:name=".services.MyForegroundServices"
+            android:name=".services.MyForegroundService"
             android:exported="true"
             android:foregroundServiceType="dataSync" />
     </application>

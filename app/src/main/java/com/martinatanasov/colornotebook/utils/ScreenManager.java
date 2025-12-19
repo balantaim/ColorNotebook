@@ -38,12 +38,9 @@ public class ScreenManager {
         ViewCompat.setOnApplyWindowInsetsListener(content, (v, insets) -> {
             Insets systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(
-                    // Add padding at the left for navigation bar
                     systemInsets.left,
-                    v.getPaddingTop(),
-                    // Add padding at the right for navigation bar
+                    systemInsets.top,
                     systemInsets.right,
-                    // Add padding at the bottom for navigation bar
                     systemInsets.bottom
             );
             return insets;

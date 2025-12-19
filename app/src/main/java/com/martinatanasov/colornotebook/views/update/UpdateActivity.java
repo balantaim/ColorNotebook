@@ -49,7 +49,6 @@ import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.dto.UpdateEvent;
 import com.martinatanasov.colornotebook.dto.UserPermission;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
-import com.martinatanasov.colornotebook.utils.ActionBarIconSetter;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
@@ -57,6 +56,7 @@ import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.utils.events.VibrationEvent;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
+import com.martinatanasov.colornotebook.views.map.MapTwoActivity;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -117,9 +117,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
         }
 
-        //Change Back arrow button
-//        changeArrowBackBtn();
-
         //Find view resources
         initViews();
 
@@ -131,7 +128,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         //getAndSetIntentData();
 
         initClickListeners();
-
 
         //Click event for edit text's icon
         eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
@@ -180,6 +176,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(this, MapTwoActivity.class));
+
+
                 return true;
             }
         }
@@ -189,11 +189,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     //Set actionbar title after getAndSetIntentData method
     private void setActionBarTitle() {
         Objects.requireNonNull(getSupportActionBar()).setTitle(eventTitle.getText().toString());
-    }
-
-    private void changeArrowBackBtn() {
-        ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
-        actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
     }
 
     private void managePriority() {

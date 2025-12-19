@@ -10,7 +10,7 @@ android {
     compileSdkVersion 36
     defaultConfig {
         applicationId "com.martinatanasov.colornotebook"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 36
         versionCode 1
         versionName "1.0.0-ALPHA"
@@ -20,6 +20,7 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "LOADING_IMAGE", "\"${properties.getProperty("LOADING_IMAGE")}\""
         buildConfigField "String", "CHECK_DEV", "\"${properties.getProperty("CHECK_DEV")}\""
+//        buildConfigField "String", "MAPTILER_API_KEY", "\"${properties.getProperty("MAPTILER_API_KEY")}\""
 
         //Set supported per-app language
         resourceConfigurations += ['en']
@@ -102,6 +103,7 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:5.0.5'
     implementation 'junit:junit:4.13.2'
+    implementation 'androidx.activity:activity:1.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
 
     //Volley: http library
@@ -109,7 +111,17 @@ dependencies {
 
     //NotificationCompat used for foreground services
     implementation "androidx.core:core:1.17.0"
-    //implementation "androidx.core:core:1.9.0"
+
+    //Maplibre alternative to Google Maps
+//    implementation 'org.maplibre.gl:android-sdk:12.3.0'
+
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+
+    implementation 'org.osmdroid:osmdroid-android:6.1.15'
+    // optional, for extra features
+    implementation 'org.osmdroid:osmdroid-wms:6.1.15'
+//    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
     //LeakCanary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'

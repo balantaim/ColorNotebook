@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -464,6 +465,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Load Theme Setting
     @Override
     public void updateAppSettings() {
+        EdgeToEdge.enable(this);
         PreferencesManager preferencesManager = new PreferencesManager(this, true, false);
         darkModeChecker(preferencesManager);
         switch (preferencesManager.getCurrentTheme()) {

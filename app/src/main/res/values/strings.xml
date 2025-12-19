@@ -145,6 +145,8 @@
     <string name="no_data_to_show">You don\'t have any events!</string>
     <!-- Validation -->
     <string name="event_title_empty">Title should contain at least 2 symbols!</string>
+    <string name="find_location">Find Location</string>
+    <string name="search">Search</string>
 
 
 </resources>

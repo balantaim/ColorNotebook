@@ -29,7 +29,7 @@ import com.martinatanasov.colornotebook.dto.UpdateEvent;
 public class EventDatabaseRepository extends SQLiteOpenHelper {
 
     private final Context context;
-    private final static String DATABASE_NAME = "ColorEventsLibrary.db";
+    private final static String DATABASE_NAME = "oasis_color_events.db";
     private final static int DATABASE_VERSION = 1;
     private final static String TABLE_NAME = "my_events";
     private final static String COLUMN_ID = "_id";

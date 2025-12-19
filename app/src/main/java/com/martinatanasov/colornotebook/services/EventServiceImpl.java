@@ -73,6 +73,7 @@ public class EventServiceImpl implements EventService {
                             Long.parseLong(cursor.getString(17)) //modified_date
                     ));
                 }
+                cursor.close();
             }
         }
         return userEvent;
