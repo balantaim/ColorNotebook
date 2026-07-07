@@ -227,30 +227,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.events_chart -> {
-                if (controller.isAvailableData()) {
-                    controller.initiateChartFragment();
-                } else {
-                    Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
-                }
+//        switch (item.getItemId()) {
+//            case R.id.events_chart -> {
+//                if (controller.isAvailableData()) {
+//                    controller.initiateChartFragment();
+//                } else {
+//                    Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            case R.id.website -> {
+//                Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
+//            }
+//            case R.id.about -> {
+//                InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
+//                infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
+//            }
+//            case R.id.exit -> {
+//                finish();
+//                System.exit(0);
+//            }
+//            default -> {
+//                Log.e(getClass().getName(), "onNavigationItemSelected: Method NOT implemented!");
+//            }
+//        }
+//        //close navigation drawer
+//        drawerLayout.closeDrawer(GravityCompat.START);
+//        return true;
+
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.events_chart) {
+            if (controller.isAvailableData()) {
+                controller.initiateChartFragment();
+            } else {
+                Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
             }
-            case R.id.website -> {
-                Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
-            }
-            case R.id.about -> {
+        } else if (itemId == R.id.website) {
+            Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
+
+        } else if (itemId == R.id.about) {
+            if (getSupportFragmentManager().findFragmentByTag("InfoPopupFragment") == null) {
                 InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
                 infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
             }
-            case R.id.exit -> {
-                finish();
-                System.exit(0);
-            }
-            default -> {
-                Log.e(getClass().getName(), "onNavigationItemSelected: Method NOT implemented!");
-            }
+        } else if (itemId == R.id.exit) {
+//            finish();
+//            System.exit(0);
+            finishAffinity();
+        } else {
+            Log.e(getClass().getName(), "onNavigationItemSelected: Method NOT implemented!");
         }
-        //close navigation drawer
+
+        // Close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -313,27 +341,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_button -> {
-                if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    //onBackPressed();
-                    drawerLayout.openDrawer(GravityCompat.START);
-                } else {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-                return true;
+//        switch (item.getItemId()) {
+//            case R.id.navigation_button -> {
+//                if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+//                    //onBackPressed();
+//                    drawerLayout.openDrawer(GravityCompat.START);
+//                } else {
+//                    drawerLayout.closeDrawer(GravityCompat.START);
+//                }
+//                return true;
+//            }
+//            case R.id.delete_all -> {
+//                confirmDialog();
+//                return true;
+//            }
+//            case R.id.options -> {
+//                navigateToOptions();
+//                return true;
+//            }
+//            default -> {
+//                return super.onOptionsItemSelected(item);
+//            }
+//        }
+
+        int itemId = item.getItemId();
+        if (itemId == R.id.navigation_button) {
+            if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            } else {
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
-            case R.id.delete_all -> {
-                confirmDialog();
-                return true;
-            }
-            case R.id.options -> {
-                navigateToOptions();
-                return true;
-            }
-            default -> {
-                return super.onOptionsItemSelected(item);
-            }
+            return true;
+        } else if (itemId == R.id.delete_all) {
+            confirmDialog();
+            return true;
+        } else if (itemId == R.id.options) {
+            navigateToOptions();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

@@ -12,67 +12,105 @@
 
 package com.martinatanasov.colornotebook.dialog_views;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.martinatanasov.colornotebook.R;
 
-public class PriorityDialog extends Dialog {
+public class PriorityDialog extends AppCompatDialogFragment {
 
-    ConstraintLayout setImportant, setRegular, setUnimportant;
-    Dialog priorityDialog;
+    private ConstraintLayout setImportant, setRegular, setUnimportant;
     private ApplyPriority listener;
+    private int priorityPosition = 1;
 
-    public PriorityDialog(@NonNull Context context) {
-        super(context);
+    public static PriorityDialog newInstance(int priority) {
+        PriorityDialog frag = new PriorityDialog();
+        Bundle args = new Bundle();
+        args.putInt("priority", priority);
+        frag.setArguments(args);
+        return frag;
     }
 
-    public void setPriority(Activity activity, int position) {
-        priorityDialog = new Dialog(activity);
-        priorityDialog.setContentView(R.layout.set_priority_dialog);
-        setImportant = (ConstraintLayout) priorityDialog.findViewById(R.id.setImportant);
-        setRegular = (ConstraintLayout) priorityDialog.findViewById(R.id.setRegular);
-        setUnimportant = (ConstraintLayout) priorityDialog.findViewById(R.id.setUnimportant);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            priorityPosition = getArguments().getInt("priority");
+        }
+    }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.set_priority_dialog, null);
+
+        initViews(view);
+        highlightSelected(priorityPosition);
+        setupClickListeners();
+
+        builder.setView(view);
+        Dialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        return dialog;
+    }
+
+    private void initViews(View view) {
+        setImportant = view.findViewById(R.id.setImportant);
+        setRegular = view.findViewById(R.id.setRegular);
+        setUnimportant = view.findViewById(R.id.setUnimportant);
+    }
+
+    private void highlightSelected(int position) {
         switch (position) {
             case 1 -> setRegular.setBackgroundResource(R.drawable.rounded_bg);
             case 2 -> setUnimportant.setBackgroundResource(R.drawable.rounded_bg);
             default -> setImportant.setBackgroundResource(R.drawable.rounded_bg);
         }
-        updateStatus();
-        priorityDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        priorityDialog.show();
     }
 
-    private void updateStatus() {
-        //OnClick listener for set priority
+    private void setupClickListeners() {
         setImportant.setOnClickListener(v -> {
             if (listener != null) {
                 listener.setPriority(0);
             }
-            priorityDialog.dismiss();
+            dismiss();
         });
         setRegular.setOnClickListener(v -> {
             if (listener != null) {
                 listener.setPriority(1);
             }
-            priorityDialog.dismiss();
+            dismiss();
         });
         setUnimportant.setOnClickListener(v -> {
             if (listener != null) {
                 listener.setPriority(2);
             }
-            priorityDialog.dismiss();
+            dismiss();
         });
     }
 
-    public void setDialogResult(ApplyPriority dialogResult) {
-        listener = dialogResult;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (ApplyPriority) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement ApplyPriority");
+        }
     }
 }
