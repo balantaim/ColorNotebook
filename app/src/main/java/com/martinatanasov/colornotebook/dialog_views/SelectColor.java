@@ -46,6 +46,10 @@ public class SelectColor extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            colorPosition = savedInstanceState.getInt("color_position");
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         assert getActivity() != null;
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
@@ -70,6 +74,12 @@ public class SelectColor extends AppCompatDialogFragment {
         selectColor();
 
         return builder.create();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("color_position", colorPosition);
     }
 
     private void selectColor() {
@@ -187,12 +197,5 @@ public class SelectColor extends AppCompatDialogFragment {
             throw new ClassCastException(context + "Implement dialog listener");
         }
     }
-
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//
-//
-//    }
 
 }

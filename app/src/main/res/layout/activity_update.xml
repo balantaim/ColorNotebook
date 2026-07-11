@@ -212,6 +212,8 @@
                             android:textColor="?attr/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold"
+                            android:drawablePadding="8dp"
+                            app:drawableStartCompat="@drawable/ic_event_settings"
                             app:drawableRightCompat="@drawable/ic_arrow_down" />
 
                     </LinearLayout>

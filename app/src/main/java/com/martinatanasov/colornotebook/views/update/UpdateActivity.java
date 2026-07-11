@@ -208,6 +208,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     private void managePriority() {
+        String tag = "PriorityDialog";
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             PriorityDialog priorityDialog = PriorityDialog.newInstance(priorityPicker);
             priorityDialog.show(getSupportFragmentManager(), getString(R.string.dialog_priority));
@@ -601,6 +602,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         silentNotificationBool = silentNotSw.isChecked() ? 1 : 0;
     }
 
+    public void setSwValues() {
+        allDaySw.setChecked(dayEventBool == 1);
+        soundNotSw.setChecked(soundNotificationBool == 1);
+        silentNotSw.setChecked(silentNotificationBool == 1);
+    }
+
     private void updateColorText(int color) {
         String[] stringArray = getResources().getStringArray(R.array.color_picker_array);
         eventColor.setText(stringArray[color]);
@@ -716,9 +723,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         outState.putInt("key_minutes2", MINUTES2);
 
         outState.putBoolean("key_expanded_card", isExpanded);
-        //outState.putInt("key_day_event", dayEventBool);
-        //outState.putInt("key_sound_notification", soundNotificationBool);
-        //outState.putInt("key_silent_notification", silentNotificationBool);
+        outState.putInt("key_day_event", dayEventBool);
+        outState.putInt("key_sound_notification", soundNotificationBool);
+        outState.putInt("key_silent_notification", silentNotificationBool);
         outState.putInt("key_color", colorPicker);
         outState.putInt("key_priority", priorityPicker);
         outState.putLong("key_created", eventCreatedDate);
@@ -745,14 +752,16 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         MINUTES2 = savedInstanceState.getInt("key_minutes2", 0);
 
         isExpanded = savedInstanceState.getBoolean("key_expanded_card", false);
-        //dayEventBool = savedInstanceState.getInt("key_day_event", 0);
-        //soundNotificationBool = savedInstanceState.getInt("key_sound_notification", 0);
-        //silentNotificationBool = savedInstanceState.getInt("key_silent_notification", 0);
+        dayEventBool = savedInstanceState.getInt("key_day_event", 0);
+        soundNotificationBool = savedInstanceState.getInt("key_sound_notification", 0);
+        silentNotificationBool = savedInstanceState.getInt("key_silent_notification", 0);
         colorPicker = savedInstanceState.getInt("key_color");
         priorityPicker = savedInstanceState.getInt("key_priority");
         eventCreatedDate = savedInstanceState.getLong("key_created");
         eventModifiedDate = savedInstanceState.getLong("key_modified");
         id = savedInstanceState.getString("key_id");
+
+        setSwValues();
         if (savedInstanceState.getBoolean("key_confirm_dialog_showing", false)) {
             showDeleteDialog();
         }

@@ -453,6 +453,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         silentNotification = silentNotSw.isChecked() ? 1 : 0;
     }
 
+    public void setSwValues() {
+        allDaySw.setChecked(dayEvent == 1);
+        soundNotSw.setChecked(soundNotification == 1);
+        silentNotSw.setChecked(silentNotification == 1);
+    }
+
     public void updateOnConfigurationChanges() {
         //Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
         //Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
@@ -588,9 +594,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
         outState.putBoolean("key_expanded_card", isExpanded);
         outState.putBoolean("key_focus_text", firstTimeFocusText);
-        //outState.putInt("key_day_event", dayEvent);
-        //outState.putInt("key_sound_notification", soundNotification);
-        //outState.putInt("key_silent_notification", silentNotification);
+        outState.putInt("key_day_event", dayEvent);
+        outState.putInt("key_sound_notification", soundNotification);
+        outState.putInt("key_silent_notification", silentNotification);
         outState.putInt("key_color", colorPicker);
         outState.putInt("key_priority", priorityPicker);
 
@@ -614,12 +620,13 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
         isExpanded = savedInstanceState.getBoolean("key_expanded_card", false);
         firstTimeFocusText = savedInstanceState.getBoolean("key_focus_text", false);
-        //dayEvent = savedInstanceState.getInt("key_day_event", 0);
-        //soundNotification = savedInstanceState.getInt("key_sound_notification", 0);
-        //silentNotification = savedInstanceState.getInt("key_silent_notification", 0);
+        dayEvent = savedInstanceState.getInt("key_day_event", 0);
+        soundNotification = savedInstanceState.getInt("key_sound_notification", 0);
+        silentNotification = savedInstanceState.getInt("key_silent_notification", 0);
         colorPicker = savedInstanceState.getInt("key_color");
         priorityPicker = savedInstanceState.getInt("key_priority");
 
+        setSwValues();
         super.onRestoreInstanceState(savedInstanceState);
     }
 

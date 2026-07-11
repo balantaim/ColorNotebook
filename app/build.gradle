@@ -20,7 +20,6 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "LOADING_IMAGE", "\"${properties.getProperty("LOADING_IMAGE")}\""
         buildConfigField "String", "CHECK_DEV", "\"${properties.getProperty("CHECK_DEV")}\""
-//        buildConfigField "String", "MAPTILER_API_KEY", "\"${properties.getProperty("MAPTILER_API_KEY")}\""
 
         //Set supported per-app language
         resourceConfigurations += ['en']
@@ -85,6 +84,7 @@ android {
 
 dependencies {
 
+    //Android base
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
@@ -93,7 +93,7 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.8.9'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    // For developers using AndroidX in their applications
+    //For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     //RecyclerView
@@ -101,10 +101,10 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.2.0"
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:5.0.5'
+    implementation 'com.github.bumptech.glide:glide:5.0.9'
     implementation 'junit:junit:4.13.2'
     implementation 'androidx.activity:activity:1.13.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.9'
 
     //Volley: http library
     implementation 'com.android.volley:volley:1.2.1'
@@ -112,11 +112,11 @@ dependencies {
     //NotificationCompat used for foreground services
     implementation "androidx.core:core:1.19.0"
 
-    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    //Http client
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
 
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
-    // optional, for extra features
+    //Optional, for extra features
     implementation 'org.osmdroid:osmdroid-wms:6.1.20'
 //    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
