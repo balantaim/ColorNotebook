@@ -33,6 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -44,6 +46,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.UpdateActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
+import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.dto.UpdateEvent;
@@ -54,9 +57,9 @@ import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
-import com.martinatanasov.colornotebook.utils.events.VibrationEvent;
+import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
-import com.martinatanasov.colornotebook.views.map.MapTwoActivity;
+import com.martinatanasov.colornotebook.views.map.MapActivity;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -69,7 +72,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class UpdateActivity extends AppCompatActivity implements ApplyColor, AppSettings, EventValidator, EasyPermissions.PermissionCallbacks {
+public class UpdateActivity extends AppCompatActivity implements ApplyColor, ApplyPriority, AppSettings, EventValidator, EasyPermissions.PermissionCallbacks {
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnUpdate, btnDelete;
@@ -77,6 +80,18 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
+    private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String location = result.getData().getStringExtra("location");
+                    if (location != null && !location.isEmpty()) {
+                        eventLocation.setText(location);
+                    }
+                }
+            }
+    );
+    TimePickerDialog timePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private String id;
     //private AlarmManager alarmManager;
@@ -85,11 +100,13 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     private Calendar calendar, calendar1;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private UpdateActivityController controller;
+    AlertDialog confirmDialog;
     private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
     private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
     private int dayEventBool = 0, soundNotificationBool = 0, silentNotificationBool = 0, colorPicker = 0, priorityPicker = 0;
     private long eventCreatedDate = 0, eventModifiedDate = 0;
     private SelectColor selectColor = new SelectColor();
+    private VibrationUtil vibration;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -177,8 +194,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
 
-                startActivity(new Intent(this, MapTwoActivity.class));
-
+                mapActivityLauncher.launch(new Intent(this, MapActivity.class));
 
                 return true;
             }
@@ -192,12 +208,16 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     private void managePriority() {
-        PriorityDialog priorityDialog = new PriorityDialog(getApplicationContext());
-        priorityDialog.setPriority(this, priorityPicker);
-        priorityDialog.setDialogResult(status -> {
-            priorityPicker = status;
-            getPriorityString();
-        });
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+            PriorityDialog priorityDialog = PriorityDialog.newInstance(priorityPicker);
+            priorityDialog.show(getSupportFragmentManager(), getString(R.string.dialog_priority));
+        }
+    }
+
+    @Override
+    public void setPriority(int status) {
+        priorityPicker = status;
+        getPriorityString();
     }
 //    private boolean initiateAlarm(){
 //        boolean checker = false;
@@ -344,7 +364,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             //Update date and time data
             manageDataAndTime();
         } else {
-            Toast.makeText(this, R.string.toast_noData, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
         }
         getPriorityString();
     }
@@ -384,12 +404,14 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     private void selectColor() {
-        if (selectColor == null) {
-            selectColor = new SelectColor();
+        String tag = String.valueOf(R.string.pickColor);
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+            if (selectColor == null) {
+                selectColor = new SelectColor();
+            }
+            selectColor.colorInit(colorPicker);
+            selectColor.show(getSupportFragmentManager(), tag);
         }
-//        SelectColor selectColor = new SelectColor();
-        selectColor.colorInit(colorPicker);
-        selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
     }
 
     private void getPriorityString() {
@@ -449,7 +471,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             HOUR2 = Hour;
             MINUTES2 = Minutes;
         };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
         //timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
     }
@@ -469,15 +491,22 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             HOUR = Hour;
             MINUTES = Minutes;
         };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
         //timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
     }
 
     void confirmDialog() {
+        if (confirmDialog != null && confirmDialog.isShowing()) {
+            return;
+        }
         //Add vibration effect
-        VibrationEvent vibration = new VibrationEvent();
-        vibration.startEffect(this);
+        vibration.vibrate();
+
+        showDeleteDialog();
+    }
+
+    private void showDeleteDialog() {
         //Create alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //Format text character max size
@@ -496,7 +525,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
 
         });
-        builder.create().show();
+        confirmDialog = builder.create();
+        confirmDialog.show();
     }
 
     @Override
@@ -667,6 +697,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         createdDate = findViewById(R.id.created);
         modifiedDate = findViewById(R.id.modified);
         controller = new UpdateActivityController(this);
+        vibration = new VibrationUtil(this);
     }
 
     //Save Instance when you rotate the device or use recreate
@@ -693,6 +724,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         outState.putLong("key_created", eventCreatedDate);
         outState.putLong("key_modified", eventModifiedDate);
         outState.putString("key_id", id);
+        outState.putBoolean("key_confirm_dialog_showing", confirmDialog != null && confirmDialog.isShowing());
 
         super.onSaveInstanceState(outState);
     }
@@ -721,17 +753,25 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         eventCreatedDate = savedInstanceState.getLong("key_created");
         eventModifiedDate = savedInstanceState.getLong("key_modified");
         id = savedInstanceState.getString("key_id");
+        if (savedInstanceState.getBoolean("key_confirm_dialog_showing", false)) {
+            showDeleteDialog();
+        }
 
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onDestroy() {
+        if (datePickerDialog != null && datePickerDialog.isShowing()) {
+            datePickerDialog.dismiss();
+        }
+        if (timePickerDialog != null && timePickerDialog.isShowing()) {
+            timePickerDialog.dismiss();
+        }
+        if (confirmDialog != null && confirmDialog.isShowing()) {
+            confirmDialog.dismiss();
+        }
         super.onDestroy();
-//        if(selectColor.is){
-//            selectColor.dismiss();
-//            selectColor = null;
-//        }
     }
 
 }

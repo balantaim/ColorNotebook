@@ -53,7 +53,7 @@ import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.services.MyForegroundService;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
-import com.martinatanasov.colornotebook.utils.events.VibrationEvent;
+import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
 import com.martinatanasov.colornotebook.views.add.AddActivity;
 import com.martinatanasov.colornotebook.views.chart.ChartActivity;
 import com.martinatanasov.colornotebook.views.option.OptionActivity;
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
+    private VibrationUtil vibration;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
     public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
@@ -395,8 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void confirmDialog() {
         //Add vibration effect
-        VibrationEvent vibration = new VibrationEvent();
-        vibration.startEffect(this);
+        vibration.vibrate();
         //Create alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.alert_dialog_title);
@@ -528,6 +528,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.layoutDrawer);
         navigationView = findViewById(R.id.navDrawer);
         controller = new MainActivityController(this);
+        vibration = new VibrationUtil(this);
     }
 
 }

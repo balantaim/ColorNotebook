@@ -22,7 +22,7 @@
         android:theme="@style/Theme.DefaultColorNotebook"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".views.map.MapTwoActivity"
+            android:name=".views.map.MapActivity"
             android:exported="false" />
         <!--        <activity-->
         <!--            android:name=".views.map.MapActivity"-->

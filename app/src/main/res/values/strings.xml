@@ -105,6 +105,7 @@
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="select_priority">Select event priority</string>
+    <string name="dialog_priority">Priority Dialog</string>
     <!--    Toast-->
     <string name="toast_failed">Failed</string>
     <string name="toast_no_data">There is no data</string>
@@ -113,7 +114,9 @@
     <string name="toast_successfully_updated">Successfully Updated!</string>
     <string name="toast_fail_to_delete">Fail to delete</string>
     <string name="toast_successfully_deleted">Successfully deleted</string>
-    <string name="toast_noData">No Data</string>
+    <string name="toast_enter_location">Please enter a location</string>
+    <string name="toast_not_found_location">Location not found</string>
+    <string name="toast_error_search_location">Error searching location</string>
     <!--    Priority picker-->
     <string name="set_important">Important</string>
     <string name="set_regular">Regular</string>
@@ -147,6 +150,6 @@
     <string name="event_title_empty">Title should contain at least 2 symbols!</string>
     <string name="find_location">Find Location</string>
     <string name="search">Search</string>
-
+    <string name="confirm_btn">Confirm</string>
 
 </resources>

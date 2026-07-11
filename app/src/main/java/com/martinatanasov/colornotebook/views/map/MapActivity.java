@@ -1,13 +1,18 @@
 package com.martinatanasov.colornotebook.views.map;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -30,21 +35,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MapTwoActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
 
-    private final MapService mapService = new MapService();
+    private static final String TAG = "MapActivity";
     private MapView mapView;
     private AutoCompleteTextView searchEditText;
     private Button searchButton;
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Marker marker;
     private String location = "";
+    private MapService mapService;
+    private Button confirmButton;
+    private Runnable searchRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_map_two);
+        setContentView(R.layout.activity_map);
 
         initScreenManager();
         MaterialToolbar toolbar = findViewById(R.id.toolbar_search_map);
@@ -62,6 +71,8 @@ public class MapTwoActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = findViewById(R.id.searchButton);
+        confirmButton = findViewById(R.id.confirmButton);
+        mapService = new MapService(getString(R.string.app_name_full));
         marker = new Marker(mapView);
 
         mapView.setTileSource(TileSourceFactory.MAPNIK);
@@ -73,6 +84,17 @@ public class MapTwoActivity extends AppCompatActivity {
 
         initAdapter();
         searchButton.setOnClickListener(v -> searchLocation(searchEditText.getText().toString()));
+        this.searchEditText.setOnItemClickListener((parent, view, position, id) -> {
+            String selected = (String) parent.getItemAtPosition(position);
+            searchLocation(selected);
+        });
+        confirmButton.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            String finalLocation = location.isEmpty() ? searchEditText.getText().toString() : location;
+            resultIntent.putExtra("location", finalLocation);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        });
     }
 
     private void initAdapter() {
@@ -86,13 +108,17 @@ public class MapTwoActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                loadSuggestions(s.toString(), suggestions -> {
+                searchHandler.removeCallbacks(searchRunnable);
+                searchRunnable = () -> loadSuggestions(s.toString(), suggestions -> {
                     adapter.clear();
                     adapter.addAll(suggestions);
                     adapter.notifyDataSetChanged();
 
-                    searchEditText.showDropDown();
+                    if (!suggestions.isEmpty()) {
+                        searchEditText.showDropDown();
+                    }
                 });
+                searchHandler.postDelayed(searchRunnable, 800);
             }
 
             @Override
@@ -102,6 +128,10 @@ public class MapTwoActivity extends AppCompatActivity {
     }
 
     private void searchLocation(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            Toast.makeText(this, R.string.toast_enter_location, Toast.LENGTH_SHORT).show();
+            return;
+        }
         new Thread(() -> {
             try {
                 LocationResult result = mapService.search(query);
@@ -119,9 +149,12 @@ public class MapTwoActivity extends AppCompatActivity {
                         location = result.locationName();
                         mapView.invalidate();
                     });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(MapActivity.this, R.string.toast_not_found_location, Toast.LENGTH_SHORT).show());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "searchLocation: Error: ", e);
+                runOnUiThread(() -> Toast.makeText(MapActivity.this, R.string.toast_error_search_location, Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
@@ -141,10 +174,14 @@ public class MapTwoActivity extends AppCompatActivity {
                     names.add(r.locationName());
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    runOnUiThread(() -> callback.accept(names));
+                    runOnUiThread(() -> {
+                        if (searchEditText.getText().toString().equals(query)) {
+                            callback.accept(names);
+                        }
+                    });
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "loadSuggestions: Error: ", e);
             }
         }).start();
     }

@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -41,6 +44,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.AddActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
+import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
 import com.martinatanasov.colornotebook.dto.AddEvent;
@@ -52,6 +56,7 @@ import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
+import com.martinatanasov.colornotebook.views.map.MapActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -61,7 +66,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class AddActivity extends AppCompatActivity implements ApplyColor, AppSettings, EventValidator, EasyPermissions.PermissionCallbacks {
+public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyPriority, AppSettings, EventValidator, EasyPermissions.PermissionCallbacks {
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
@@ -69,6 +74,17 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
+    private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String location = result.getData().getStringExtra("location");
+                    if (location != null && !location.isEmpty()) {
+                        eventLocation.setText(location);
+                    }
+                }
+            }
+    );
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private AddActivityController controller;
@@ -81,6 +97,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
     private Calendar calendar, calendar1;
     private boolean firstTimeFocusText = true, isExpanded = false;
     private int dayEvent = 0, soundNotification = 0, silentNotification = 0, colorPicker = 0, priorityPicker = 1;
+    TimePickerDialog timePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +149,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
 
         //Set up On Click Listeners
         btnAdd.setOnClickListener(v -> onAddBtn());
+        eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
         advOptions.setOnClickListener(view -> expandView());
         dateStart.setOnClickListener(view -> setStartDate());
         timeStart.setOnClickListener(view -> setStartTime());
@@ -175,6 +193,18 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
                 false);
     }
 
+    private boolean locationEvent(MotionEvent motionEvent) {
+        final int DRAWABLE_RIGHT = 2;
+
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                mapActivityLauncher.launch(new Intent(this, MapActivity.class));
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void changeArrowBackBtn() {
         ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
         actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
@@ -182,40 +212,33 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
 
     private void selectColor() {
         Log.d("ADD", "selectColor: " + colorPicker);
-//            SelectColor selectColor = new SelectColor(colorPicker);
-//            selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
-        if (selectColor == null) {
-            selectColor = new SelectColor();
+        String tag = String.valueOf(R.string.pickColor);
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+            if (selectColor == null) {
+                selectColor = new SelectColor();
+            }
+            selectColor.colorInit(colorPicker);
+            selectColor.show(getSupportFragmentManager(), tag);
         }
-        selectColor.colorInit(colorPicker);
-        selectColor.show(getSupportFragmentManager(), String.valueOf(R.string.pickColor));
     }
 
     private void managePriority() {
-        PriorityDialog priorityDialog = new PriorityDialog(getApplicationContext());
         Log.d("ADD", "managePriority: " + priorityPicker);
-        priorityDialog.setPriority(this, priorityPicker);
-        priorityDialog.setDialogResult(status -> {
-            priorityPicker = status;
-            switch (status) {
-                case 1 -> priority.setText(R.string.set_regular);
-                case 2 -> priority.setText(R.string.set_unimportant);
-                default -> priority.setText(R.string.set_important);
-            }
-        });
-        /*
-        SetPriority setPriority = new SetPriority();
-        setPriority.show(getSupportFragmentManager(), "Set priority");
-        priorityDialog.setContentView(R.layout.set_priority_dialog);
-        setImportant = (ConstraintLayout) priorityDialog.findViewById(R.id.setImportant);
-        setRegular = (ConstraintLayout) priorityDialog.findViewById(R.id.setRegular);
-        setUnimportant = (ConstraintLayout) priorityDialog.findViewById(R.id.setUnimportant);
-        setImportant.setOnClickListener(v -> { priorityPicker=0; priorityDialog.dismiss();});
-        setRegular.setOnClickListener(v -> {listener.setPriority(1);priorityDialog.dismiss();});
-        setUnimportant.setOnClickListener(v -> {listener.setPriority(2);priorityDialog.dismiss();});
-        priorityDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        priorityDialog.show();
-        */
+        String tag = "PriorityDialog";
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+            PriorityDialog priorityDialog = PriorityDialog.newInstance(priorityPicker);
+            priorityDialog.show(getSupportFragmentManager(), tag);
+        }
+    }
+
+    @Override
+    public void setPriority(int status) {
+        priorityPicker = status;
+        switch (status) {
+            case 1 -> priority.setText(R.string.set_regular);
+            case 2 -> priority.setText(R.string.set_unimportant);
+            default -> priority.setText(R.string.set_important);
+        }
     }
 
     private void onAddBtn() {
@@ -358,7 +381,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
             HOUR2 = Hour;
             MINUTES2 = Minutes;
         };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
         //timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
     }
@@ -379,7 +402,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
             HOUR = Hour;
             MINUTES = Minutes;
         };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
         //timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
     }
@@ -598,6 +621,17 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, AppSet
         priorityPicker = savedInstanceState.getInt("key_priority");
 
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (datePickerDialog != null && datePickerDialog.isShowing()) {
+            datePickerDialog.dismiss();
+        }
+        if (timePickerDialog != null && timePickerDialog.isShowing()) {
+            timePickerDialog.dismiss();
+        }
+        super.onDestroy();
     }
 
 }

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/badgeStyle"
     android:fitsSystemWindows="true"
-    tools:context=".views.map.MapTwoActivity">
+    tools:context=".views.map.MapActivity">
 
     <!--    Navigation bar -->
     <com.google.android.material.appbar.MaterialToolbar
@@ -42,8 +42,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Search"
+        android:layout_marginEnd="8dp"
+        android:text="@string/search"
+        app:layout_constraintEnd_toStartOf="@+id/confirmButton"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/confirm_btn"
         app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
 
     <LinearLayout
@@ -60,7 +71,7 @@
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></org.osmdroid.views.MapView>
+            android:layout_weight="1" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
