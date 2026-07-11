@@ -12,6 +12,9 @@
 
 package com.martinatanasov.colornotebook.services;
 
+import android.util.Log;
+
+import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.dto.LocationResult;
 
 import org.json.JSONArray;
@@ -27,15 +30,19 @@ import okhttp3.Response;
 
 public class MapService {
 
+    private static final String TAG = "MapService";
+    private final OkHttpClient client;
     private static final String BASE_URL = "https://nominatim.openstreetmap.org/search";
-    private final OkHttpClient client = new OkHttpClient();
-    private final String userAgent;
+    private final String userAgentDetails;
 
     public MapService(String userAgent) {
-        this.userAgent = userAgent;
+        String userAgentName = userAgent + ":" + BuildConfig.VERSION_CODE;
+        Log.i(TAG, "MapService: userAgentDetails: " + userAgentName);
+        this.userAgentDetails = userAgent;
+        client = new OkHttpClient();
     }
 
-    public LocationResult search(String query) throws Exception {
+    public LocationResult search(String query) {
         if (query == null || query.trim().isEmpty()) {
             return null;
         }
@@ -43,7 +50,7 @@ public class MapService {
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public List<LocationResult> suggest(String query, int limit) throws Exception {
+    public List<LocationResult> suggest(String query, int limit) {
         List<LocationResult> suggestions = new ArrayList<>();
         if (query == null || query.trim().isEmpty()) {
             return suggestions;
@@ -58,7 +65,7 @@ public class MapService {
 
         Request request = new Request.Builder()
                 .url(url)
-                .header("User-Agent", userAgent)
+                .header("User-Agent", userAgentDetails)
                 .header("Accept", "application/json")
                 .build();
 
@@ -80,6 +87,8 @@ public class MapService {
 
                 suggestions.add(new LocationResult(lat, lon, locationName));
             }
+        } catch (Exception e) {
+            Log.e(TAG, "Http request error: ", e);
         }
         return suggestions;
     }

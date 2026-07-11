@@ -37,16 +37,20 @@ import java.util.function.Consumer;
 
 public class MapActivity extends AppCompatActivity {
 
-    private static final String TAG = "MapActivity";
     private MapView mapView;
     private AutoCompleteTextView searchEditText;
     private Button searchButton;
-    private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Marker marker;
     private String location = "";
     private MapService mapService;
     private Button confirmButton;
     private Runnable searchRunnable;
+    private static final String TAG = "MapActivity";
+    private static final long DELAY_BEFORE_RETRY_IN_MILLISECONDS = 800;
+    private static final int QUERY_LIMIT = 5;
+    private static final double DEFAULT_LOCATION_ZOOM = 10.0D;
+    private static final double FOCUSED_LOCATION_ZOOM = 18.0D;
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,33 +72,9 @@ public class MapActivity extends AppCompatActivity {
         // Load OSM configuration
         Configuration.getInstance().setUserAgentValue(getPackageName());
 
-        mapView = findViewById(R.id.mapView);
-        searchEditText = findViewById(R.id.searchEditText);
-        searchButton = findViewById(R.id.searchButton);
-        confirmButton = findViewById(R.id.confirmButton);
-        mapService = new MapService(getString(R.string.app_name_full));
-        marker = new Marker(mapView);
-
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setMultiTouchControls(true);
-
-        IMapController mapController = mapView.getController();
-        mapController.setZoom(10.0);
-        mapController.setCenter(new GeoPoint(48.8566, 2.3522));
-
+        initViews();
         initAdapter();
-        searchButton.setOnClickListener(v -> searchLocation(searchEditText.getText().toString()));
-        this.searchEditText.setOnItemClickListener((parent, view, position, id) -> {
-            String selected = (String) parent.getItemAtPosition(position);
-            searchLocation(selected);
-        });
-        confirmButton.setOnClickListener(v -> {
-            Intent resultIntent = new Intent();
-            String finalLocation = location.isEmpty() ? searchEditText.getText().toString() : location;
-            resultIntent.putExtra("location", finalLocation);
-            setResult(RESULT_OK, resultIntent);
-            finish();
-        });
+        setOnClickListeners();
     }
 
     private void initAdapter() {
@@ -118,7 +98,7 @@ public class MapActivity extends AppCompatActivity {
                         searchEditText.showDropDown();
                     }
                 });
-                searchHandler.postDelayed(searchRunnable, 800);
+                searchHandler.postDelayed(searchRunnable, DELAY_BEFORE_RETRY_IN_MILLISECONDS);
             }
 
             @Override
@@ -143,7 +123,7 @@ public class MapActivity extends AppCompatActivity {
                         );
 
                         mapView.getController().setCenter(point);
-                        mapView.getController().setZoom(18.0);
+                        mapView.getController().setZoom(FOCUSED_LOCATION_ZOOM);
 
                         setMarker(point, result.locationName());
                         location = result.locationName();
@@ -168,7 +148,7 @@ public class MapActivity extends AppCompatActivity {
         }
         new Thread(() -> {
             try {
-                List<LocationResult> results = mapService.suggest(query, 5);
+                List<LocationResult> results = mapService.suggest(query, QUERY_LIMIT);
                 List<String> names = new ArrayList<>();
                 for (LocationResult r : results) {
                     names.add(r.locationName());
@@ -203,6 +183,38 @@ public class MapActivity extends AppCompatActivity {
         new ScreenManager(findViewById(R.id.root_layout_map),
                 getWindow(),
                 false);
+    }
+
+    private void setOnClickListeners() {
+        searchButton.setOnClickListener(v -> searchLocation(searchEditText.getText().toString()));
+        this.searchEditText.setOnItemClickListener((parent, view, position, id) -> {
+            String selected = (String) parent.getItemAtPosition(position);
+            searchLocation(selected);
+        });
+        confirmButton.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            String finalLocation = location.isEmpty() ? searchEditText.getText().toString() : location;
+            resultIntent.putExtra("location", finalLocation);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        });
+    }
+
+    private void initViews() {
+        mapView = findViewById(R.id.mapView);
+        searchEditText = findViewById(R.id.searchEditText);
+        searchButton = findViewById(R.id.searchButton);
+        confirmButton = findViewById(R.id.confirmButton);
+        mapService = new MapService(getString(R.string.app_name_full));
+        marker = new Marker(mapView);
+
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setMultiTouchControls(true);
+
+        IMapController mapController = mapView.getController();
+        mapController.setZoom(DEFAULT_LOCATION_ZOOM);
+        //Set default location (Central Europe)
+        mapController.setCenter(new GeoPoint(48.8566, 2.3522));
     }
 
     @Override
