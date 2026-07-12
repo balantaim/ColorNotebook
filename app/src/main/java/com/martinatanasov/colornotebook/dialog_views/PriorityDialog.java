@@ -110,7 +110,7 @@ public class PriorityDialog extends AppCompatDialogFragment {
         try {
             listener = (ApplyPriority) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement ApplyPriority");
+            throw new ClassCastException(context + " must implement ApplyPriority");
         }
     }
 }

@@ -272,8 +272,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
             }
         } else if (itemId == R.id.exit) {
-//            finish();
-//            System.exit(0);
             finishAffinity();
         } else {
             Log.e(getClass().getName(), "onNavigationItemSelected: Method NOT implemented!");
@@ -342,29 +340,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.navigation_button -> {
-//                if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//                    //onBackPressed();
-//                    drawerLayout.openDrawer(GravityCompat.START);
-//                } else {
-//                    drawerLayout.closeDrawer(GravityCompat.START);
-//                }
-//                return true;
-//            }
-//            case R.id.delete_all -> {
-//                confirmDialog();
-//                return true;
-//            }
-//            case R.id.options -> {
-//                navigateToOptions();
-//                return true;
-//            }
-//            default -> {
-//                return super.onOptionsItemSelected(item);
-//            }
-//        }
-
         int itemId = item.getItemId();
         if (itemId == R.id.navigation_button) {
             if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -448,10 +423,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void startForegroundService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Todo
-//            if (!isForegroundServiceRunning()) {
-//                Intent serviceIntent = new Intent(this, MyForegroundServices.class);
-//                startForegroundService(serviceIntent);
-//            }
+            if (!isForegroundServiceRunning()) {
+                Intent serviceIntent = new Intent(this, MyForegroundService.class);
+                startForegroundService(serviceIntent);
+            }
         }
     }
 

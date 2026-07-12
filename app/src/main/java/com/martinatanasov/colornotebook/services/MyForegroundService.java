@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import com.martinatanasov.colornotebook.R;
 
 public class MyForegroundService extends Service {
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -64,4 +65,5 @@ public class MyForegroundService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 }

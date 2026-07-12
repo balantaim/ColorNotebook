@@ -49,7 +49,6 @@ public class AddActivityController {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     Log.e(getClass().getName(), "Error: " + e);
                 }
                 handler.post(new Runnable() {

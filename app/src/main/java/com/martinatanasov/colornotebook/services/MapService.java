@@ -36,7 +36,7 @@ public class MapService {
     private final String userAgentDetails;
 
     public MapService(String userAgent) {
-        String userAgentName = userAgent + ":" + BuildConfig.VERSION_CODE;
+        String userAgentName = userAgent + ":" + BuildConfig.VERSION_NAME;
         Log.i(TAG, "MapService: userAgentDetails: " + userAgentName);
         this.userAgentDetails = userAgent;
         client = new OkHttpClient();

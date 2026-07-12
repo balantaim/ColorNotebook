@@ -158,14 +158,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                     filterResults.count = userModelListFiltered.size();
                 } else {
                     String search = constraint.toString().toLowerCase();
-                    List<UserEvent> userFilteredList = new ArrayList<>();
-                    for (UserEvent userEvent : userModelListFiltered) {
-                        if (userEvent.txtEventTitle().toLowerCase().contains(search) ||
-                                userEvent.txtNode().toLowerCase().contains(search) ||
-                                userEvent.txtEventLocation().toLowerCase().contains(search)) {
-                            userFilteredList.add(userEvent);
-                        }
-                    }
+                    List<UserEvent> userFilteredList = getUserEvents(search);
                     filterResults.values = userFilteredList;
                     filterResults.count = userFilteredList.size();
                 }
@@ -187,6 +180,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 }
             }
         };
+    }
+
+    @NonNull
+    private List<UserEvent> getUserEvents(String search) {
+        List<UserEvent> userFilteredList = new ArrayList<>();
+        for (UserEvent userEvent : userModelListFiltered) {
+            if (userEvent.txtEventTitle().toLowerCase().contains(search) ||
+                    userEvent.txtNode().toLowerCase().contains(search) ||
+                    userEvent.txtEventLocation().toLowerCase().contains(search)) {
+                userFilteredList.add(userEvent);
+            }
+        }
+        return userFilteredList;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

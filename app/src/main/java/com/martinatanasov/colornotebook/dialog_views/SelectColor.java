@@ -35,10 +35,6 @@ public class SelectColor extends AppCompatDialogFragment {
 
     private int colorPosition = 0;
     private ApplyColor listener;
-
-    //    public SelectColor(int color) {
-//        this.colorPosition = color;
-//    }
     public void colorInit(int color) {
         this.colorPosition = color;
     }

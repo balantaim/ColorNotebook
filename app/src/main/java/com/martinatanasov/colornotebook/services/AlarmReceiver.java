@@ -30,9 +30,9 @@ import com.martinatanasov.colornotebook.views.custom.CustomActivity;
 import java.util.Objects;
 
 public class AlarmReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
-
         int id = Integer.parseInt(Objects.requireNonNull(intent.getStringExtra("id")));
         String title = intent.getStringExtra("title");
         String node = intent.getStringExtra("node");
