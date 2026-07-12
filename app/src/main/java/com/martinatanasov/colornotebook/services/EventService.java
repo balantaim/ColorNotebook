@@ -20,9 +20,9 @@ import com.martinatanasov.colornotebook.dto.UserEvent;
 
 import java.util.List;
 
-public interface EventService {
+public interface EventService extends AutoCloseable {
 
-    void addEvent(AddEvent addEvent);
+    long addEvent(AddEvent addEvent);
 
     Cursor readAllEvents();
 
@@ -38,4 +38,6 @@ public interface EventService {
 
     void removeSilentNotification(String row_id);
 
+    @Override
+    void close();
 }

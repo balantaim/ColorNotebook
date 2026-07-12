@@ -36,8 +36,11 @@ public class CustomActivityController {
     }
 
     public void removeSoundNotificationFrom(String id) {
-        EventService eventService = new EventServiceImpl(view.getApplicationContext());
-        eventService.removeSoundNotification(id);
+        try (EventService eventService = new EventServiceImpl(view.getApplicationContext())) {
+            eventService.removeSoundNotification(id);
+        } catch (Exception e) {
+            Log.e("CustomController", "Error removing sound notification", e);
+        }
     }
 
 

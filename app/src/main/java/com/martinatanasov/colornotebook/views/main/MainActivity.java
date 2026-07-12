@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     scroll_top.setVisibility(View.VISIBLE);
                 } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
                     scroll_top.setVisibility(View.GONE);
-                }
             }
-        });
+        }
+    });
         scroll_top.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -504,6 +504,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navDrawer);
         controller = new MainActivityController(this);
         vibration = new VibrationUtil(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (controller != null) {
+            controller.close();
+        }
+        super.onDestroy();
     }
 
 }

@@ -32,8 +32,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void addEvent(AddEvent event) {
-        database.addEvent(event);
+    public long addEvent(AddEvent event) {
+        return database.addEvent(event);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class EventServiceImpl implements EventService {
     public List<UserEvent> getUserEventDto() {
         List<UserEvent> userEvent = new ArrayList<>();
         try (Cursor cursor = readAllEvents()) {
-            if (cursor.getCount() == 0) {
+            if (cursor == null || cursor.getCount() == 0) {
                 return userEvent;
             } else {
                 while (cursor.moveToNext()) {
@@ -73,7 +73,6 @@ public class EventServiceImpl implements EventService {
                             Long.parseLong(cursor.getString(17)) //modified_date
                     ));
                 }
-                cursor.close();
             }
         }
         return userEvent;
@@ -102,6 +101,13 @@ public class EventServiceImpl implements EventService {
     @Override
     public void removeSilentNotification(String row_id) {
         database.removeSilentNotification(row_id);
+    }
+
+    @Override
+    public void close() {
+        if (database != null) {
+            database.close();
+        }
     }
 
 }

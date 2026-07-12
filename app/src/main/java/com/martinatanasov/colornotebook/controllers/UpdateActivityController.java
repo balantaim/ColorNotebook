@@ -49,6 +49,15 @@ public class UpdateActivityController {
         eventService.deleteEventOnOneRow(eventID);
     }
 
+    public void close() {
+        if (eventService != null) {
+            eventService.close();
+        }
+        if (executorService != null) {
+            executorService.shutdown();
+        }
+    }
+
     private void cancelSoundNotification(String eventID) {
         AlarmEvent alarmEvent = new AlarmEvent(updateView);
         alarmEvent.cancelAlarm(eventID);
@@ -61,7 +70,6 @@ public class UpdateActivityController {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     Log.e(getClass().getName(), "Error: " + e);
                 }
                 handler.post(new Runnable() {

@@ -289,6 +289,15 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         if (isEventTitleValid(eventTitle.getText().toString())) {
             if (soundNotificationBool == 1) {
                 checkAlarmState = initiateAlarm();
+                if (!checkAlarmState) {
+                    // Time is not valid, cancel existing alarm
+                    AlarmEvent alarm = new AlarmEvent(this);
+                    alarm.cancelAlarm(id);
+                }
+            } else {
+                // Cancel existing alarm if sound notification is turned off
+                AlarmEvent alarm = new AlarmEvent(this);
+                alarm.cancelAlarm(id);
             }
             if (!checkAlarmState) {
                 //soundNotSw.setChecked(false);
@@ -551,12 +560,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             isExpanded = true;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.VISIBLE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
         } else {
             isExpanded = false;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.GONE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
         }
     }
 
@@ -779,6 +788,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         }
         if (confirmDialog != null && confirmDialog.isShowing()) {
             confirmDialog.dismiss();
+        }
+        if (controller != null) {
+            controller.close();
         }
         super.onDestroy();
     }

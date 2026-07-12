@@ -55,6 +55,7 @@ import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 import com.martinatanasov.colornotebook.views.map.MapActivity;
 
@@ -241,11 +242,30 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         }
     }
 
+    private boolean initiateAlarm(String id) {
+        boolean checker = false;
+
+        Calendar calendarNow = Calendar.getInstance();
+        if (calendarNow.compareTo(calendar) < 0) {
+            Log.d("ALARM", "Time is valid");
+            checker = true;
+            AlarmEvent alarm = new AlarmEvent(this);
+            alarm.setUpAlarm(id,
+                    eventTitle.getText().toString(),
+                    eventInput.getText().toString(),
+                    calendar,
+                    priorityPicker);
+        }
+
+        Log.d("ALARM", "The alarm is set to " + checker);
+        return checker;
+    }
+
     private void onAddBtn() {
         if (eventTitle.getText().toString().length() > 1) {
             if (isEventTitleValid(eventTitle.getText().toString())) {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
-                controller.AddUserEvent(
+                long newId = controller.AddUserEvent(
                         new AddEvent(eventTitle.getText().toString().trim(),
                                 eventLocation.getText().toString().trim(),
                                 eventInput.getText().toString().trim(),
@@ -260,16 +280,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                                 silentNotification)
                 );
 
+                if (soundNotification == 1 && newId != -1) {
+                    initiateAlarm(String.valueOf(newId));
+                }
+
                 //Redirect to Main Activity
                 startActivity(new Intent(this, MainActivity.class));
-
-                /*
-                Log.d("TEST", "onAddBtn: " + timestamp);
-                String pattern = "dd-M-yyyy hh:mm:ss";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                String ss = simpleDateFormat.format(new Date(timestamp));
-                Log.d("TEST", "TimePrint: " + ss + " ," + timestamp);
-                */
             }
         } else {
             Toast.makeText(this, R.string.event_title_empty, Toast.LENGTH_SHORT).show();
@@ -438,12 +454,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
             isExpanded = true;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.VISIBLE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
         } else {
             isExpanded = false;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.GONE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
         }
     }
 
@@ -460,16 +476,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     public void updateOnConfigurationChanges() {
-        //Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
-        //Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
         if (colorPicker != 0) {
             updateColorText(colorPicker);
         }
         if (priorityPicker != 1) {
             updatePriorityText(priorityPicker);
         }
-        //updateColorText(color);
-        //updatePriorityText(priority);
     }
 
     private void updatePriorityText(int value) {
@@ -637,6 +649,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         }
         if (timePickerDialog != null && timePickerDialog.isShowing()) {
             timePickerDialog.dismiss();
+        }
+        if (controller != null) {
+            controller.close();
         }
         super.onDestroy();
     }

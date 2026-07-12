@@ -93,7 +93,7 @@ public class EventDatabaseRepository extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addEvent(
+    public long addEvent(
             AddEvent addEvent
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -128,6 +128,7 @@ public class EventDatabaseRepository extends SQLiteOpenHelper {
         }
         //close connection
         db.close();
+        return result;
     }
 
     public Cursor readAllEvents() {
@@ -138,9 +139,6 @@ public class EventDatabaseRepository extends SQLiteOpenHelper {
         if (db != null) {
             cursor = db.rawQuery(query, null);
         }
-        //close connection
-//        assert db != null;
-//        db.close();
         return cursor;
     }
 

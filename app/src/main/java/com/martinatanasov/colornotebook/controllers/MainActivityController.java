@@ -140,4 +140,10 @@ public class MainActivityController {
         return !isAvailableData;
     }
 
+    public void close() {
+        if (eventService != null) {
+            eventService.close();
+        }
+    }
+
 }
