@@ -422,7 +422,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Start Foreground Services
     public void startForegroundService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //Todo
             if (!isForegroundServiceRunning()) {
                 Intent serviceIntent = new Intent(this, MyForegroundService.class);
                 startForegroundService(serviceIntent);
@@ -430,11 +429,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isForegroundServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
-            if (MyForegroundService.class.getName().equals(service.service.getClassName())) {
-                return true;
+        if (activityManager != null) {
+            for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if (MyForegroundService.class.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
             }
         }
         return false;

@@ -41,10 +41,10 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ExampleInstrumentedTest {
+
     @Rule
     //Start MainActivity when the test is started
-    public ActivityScenarioRule<MainActivity> activityRule =
-            new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     //This is UI test with Espresso
     @Test
@@ -68,6 +68,6 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.txtDevelopers)).check(matches(withText(R.string.error_404)));
         //Perform click in order to return to the main screen
         onView(withId(R.id.txtDevelopers)).perform(click());
-
     }
+
 }
