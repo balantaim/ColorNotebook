@@ -63,9 +63,10 @@ public class ExampleInstrumentedTest {
         //This is timeout for the POST query
 
         //SystemClock.sleep(3000);
-        //This is Positive test and the internet connection should be disrupted!
-        //Check if the error message is presented from string resource R.string.error_404
-        onView(withId(R.id.txtDevelopers)).check(matches(withText(R.string.error_404)));
+        //This is Positive test
+        //Check if the developer info is presented correctly
+        String expectedText = "Created by:\n\nMartin Atanasov\n\nVersion " + BuildConfig.VERSION_NAME;
+        onView(withId(R.id.txtDevelopers)).check(matches(withText(expectedText)));
         //Perform click in order to return to the main screen
         onView(withId(R.id.txtDevelopers)).perform(click());
     }

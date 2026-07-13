@@ -75,17 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private VibrationUtil vibration;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
-    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
-            TextView regularEvents, TextView lowPriorityEvents,
-            int important, int regular, int unimportant,
-            int sound_notifications, int sizeCount) {
-        formatCount(counter, sizeCount);
-        formatCount(activeAlarms, sound_notifications);
-        formatCount(importantEvents, important);
-        formatCount(regularEvents, regular);
-        formatCount(lowPriorityEvents, unimportant);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Load skin resource
@@ -135,6 +124,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
 
         //createDrawerCounters();
+    }
+
+    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
+            TextView regularEvents, TextView lowPriorityEvents,
+            int important, int regular, int unimportant,
+            int sound_notifications, int sizeCount) {
+        formatCount(counter, sizeCount);
+        formatCount(activeAlarms, sound_notifications);
+        formatCount(importantEvents, important);
+        formatCount(regularEvents, regular);
+        formatCount(lowPriorityEvents, unimportant);
     }
 
     private void initToolbar() {

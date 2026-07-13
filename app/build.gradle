@@ -35,6 +35,11 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    testOptions {
+        animationsDisabled = true
+    }
+
     signingConfigs {
         release {
             storeFile file(keystoreProperties['storeFile'])
