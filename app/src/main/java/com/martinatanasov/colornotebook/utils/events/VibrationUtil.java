@@ -20,6 +20,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
 
+@SuppressWarnings("deprecation")
 public class VibrationUtil {
 
     private static final long VIBRATION_DURATION = 200;

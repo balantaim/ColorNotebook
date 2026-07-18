@@ -37,9 +37,16 @@ public class AddActivityController {
         timerEventUpdate();
     }
 
-    public void AddUserEvent(AddEvent addEvent) {
-        EventService eventService = new EventServiceImpl(addView.getApplicationContext());
-        eventService.addEvent(addEvent);
+    public long AddUserEvent(AddEvent addEvent) {
+        try (EventService eventService = new EventServiceImpl(addView.getApplicationContext())) {
+            return eventService.addEvent(addEvent);
+        }
+    }
+
+    public void close() {
+        if (executorService != null) {
+            executorService.shutdown();
+        }
     }
 
     private void timerEventUpdate() {

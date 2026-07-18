@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -75,17 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private VibrationUtil vibration;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
-    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
-            TextView regularEvents, TextView lowPriorityEvents,
-            int important, int regular, int unimportant,
-            int sound_notifications, int sizeCount) {
-        formatCount(counter, sizeCount);
-        formatCount(activeAlarms, sound_notifications);
-        formatCount(importantEvents, important);
-        formatCount(regularEvents, regular);
-        formatCount(lowPriorityEvents, unimportant);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Load skin resource
@@ -122,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     scroll_top.setVisibility(View.VISIBLE);
                 } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
                     scroll_top.setVisibility(View.GONE);
-                }
             }
-        });
+        }
+    });
         scroll_top.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,8 +127,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //createDrawerCounters();
     }
 
+    public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
+            TextView regularEvents, TextView lowPriorityEvents,
+            int important, int regular, int unimportant,
+            int sound_notifications, int sizeCount) {
+        formatCount(counter, sizeCount);
+        formatCount(activeAlarms, sound_notifications);
+        formatCount(importantEvents, important);
+        formatCount(regularEvents, regular);
+        formatCount(lowPriorityEvents, unimportant);
+    }
+
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_settings));
         setSupportActionBar(toolbar);
     }
 
@@ -422,7 +424,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Start Foreground Services
     public void startForegroundService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //Todo
             if (!isForegroundServiceRunning()) {
                 Intent serviceIntent = new Intent(this, MyForegroundService.class);
                 startForegroundService(serviceIntent);
@@ -430,11 +431,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isForegroundServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
-            if (MyForegroundService.class.getName().equals(service.service.getClassName())) {
-                return true;
+        if (activityManager != null) {
+            for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if (MyForegroundService.class.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -473,6 +477,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         add_button.shrink();
     }
 
+    public void extendMenuButton() {
+        add_button.extend();
+    }
+
     //Check if Night mode is activated
     private void darkModeChecker(PreferencesManager preferencesManager) {
         if (preferencesManager.getForceDarkMode()) {
@@ -504,6 +512,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navDrawer);
         controller = new MainActivityController(this);
         vibration = new VibrationUtil(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (controller != null) {
+            controller.close();
+        }
+        super.onDestroy();
     }
 
 }

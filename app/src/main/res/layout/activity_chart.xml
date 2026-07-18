@@ -26,11 +26,14 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
+        android:theme="@style/ToolbarTheme"
+        app:navigationIconTint="?attr/customColorValue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
         app:title="@string/chart"
-        app:titleTextColor="?attr/colorOnSecondary" />
+        app:titleTextColor="?attr/customColorValue" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"

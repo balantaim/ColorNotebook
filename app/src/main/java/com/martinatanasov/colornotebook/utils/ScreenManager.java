@@ -12,18 +12,14 @@
 
 package com.martinatanasov.colornotebook.utils;
 
-import android.os.Build;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowInsets;
-import android.view.WindowManager;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import java.util.Objects;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 public class ScreenManager {
 
@@ -48,17 +44,12 @@ public class ScreenManager {
     }
 
     private void setApplicationFullscreenMode(Window window, final boolean decorFitsSystemWindows) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
-            Objects.requireNonNull(window.getInsetsController()).hide(WindowInsets.Type.statusBars());
-        } else {
-            setApplicationFullscreenModeOnOlderSDK(window);
+        WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
+        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.getDecorView());
+        if (windowInsetsControllerCompat != null) {
+            windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.systemBars());
+            windowInsetsControllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setApplicationFullscreenModeOnOlderSDK(Window window) {
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 }

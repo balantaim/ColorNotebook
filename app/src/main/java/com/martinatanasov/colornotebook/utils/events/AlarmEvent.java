@@ -12,7 +12,6 @@
 
 package com.martinatanasov.colornotebook.utils.events;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -25,41 +24,60 @@ import com.martinatanasov.colornotebook.services.AlarmReceiver;
 import java.util.Calendar;
 
 public class AlarmEvent implements AlarmItems {
-    private AlarmManager alarmManager;
-    private final Activity activity;
 
-    public AlarmEvent(Activity activity) {
-        this.activity = activity;
-        alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+    private AlarmManager alarmManager;
+    private final Context context;
+
+    public AlarmEvent(Context context) {
+        this.context = context;
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
     @Override
     public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority) {
         int requestCode = Integer.parseInt(id);
-        Intent intent = new Intent(activity, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("id", id);
         intent.putExtra("title", title);
         intent.putExtra("node", node);
         intent.putExtra("priority", priority);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, requestCode, intent,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        //Set alarm repeating
-        if (priority == 0) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+        if (alarmManager == null) {
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        }
+
+        if (alarmManager == null) {
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                // Fallback to inexact if permission not granted
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                return;
+            }
+        }
+
+        if (priority == 0) { // Important
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        pendingIntent);
+            }
+        } else if (priority == 1) { // Regular
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
                     pendingIntent);
-        } else if (priority == 1) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+        } else { // Unimportant
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_HALF_HOUR,
-                    pendingIntent);
-        } else {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_HOUR,
                     pendingIntent);
         }
     }
@@ -67,11 +85,11 @@ public class AlarmEvent implements AlarmItems {
     @Override
     public void cancelAlarm(String id) {
         if (alarmManager == null) {
-            alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }
         int requestCode = Integer.parseInt(id);
-        Intent intent = new Intent(activity, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, requestCode, intent,
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
@@ -90,8 +108,16 @@ public class AlarmEvent implements AlarmItems {
     }
 
     public long nextAlarmTriggerTime() {
-        AlarmManager.AlarmClockInfo result = alarmManager.getNextAlarmClock();
-        return result.getTriggerTime();
+        if (alarmManager == null) {
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        }
+        if (alarmManager != null) {
+            AlarmManager.AlarmClockInfo result = alarmManager.getNextAlarmClock();
+            if (result != null) {
+                return result.getTriggerTime();
+            }
+        }
+        return 0;
     }
 
 }

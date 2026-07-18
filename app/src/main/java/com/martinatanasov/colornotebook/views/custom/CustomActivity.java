@@ -69,6 +69,7 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
         if (!isDone) {
             controller.cancelCurrentAlarm(id);
             controller.removeSoundNotificationFrom(id);
+            controller.removeSilentNotificationFrom(id);
             isDone = true;
         }
     }

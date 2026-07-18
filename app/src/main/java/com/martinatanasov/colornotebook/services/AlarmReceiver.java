@@ -13,11 +13,14 @@
 package com.martinatanasov.colornotebook.services;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
@@ -38,15 +41,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         String node = intent.getStringExtra("node");
         int priorityValue = intent.getIntExtra("priority", 0);
         String channelIdName = "sound_notifications_channel";
+
+        createNotificationChannel(context, channelIdName);
+
         if (priorityValue == 0) {
             priorityValue = NotificationCompat.PRIORITY_HIGH;
-            //channelIdName = "sound_notifications_channel";
         } else if (priorityValue == 1) {
-            priorityValue = NotificationCompat.DEFAULT_ALL;
-            //channelIdName = "sound_notifications_channel";
+            priorityValue = NotificationCompat.PRIORITY_DEFAULT;
         } else {
             priorityValue = NotificationCompat.PRIORITY_LOW;
-            //channelIdName = "sound_notifications_channel";
         }
 
         Intent customIntent = new Intent(context, CustomActivity.class);
@@ -54,7 +57,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         customIntent.putExtra("title", title);
         customIntent.putExtra("node", node);
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        customIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, customIntent, 0);
         //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, customIntent, PendingIntent.FLAG_IMMUTABLE);
@@ -89,6 +92,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         notificationManagerCompat.notify(id, builder.build());
         //notificationManagerCompat.notify(124, builder.build());
         Log.d("ALARM", "The alarm receiver started");
+    }
+
+    private void createNotificationChannel(Context context, String channelId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Sound Notifications";
+            String description = "Channel for sound notifications";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
     }
 
 }

@@ -55,6 +55,8 @@ import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
+import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 import com.martinatanasov.colornotebook.views.map.MapActivity;
 
@@ -89,9 +91,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private AddActivityController controller;
     private SelectColor selectColor = new SelectColor();
-    //private ApplyPriority listener;
-    //Dialog colorDialog;
-    //ConstraintLayout setImportant, setRegular, setUnimportant;
     private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
     private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
     private Calendar calendar, calendar1;
@@ -158,7 +157,10 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         eventColor.setOnClickListener(view -> selectColor());
         priority.setOnClickListener(v -> managePriority());
         //Set up Switches
-        allDaySw.setOnClickListener(view -> dayEvent = allDaySw.isChecked() ? 1 : 0);
+        allDaySw.setOnClickListener(view -> {
+            dayEvent = allDaySw.isChecked() ? 1 : 0;
+            manageAllDaySw();
+        });
         soundNotSw.setOnClickListener(view -> {
             soundNotification = soundNotSw.isChecked() ? 1 : 0;
             if (soundNotification == 1) {
@@ -241,11 +243,77 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         }
     }
 
+    private void manageAllDaySw() {
+        if (allDaySw.isChecked()) {
+            soundNotSw.setChecked(false);
+            silentNotSw.setChecked(false);
+            soundNotSw.setEnabled(false);
+            silentNotSw.setEnabled(false);
+            soundNotification = 0;
+            silentNotification = 0;
+            timeStart.setEnabled(false);
+            timeEnd.setEnabled(false);
+            timeStart.setAlpha(0.5f);
+            timeEnd.setAlpha(0.5f);
+        } else {
+            // Version below Android 8 doesn't support notifications
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                soundNotSw.setEnabled(false);
+                silentNotSw.setEnabled(false);
+            } else {
+                soundNotSw.setEnabled(true);
+                silentNotSw.setEnabled(true);
+            }
+            timeStart.setEnabled(true);
+            timeEnd.setEnabled(true);
+            timeStart.setAlpha(1.0f);
+            timeEnd.setAlpha(1.0f);
+        }
+    }
+
+    private boolean initiateAlarm(String id) {
+        boolean checker = false;
+
+        Calendar calendarNow = Calendar.getInstance();
+        if (calendarNow.compareTo(calendar) < 0) {
+            Log.d("ALARM", "Time is valid");
+            checker = true;
+            AlarmEvent alarm = new AlarmEvent(this);
+            alarm.setUpAlarm(id,
+                    eventTitle.getText().toString(),
+                    eventInput.getText().toString(),
+                    calendar,
+                    priorityPicker);
+        }
+
+        Log.d("ALARM", "The alarm is set to " + checker);
+        return checker;
+    }
+
+    private boolean initiateSilentNotification(String id) {
+        boolean checker = false;
+        Calendar calendarNow = Calendar.getInstance();
+        if (calendarNow.compareTo(calendar) < 0) {
+            long delay = calendar.getTimeInMillis() - calendarNow.getTimeInMillis();
+            SilentNotificationWorker.scheduleSilentNotification(
+                    this,
+                    id,
+                    eventTitle.getText().toString(),
+                    eventInput.getText().toString(),
+                    colorPicker,
+                    priorityPicker,
+                    delay
+            );
+            checker = true;
+        }
+        return checker;
+    }
+
     private void onAddBtn() {
         if (eventTitle.getText().toString().length() > 1) {
             if (isEventTitleValid(eventTitle.getText().toString())) {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
-                controller.AddUserEvent(
+                long newId = controller.AddUserEvent(
                         new AddEvent(eventTitle.getText().toString().trim(),
                                 eventLocation.getText().toString().trim(),
                                 eventInput.getText().toString().trim(),
@@ -260,16 +328,16 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                                 silentNotification)
                 );
 
+                if (soundNotification == 1 && newId != -1) {
+                    initiateAlarm(String.valueOf(newId));
+                }
+
+                if (silentNotification == 1 && newId != -1) {
+                    initiateSilentNotification(String.valueOf(newId));
+                }
+
                 //Redirect to Main Activity
                 startActivity(new Intent(this, MainActivity.class));
-
-                /*
-                Log.d("TEST", "onAddBtn: " + timestamp);
-                String pattern = "dd-M-yyyy hh:mm:ss";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                String ss = simpleDateFormat.format(new Date(timestamp));
-                Log.d("TEST", "TimePrint: " + ss + " ," + timestamp);
-                */
             }
         } else {
             Toast.makeText(this, R.string.event_title_empty, Toast.LENGTH_SHORT).show();
@@ -305,10 +373,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         }
         //Set up date and time pickers
         manageDateAndTime();
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-//            soundNotSw.setEnabled(false);
-//            silentNotSw.setEnabled(false);
-//        }
+        manageAllDaySw();
     }
 
     private void manageDateAndTime() {
@@ -438,12 +503,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
             isExpanded = true;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.VISIBLE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
         } else {
             isExpanded = false;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.GONE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
         }
     }
 
@@ -460,16 +525,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     public void updateOnConfigurationChanges() {
-        //Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
-        //Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
         if (colorPicker != 0) {
             updateColorText(colorPicker);
         }
         if (priorityPicker != 1) {
             updatePriorityText(priorityPicker);
         }
-        //updateColorText(color);
-        //updatePriorityText(priority);
     }
 
     private void updatePriorityText(int value) {
@@ -627,6 +688,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         priorityPicker = savedInstanceState.getInt("key_priority");
 
         setSwValues();
+        manageAllDaySw();
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -637,6 +699,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         }
         if (timePickerDialog != null && timePickerDialog.isShowing()) {
             timePickerDialog.dismiss();
+        }
+        if (controller != null) {
+            controller.close();
         }
         super.onDestroy();
     }

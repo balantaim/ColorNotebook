@@ -135,6 +135,7 @@
     <string name="red_color">Red color</string>
     <string name="blue_color">Blue color</string>
     <string name="purple_color">Purple color</string>
+    <string name="brown_color">Brown color</string>
     <string name="grey_color">Gray color</string>
     <string name="channel_description_sound_notifications">Sound notification channel</string>
     <!--    <string name="channel_description_regular">Regular notification</string>-->

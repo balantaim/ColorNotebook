@@ -38,7 +38,7 @@ public class MainActivityController {
     private final EventService eventService;
     private int unimportant = 0, regular = 0, important = 0, event_sound_notifications = 0;
     private final PreferencesManager preferencesManager;
-    private boolean isAvailableData = false;
+    private boolean isDataEmpty = true;
     private List<UserEvent> events;
 
     public MainActivityController(MainActivity mainView) {
@@ -64,6 +64,8 @@ public class MainActivityController {
     }
 
     public void storeDataInArrays() {
+        //Reset counters
+        unimportant = regular = important = event_sound_notifications = 0;
         //Update the events
         events = eventService.getUserEventDto();
         if (events.isEmpty()) {
@@ -82,12 +84,16 @@ public class MainActivityController {
         }
         //Update UI
         setInitialRecyclerView();
-        //shrink FAB
-        mainView.shrinkMenuButton();
+        //Toggle FAB
+        if (events.isEmpty()) {
+            mainView.extendMenuButton();
+        } else {
+            mainView.shrinkMenuButton();
+        }
         //Update drawer count/statistic
         mainView.createDrawerCounters(important, regular, unimportant, event_sound_notifications, events.size());
-        //set isAvailableData boolean
-        isAvailableData = events.isEmpty();
+        //set isDataEmpty boolean
+        isDataEmpty = events.isEmpty();
     }
 
     private void setInitialRecyclerView() {
@@ -137,7 +143,13 @@ public class MainActivityController {
     }
 
     public boolean isAvailableData() {
-        return !isAvailableData;
+        return !isDataEmpty;
+    }
+
+    public void close() {
+        if (eventService != null) {
+            eventService.close();
+        }
     }
 
 }

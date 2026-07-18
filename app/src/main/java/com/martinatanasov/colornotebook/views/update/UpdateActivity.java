@@ -57,6 +57,7 @@ import com.martinatanasov.colornotebook.utils.ConvertTimeToTxt;
 import com.martinatanasov.colornotebook.utils.EventValidator;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
+import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 import com.martinatanasov.colornotebook.views.map.MapActivity;
@@ -80,6 +81,19 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
+    TimePickerDialog timePickerDialog;
+    SwitchCompat allDaySw, soundNotSw, silentNotSw;
+    private String id;
+    private boolean isExpanded = false;
+    private Calendar calendar, calendar1;
+    private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
+    private UpdateActivityController controller;
+    private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
+    private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
+    private int dayEventBool = 0, soundNotificationBool = 0, silentNotificationBool = 0, colorPicker = 0, priorityPicker = 0;
+    private long eventCreatedDate = 0, eventModifiedDate = 0;
+    private SelectColor selectColor = new SelectColor();
+    private VibrationUtil vibration;
     private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -91,22 +105,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                 }
             }
     );
-    TimePickerDialog timePickerDialog;
-    SwitchCompat allDaySw, soundNotSw, silentNotSw;
-    private String id;
-    //private AlarmManager alarmManager;
-    //private PendingIntent pendingIntent;
-    private boolean isExpanded = false;
-    private Calendar calendar, calendar1;
-    private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
-    private UpdateActivityController controller;
-    AlertDialog confirmDialog;
-    private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
-    private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
-    private int dayEventBool = 0, soundNotificationBool = 0, silentNotificationBool = 0, colorPicker = 0, priorityPicker = 0;
-    private long eventCreatedDate = 0, eventModifiedDate = 0;
-    private SelectColor selectColor = new SelectColor();
-    private VibrationUtil vibration;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -149,6 +147,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         //Click event for edit text's icon
         eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
     }
+    AlertDialog confirmDialog;
 
     private void initScreenManager() {
         new ScreenManager(findViewById(R.id.root_layout_update),
@@ -166,7 +165,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         timeEnd.setOnClickListener(view -> setEndTime());
         eventColor.setOnClickListener(view -> selectColor());
         priority.setOnClickListener(v -> managePriority());
-        allDaySw.setOnClickListener(view -> dayEventBool = allDaySw.isChecked() ? 1 : 0);
+        allDaySw.setOnClickListener(view -> {
+            dayEventBool = allDaySw.isChecked() ? 1 : 0;
+            manageAllDaySw();
+        });
         soundNotSw.setOnClickListener(view -> {
             soundNotificationBool = soundNotSw.isChecked() ? 1 : 0;
             if (soundNotificationBool == 1) {
@@ -195,7 +197,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                 Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
 
                 mapActivityLauncher.launch(new Intent(this, MapActivity.class));
-
                 return true;
             }
         }
@@ -220,6 +221,35 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         priorityPicker = status;
         getPriorityString();
     }
+
+    private void manageAllDaySw() {
+        if (allDaySw.isChecked()) {
+            soundNotSw.setChecked(false);
+            silentNotSw.setChecked(false);
+            soundNotSw.setEnabled(false);
+            silentNotSw.setEnabled(false);
+            soundNotificationBool = 0;
+            silentNotificationBool = 0;
+            timeStart.setEnabled(false);
+            timeEnd.setEnabled(false);
+            timeStart.setAlpha(0.5f);
+            timeEnd.setAlpha(0.5f);
+        } else {
+            // Version below Android 8 doesn't support notifications
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                soundNotSw.setEnabled(false);
+                silentNotSw.setEnabled(false);
+            } else {
+                soundNotSw.setEnabled(true);
+                silentNotSw.setEnabled(true);
+            }
+            timeStart.setEnabled(true);
+            timeEnd.setEnabled(true);
+            timeStart.setAlpha(1.0f);
+            timeEnd.setAlpha(1.0f);
+        }
+    }
+
 //    private boolean initiateAlarm(){
 //        boolean checker = false;
 //
@@ -284,12 +314,50 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         return checker;
     }
 
+    private boolean initiateSilentNotification() {
+        boolean checker = false;
+        Calendar calendarNow = Calendar.getInstance();
+        if (calendarNow.compareTo(calendar) < 0) {
+            long delay = calendar.getTimeInMillis() - calendarNow.getTimeInMillis();
+            SilentNotificationWorker.scheduleSilentNotification(
+                    this,
+                    id,
+                    eventTitle.getText().toString(),
+                    eventInput.getText().toString(),
+                    colorPicker,
+                    priorityPicker,
+                    delay
+            );
+            checker = true;
+        }
+        return checker;
+    }
+
     private void onUpdateBtn() {
         boolean checkAlarmState = true;
         if (isEventTitleValid(eventTitle.getText().toString())) {
             if (soundNotificationBool == 1) {
                 checkAlarmState = initiateAlarm();
+                if (!checkAlarmState) {
+                    // Time is not valid, cancel existing alarm
+                    AlarmEvent alarm = new AlarmEvent(this);
+                    alarm.cancelAlarm(id);
+                }
+            } else {
+                // Cancel existing alarm if sound notification is turned off
+                AlarmEvent alarm = new AlarmEvent(this);
+                alarm.cancelAlarm(id);
             }
+
+            if (silentNotificationBool == 1) {
+                boolean checkSilentState = initiateSilentNotification();
+                if (!checkSilentState) {
+                    SilentNotificationWorker.cancelSilentNotification(this, id);
+                }
+            } else {
+                SilentNotificationWorker.cancelSilentNotification(this, id);
+            }
+
             if (!checkAlarmState) {
                 //soundNotSw.setChecked(false);
                 soundNotificationBool = 0;
@@ -360,6 +428,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                 allDaySw.setChecked(dayEventBool == 1);
                 soundNotSw.setChecked(soundNotificationBool == 1);
                 silentNotSw.setChecked(silentNotificationBool == 1);
+                manageAllDaySw();
             }
             //Log.d("update", "getAndSetIntentData: ID is valid");
             //Update date and time data
@@ -551,12 +620,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             isExpanded = true;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.VISIBLE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
         } else {
             isExpanded = false;
             TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
             expandableLayout.setVisibility(View.GONE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
         }
     }
 
@@ -762,6 +831,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         id = savedInstanceState.getString("key_id");
 
         setSwValues();
+        manageAllDaySw();
         if (savedInstanceState.getBoolean("key_confirm_dialog_showing", false)) {
             showDeleteDialog();
         }
@@ -779,6 +849,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         }
         if (confirmDialog != null && confirmDialog.isShowing()) {
             confirmDialog.dismiss();
+        }
+        if (controller != null) {
+            controller.close();
         }
         super.onDestroy();
     }
