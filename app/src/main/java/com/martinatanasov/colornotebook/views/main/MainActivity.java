@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_settings));
         setSupportActionBar(toolbar);
     }
 
@@ -473,6 +475,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void shrinkMenuButton() {
         add_button.shrink();
+    }
+
+    public void extendMenuButton() {
+        add_button.extend();
     }
 
     //Check if Night mode is activated

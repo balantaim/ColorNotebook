@@ -81,17 +81,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     LinearLayout expandableLayout;
     CardView cardView;
     DatePickerDialog datePickerDialog;
-    private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    String location = result.getData().getStringExtra("location");
-                    if (location != null && !location.isEmpty()) {
-                        eventLocation.setText(location);
-                    }
-                }
-            }
-    );
     TimePickerDialog timePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private String id;
@@ -105,6 +94,17 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     private long eventCreatedDate = 0, eventModifiedDate = 0;
     private SelectColor selectColor = new SelectColor();
     private VibrationUtil vibration;
+    private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String location = result.getData().getStringExtra("location");
+                    if (location != null && !location.isEmpty()) {
+                        eventLocation.setText(location);
+                    }
+                }
+            }
+    );
 
     @SuppressLint("ClickableViewAccessibility")
     @Override

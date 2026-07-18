@@ -21,7 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.dto.LocationResult;
+import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.services.MapService;
+import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 
 import org.osmdroid.api.IMapController;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements AppSettings {
 
     private MapView mapView;
     private AutoCompleteTextView searchEditText;
@@ -54,6 +56,8 @@ public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Load skin resource
+        updateAppSettings();
         super.onCreate(savedInstanceState);
 
         EdgeToEdge.enable(this);
@@ -75,6 +79,17 @@ public class MapActivity extends AppCompatActivity {
         initViews();
         initAdapter();
         setOnClickListeners();
+    }
+
+    @Override
+    public void updateAppSettings() {
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        int theme = preferencesManager.getCurrentTheme();
+        switch (theme) {
+            case 1 -> setTheme(R.style.Theme_BlueColorNotebook);
+            case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
+            default -> setTheme(R.style.Theme_DefaultColorNotebook);
+        }
     }
 
     private void initAdapter() {

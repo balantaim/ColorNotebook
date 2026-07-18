@@ -62,27 +62,29 @@ public class EventDatabaseRepository extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_TITLE + " TEXT, " +
-                COLUMN_LOCATION + " TEXT, " +
-                COLUMN_EVENT + " TEXT, " +
-                COLUMN_PICKED_COLOR + " INTEGER, " +
-                COLUMN_PICKED_AVATAR + " INTEGER, " +
-                COLUMN_START_YEAR + " INTEGER, " +
-                COLUMN_START_MONTH + " INTEGER, " +
-                COLUMN_START_DAY + " INTEGER, " +
-                COLUMN_START_HOUR + " INTEGER, " +
-                COLUMN_START_MINUTES + " INTEGER, " +
-                COLUMN_END_YEAR + " INTEGER, " +
-                COLUMN_END_MONTH + " INTEGER, " +
-                COLUMN_END_DAY + " INTEGER, " +
-                COLUMN_END_HOUR + " INTEGER, " +
-                COLUMN_END_MINUTES + " INTEGER, " +
-                COLUMN_CREATED_DATE + " INTEGER, " +
-                COLUMN_MODIFIED_DATE + " INTEGER, " +
-                COLUMN_DAY_EVENT + " INTEGER, " +
-                COLUMN_SOUND_NOTIFICATION + " INTEGER, " +
-                COLUMN_SILENT_NOTIFICATIONS + " INTEGER);";
+                " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TITLE + " TEXT NOT NULL, " +
+                COLUMN_LOCATION + " TEXT NOT NULL, " +
+                COLUMN_EVENT + " TEXT NOT NULL, " +
+                COLUMN_PICKED_COLOR + " INTEGER NOT NULL DEFAULT 0, " +
+                COLUMN_PICKED_AVATAR + " INTEGER NOT NULL DEFAULT 0, " +
+                COLUMN_START_YEAR + " INTEGER NOT NULL, " +
+                COLUMN_START_MONTH + " INTEGER NOT NULL, " +
+                COLUMN_START_DAY + " INTEGER NOT NULL, " +
+                COLUMN_START_HOUR + " INTEGER NOT NULL, " +
+                COLUMN_START_MINUTES + " INTEGER NOT NULL, " +
+                COLUMN_END_YEAR + " INTEGER NOT NULL, " +
+                COLUMN_END_MONTH + " INTEGER NOT NULL, " +
+                COLUMN_END_DAY + " INTEGER NOT NULL, " +
+                COLUMN_END_HOUR + " INTEGER NOT NULL, " +
+                COLUMN_END_MINUTES + " INTEGER NOT NULL, " +
+                COLUMN_CREATED_DATE + " INTEGER NOT NULL, " +
+                COLUMN_MODIFIED_DATE + " INTEGER NOT NULL, " +
+                COLUMN_DAY_EVENT + " INTEGER NOT NULL DEFAULT 0, " +
+                COLUMN_SOUND_NOTIFICATION + " INTEGER NOT NULL DEFAULT 0, " +
+                COLUMN_SILENT_NOTIFICATIONS + " INTEGER NOT NULL DEFAULT 0" +
+                ");";
 
         db.execSQL(query);
     }
@@ -229,17 +231,5 @@ public class EventDatabaseRepository extends SQLiteOpenHelper {
         //close connection
         db.close();
     }
-
-//    public boolean swipeDeleteItem(String delItem){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        String queryString = ("DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + delItem);
-//        Cursor cursor = db.rawQuery(queryString, null);
-//
-//        if(cursor.moveToFirst()){
-//            return true;
-//        }else{
-//            return false;
-//        }
-//    }
 
 }

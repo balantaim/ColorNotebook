@@ -105,6 +105,11 @@
         <item name="android:activityCloseExitAnimation">@anim/activity_slide_out_back</item>
     </style>
 
+    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="actionMenuTextColor">?attr/customColorValue</item>
+        <item name="android:textColorPrimary">?attr/customColorValue</item>
+    </style>
+
     <style name="Theme.Tutorial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/teal_900</item>
