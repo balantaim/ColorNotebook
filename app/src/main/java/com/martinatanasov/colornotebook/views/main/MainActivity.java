@@ -15,11 +15,8 @@ package com.martinatanasov.colornotebook.views.main;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +40,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,7 +50,7 @@ import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.MainActivityController;
 import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
-import com.martinatanasov.colornotebook.services.MyForegroundService;
+import com.martinatanasov.colornotebook.services.RescheduleWorker;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
@@ -421,27 +420,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(new Intent(MainActivity.this, TutorialActivity.class));
     }
 
-    //Start Foreground Services
-    public void startForegroundService() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!isForegroundServiceRunning()) {
-                Intent serviceIntent = new Intent(this, MyForegroundService.class);
-                startForegroundService(serviceIntent);
-            }
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private boolean isForegroundServiceRunning() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        if (activityManager != null) {
-            for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
-                if (MyForegroundService.class.getName().equals(service.service.getClassName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    //Reschedule Alarms and Notifications
+    public void rescheduleWork() {
+        OneTimeWorkRequest rescheduleWork = new OneTimeWorkRequest.Builder(RescheduleWorker.class).build();
+        WorkManager.getInstance(this).enqueue(rescheduleWork);
     }
 
     public void setUpRecyclerView(List<UserEvent> data) {

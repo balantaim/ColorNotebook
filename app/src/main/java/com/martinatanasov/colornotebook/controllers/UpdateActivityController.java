@@ -20,6 +20,7 @@ import com.martinatanasov.colornotebook.dto.UpdateEvent;
 import com.martinatanasov.colornotebook.services.EventService;
 import com.martinatanasov.colornotebook.services.EventServiceImpl;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
+import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.views.update.UpdateActivity;
 
 import java.util.concurrent.ExecutorService;
@@ -46,6 +47,7 @@ public class UpdateActivityController {
 
     public void deleteCurrentEvent(String eventID) {
         cancelSoundNotification(eventID);
+        SilentNotificationWorker.cancelSilentNotification(updateView.getApplicationContext(), eventID);
         eventService.deleteEventOnOneRow(eventID);
     }
 

@@ -152,5 +152,14 @@
     <string name="find_location">Find Location</string>
     <string name="search">Search</string>
     <string name="confirm_btn">Confirm</string>
+    <!-- Notifications -->
+    <string name="alarms_active_title">Active alarms</string>
+    <string name="alarms_active_content_text">You have active alarms</string>
+    <string name="sound_notifications_name">Sound Notifications</string>
+    <string name="sound_notifications_description">Channel for sound notifications</string>
+    <string name="silent_notifications_title">Silent notifications</string>
+    <string name="silent_notifications_content_text">You have new notes</string>
+    <string name="silent_notifications_name">Silent notifications</string>
+    <string name="silent_notifications_description">Channel for silent notifications</string>
 
 </resources>
