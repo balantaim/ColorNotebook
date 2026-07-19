@@ -25,7 +25,7 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
 
-import com.martinatanasov.colornotebook.services.AlarmReceiver;
+import com.martinatanasov.colornotebook.services.AlarmReceiverService;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -52,7 +52,7 @@ public class AlarmFunctionalityTest {
     @Test
     public void testAlarmNotificationAppears() {
         // Prepare intent for AlarmReceiver
-        Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiverService.class);
         intent.putExtra("id", "9999");
         intent.putExtra("title", "Test Alarm");
         intent.putExtra("node", "This is a test alarm message");

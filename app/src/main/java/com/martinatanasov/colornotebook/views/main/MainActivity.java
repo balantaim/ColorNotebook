@@ -50,7 +50,7 @@ import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.MainActivityController;
 import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
-import com.martinatanasov.colornotebook.services.RescheduleWorker;
+import com.martinatanasov.colornotebook.services.RescheduleWorkerService;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
@@ -229,33 +229,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-//        switch (item.getItemId()) {
-//            case R.id.events_chart -> {
-//                if (controller.isAvailableData()) {
-//                    controller.initiateChartFragment();
-//                } else {
-//                    Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//            case R.id.website -> {
-//                Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
-//            }
-//            case R.id.about -> {
-//                InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
-//                infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
-//            }
-//            case R.id.exit -> {
-//                finish();
-//                System.exit(0);
-//            }
-//            default -> {
-//                Log.e(getClass().getName(), "onNavigationItemSelected: Method NOT implemented!");
-//            }
-//        }
-//        //close navigation drawer
-//        drawerLayout.closeDrawer(GravityCompat.START);
-//        return true;
-
         int itemId = item.getItemId();
 
         if (itemId == R.id.events_chart) {
@@ -265,8 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
             }
         } else if (itemId == R.id.website) {
-            Toast.makeText(this, "In development", Toast.LENGTH_SHORT).show();
-
+            controller.openWebsite();
         } else if (itemId == R.id.about) {
             if (getSupportFragmentManager().findFragmentByTag("InfoPopupFragment") == null) {
                 InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
@@ -422,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Reschedule Alarms and Notifications
     public void rescheduleWork() {
-        OneTimeWorkRequest rescheduleWork = new OneTimeWorkRequest.Builder(RescheduleWorker.class).build();
+        OneTimeWorkRequest rescheduleWork = new OneTimeWorkRequest.Builder(RescheduleWorkerService.class).build();
         WorkManager.getInstance(this).enqueue(rescheduleWork);
     }
 

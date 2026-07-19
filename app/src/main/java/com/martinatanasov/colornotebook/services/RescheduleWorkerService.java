@@ -26,11 +26,11 @@ import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import java.util.Calendar;
 import java.util.List;
 
-public class RescheduleWorker extends Worker {
+public class RescheduleWorkerService extends Worker {
 
     private static final String TAG = "RescheduleWorker";
 
-    public RescheduleWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public RescheduleWorkerService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
@@ -54,7 +54,8 @@ public class RescheduleWorker extends Worker {
                             event.txtEventTitle(),
                             event.txtNode(),
                             alarmTime,
-                            event.int_avatar_picker()
+                            event.int_avatar_picker(),
+                            event.int_color_picker()
                     );
                     Log.d(TAG, "Rescheduled sound alarm for event: " + event.txtEventTitle());
                 }

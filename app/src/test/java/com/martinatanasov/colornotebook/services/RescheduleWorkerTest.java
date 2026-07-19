@@ -37,7 +37,7 @@ public class RescheduleWorkerTest {
 
     @Test
     public void testRescheduleWorkerDoWork() {
-        RescheduleWorker worker = TestListenableWorkerBuilder.from(context, RescheduleWorker.class).build();
+        RescheduleWorkerService worker = TestListenableWorkerBuilder.from(context, RescheduleWorkerService.class).build();
         ListenableWorker.Result result = worker.doWork();
         assertEquals(ListenableWorker.Result.success(), result);
     }

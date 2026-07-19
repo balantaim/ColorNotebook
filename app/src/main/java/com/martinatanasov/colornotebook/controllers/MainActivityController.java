@@ -12,8 +12,11 @@
 
 package com.martinatanasov.colornotebook.controllers;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 
+import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.services.EventService;
@@ -96,6 +99,14 @@ public class MainActivityController {
 
     public void initiateChartFragment() {
         mainView.openChartFragment(important, regular, unimportant);
+    }
+
+    public void openWebsite() {
+        Uri websiteUri = Uri.parse(BuildConfig.APP_WEBSITE);
+        Intent intent = new Intent(Intent.ACTION_VIEW, websiteUri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mainView.startActivity(intent);
+        mainView.moveTaskToBack(true);
     }
 
     public void deleteBDRecords() {

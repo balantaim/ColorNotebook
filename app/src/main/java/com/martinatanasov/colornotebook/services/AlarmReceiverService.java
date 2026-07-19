@@ -33,18 +33,20 @@ import com.martinatanasov.colornotebook.views.custom.CustomActivity;
 
 import java.util.Objects;
 
-public class AlarmReceiver extends BroadcastReceiver {
+public class AlarmReceiverService extends BroadcastReceiver {
 
     private static final String GROUP_KEY_SOUND = "com.martinatanasov.colornotebook.SOUND_GROUP";
     private static final String channelIdName = "sound_notifications_channel";
     private static final int SUMMARY_ID = 0;
 
     @NonNull
-    private static Intent getIntent(Context context, Intent intent, String title, String node) {
+    private static Intent getIntent(Context context, Intent intent, String title, String node, int priority, int color) {
         Intent customIntent = new Intent(context, CustomActivity.class);
         customIntent.putExtra("id", intent.getStringExtra("id"));
         customIntent.putExtra("title", title);
         customIntent.putExtra("node", node);
+        customIntent.putExtra("priority", priority);
+        customIntent.putExtra("color", color);
         return customIntent;
     }
 
@@ -66,7 +68,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         //Create custom intent
-        Intent customIntent = getIntent(context, intent, title, node);
+        Intent customIntent = getIntent(context,
+                intent,
+                title,
+                node,
+                intent.getIntExtra("priority", 0),
+                intent.getIntExtra("color", 0));
         //Make the intent to start a new activity and clear the back stack
         customIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

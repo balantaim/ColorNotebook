@@ -21,6 +21,7 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "LOADING_IMAGE", "\"${properties.getProperty("LOADING_IMAGE")}\""
         buildConfigField "String", "CHECK_DEV", "\"${properties.getProperty("CHECK_DEV")}\""
+        buildConfigField "String", "APP_WEBSITE", "\"${properties.getProperty("APP_WEBSITE")}\""
 
         //Set supported per-app language
         resourceConfigurations += ['en']

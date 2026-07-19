@@ -21,12 +21,12 @@ import androidx.work.WorkManager;
 
 import java.util.Objects;
 
-public class MyBroadcastReceiver extends BroadcastReceiver {
+public class BroadcastReceiverService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
-            OneTimeWorkRequest rescheduleWork = new OneTimeWorkRequest.Builder(RescheduleWorker.class).build();
+            OneTimeWorkRequest rescheduleWork = new OneTimeWorkRequest.Builder(RescheduleWorkerService.class).build();
             WorkManager.getInstance(context).enqueue(rescheduleWork);
         }
     }

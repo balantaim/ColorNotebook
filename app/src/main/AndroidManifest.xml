@@ -75,14 +75,14 @@
             tools:ignore="LockedOrientationActivity" />
 
         <receiver
-            android:name=".services.MyBroadcastReceiver"
+            android:name=".services.BroadcastReceiverService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".services.AlarmReceiver"
+            android:name=".services.AlarmReceiverService"
             android:exported="false" />
 
     </application>

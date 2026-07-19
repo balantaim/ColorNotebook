@@ -30,7 +30,7 @@ import androidx.work.WorkManager;
 import com.martinatanasov.colornotebook.dto.AddEvent;
 import com.martinatanasov.colornotebook.services.EventService;
 import com.martinatanasov.colornotebook.services.EventServiceImpl;
-import com.martinatanasov.colornotebook.services.RescheduleWorker;
+import com.martinatanasov.colornotebook.services.RescheduleWorkerService;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -84,7 +84,7 @@ public class NotificationPersistenceTest {
 
         try (EventService eventService = new EventServiceImpl(context)) {
             // 2. Run the RescheduleWorker
-            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(RescheduleWorker.class).build();
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(RescheduleWorkerService.class).build();
             WorkManager.getInstance(context).enqueue(workRequest).getResult().get();
 
             // 3. Open notification shade and check for the notification
