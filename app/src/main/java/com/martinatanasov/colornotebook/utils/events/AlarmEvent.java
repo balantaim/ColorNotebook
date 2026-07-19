@@ -19,7 +19,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.martinatanasov.colornotebook.services.AlarmReceiver;
+import com.martinatanasov.colornotebook.services.AlarmReceiverService;
 
 import java.util.Calendar;
 
@@ -34,13 +34,14 @@ public class AlarmEvent implements AlarmItems {
     }
 
     @Override
-    public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority) {
+    public void setUpAlarm(String id, String title, String node, Calendar calendar, int priority, int color) {
         int requestCode = Integer.parseInt(id);
-        Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiverService.class);
         intent.putExtra("id", id);
         intent.putExtra("title", title);
         intent.putExtra("node", node);
         intent.putExtra("priority", priority);
+        intent.putExtra("color", color);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -88,7 +89,7 @@ public class AlarmEvent implements AlarmItems {
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }
         int requestCode = Integer.parseInt(id);
-        Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, AlarmReceiverService.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         if (alarmManager != null) {

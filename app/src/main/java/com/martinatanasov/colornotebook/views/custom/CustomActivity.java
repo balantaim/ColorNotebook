@@ -12,23 +12,27 @@
 
 package com.martinatanasov.colornotebook.views.custom;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.controllers.CustomActivityController;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
-import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
+import com.martinatanasov.colornotebook.utils.ScreenManager;
 
 public class CustomActivity extends AppCompatActivity implements AppSettings {
     Button cancelBtn;
     TextView titleTxt, nodeTxt;
+    ImageView priorityIcon;
     CustomActivityController controller;
     private boolean isDone = false;
 
@@ -48,8 +52,10 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
         String id = getIntent().getStringExtra("id");
         String title = getIntent().getStringExtra("title");
         String node = getIntent().getStringExtra("node");
+        int priority = getIntent().getIntExtra("priority", 1);
+        int color = getIntent().getIntExtra("color", 0);
 
-        updateTextFields(title, node);
+        updateTextFields(title, node, priority, color);
         //Cancel alarm
         cancelBtn.setOnClickListener(view -> cancel(id));
     }
@@ -60,9 +66,30 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
                 false);
     }
 
-    private void updateTextFields(String title, String node) {
+    private void updateTextFields(String title, String node, int priority, int color) {
         titleTxt.setText(title);
         nodeTxt.setText(node);
+        switch (priority) {
+            case 0 -> priorityIcon.setImageResource(R.drawable.ic_set_important);
+            case 2 -> priorityIcon.setImageResource(R.drawable.ic_set_unimportant);
+            default -> priorityIcon.setImageResource(R.drawable.ic_set_regular);
+        }
+        priorityIcon.setColorFilter(ContextCompat.getColor(this, getCurrentIconColor(color)), PorterDuff.Mode.SRC_IN);
+    }
+
+    private int getCurrentIconColor(int color) {
+        return switch (color) {
+            case 1 -> R.color.pick_sky_blue;
+            case 2 -> R.color.pick_green;
+            case 3 -> R.color.pick_yellow;
+            case 4 -> R.color.pick_orange;
+            case 5 -> R.color.error;
+            case 6 -> R.color.pick_blue;
+            case 7 -> R.color.pick_purple;
+            case 8 -> R.color.gray_new;
+            //We don't use brown yet
+            default -> R.color.brown;
+        };
     }
 
     private void cancel(String id){
@@ -98,6 +125,7 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
         cancelBtn = findViewById(R.id.cancelAlarm);
         titleTxt = findViewById(R.id.txtHeader);
         nodeTxt = findViewById(R.id.txtNode);
+        priorityIcon = findViewById(R.id.priorityIcon);
         controller = new CustomActivityController(this);
     }
 

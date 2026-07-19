@@ -15,10 +15,12 @@ package com.martinatanasov.colornotebook.utils.events;
 import java.util.Calendar;
 
 public interface AlarmItems {
-    void setUpAlarm(String id, String title, String node, Calendar calendar, int priority);
+
+    void setUpAlarm(String id, String title, String node, Calendar calendar, int priority, int color);
 
     void cancelAlarm(String id);
 
     //For API 34
     void cancelAllAlarms();
+
 }

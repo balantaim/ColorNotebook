@@ -12,12 +12,11 @@
 
 package com.martinatanasov.colornotebook.controllers;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
-
+import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.services.EventService;
@@ -30,7 +29,6 @@ import com.martinatanasov.colornotebook.views.main.MainActivity;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivityController {
 
@@ -50,16 +48,8 @@ public class MainActivityController {
             mainView.loadTutorial();
         } else {
             storeDataInArrays();
-            mainView.startForegroundService();
+            mainView.rescheduleWork();
             createNotification();
-
-            WorkRequest myWorkRequest =
-                    new OneTimeWorkRequest.Builder(SilentNotificationWorker.class)
-                            .setInitialDelay(5, TimeUnit.SECONDS)
-                            .addTag("123")
-                            .build();
-
-            WorkManager.getInstance(mainView).enqueue(myWorkRequest);
         }
     }
 
@@ -111,8 +101,17 @@ public class MainActivityController {
         mainView.openChartFragment(important, regular, unimportant);
     }
 
+    public void openWebsite() {
+        Uri websiteUri = Uri.parse(BuildConfig.APP_WEBSITE);
+        Intent intent = new Intent(Intent.ACTION_VIEW, websiteUri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mainView.startActivity(intent);
+        mainView.moveTaskToBack(true);
+    }
+
     public void deleteBDRecords() {
         removeAllSoundAlarms();
+        SilentNotificationWorker.cancelAllSilentNotifications(mainView.getApplicationContext());
         important = regular = unimportant = 0;
         eventService.deleteAllEvents();
     }
@@ -123,6 +122,9 @@ public class MainActivityController {
     }
 
     public void removeRowOnSwipe(String idString) {
+        AlarmEvent alarmEvent = new AlarmEvent(mainView);
+        alarmEvent.cancelAlarm(idString);
+        SilentNotificationWorker.cancelSilentNotification(mainView.getApplicationContext(), idString);
         eventService.deleteEventOnOneRow(idString);
     }
 
@@ -133,13 +135,6 @@ public class MainActivityController {
     private void createNotification() {
         NotificationCreator notificationCreator = new NotificationCreator();
         notificationCreator.createNotificationChannel(mainView);
-//        try {
-//            notificationCreator.createNotification(mainView);
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        } catch (InstantiationException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public boolean isAvailableData() {

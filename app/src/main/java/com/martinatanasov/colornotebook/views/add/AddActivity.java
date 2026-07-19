@@ -283,7 +283,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                     eventTitle.getText().toString(),
                     eventInput.getText().toString(),
                     calendar,
-                    priorityPicker);
+                    priorityPicker,
+                    colorPicker);
         }
 
         Log.d("ALARM", "The alarm is set to " + checker);

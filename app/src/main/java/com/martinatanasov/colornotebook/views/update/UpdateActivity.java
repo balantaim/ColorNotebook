@@ -306,7 +306,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                     eventTitle.getText().toString(),
                     eventInput.getText().toString(),
                     calendar,
-                    priorityPicker);
+                    priorityPicker,
+                    colorPicker);
         }
 
         //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
