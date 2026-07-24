@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -25,16 +26,17 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.controllers.ChartActivityController;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.viewmodels.ChartViewModel;
 
 import java.util.ArrayList;
 
 public class ChartActivity extends AppCompatActivity implements AppSettings {
+
     PieChart pieChart;
-    private ChartActivityController controller;
+    private ChartViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
         updateAppSettings();
 
         setContentView(R.layout.activity_chart);
+
+        viewModel = new ViewModelProvider(this).get(ChartViewModel.class);
 
         initScreenManager();
 
@@ -60,15 +64,11 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
         }
 
-        //Change Back arrow button
-//        changeArrowBackBtn();
-
-        controller = new ChartActivityController(this);
+        viewModel.importantPercent.observe(this, v -> initiatePieChart());
+        viewModel.regularPercent.observe(this, v -> initiatePieChart());
+        viewModel.unimportantPercent.observe(this, v -> initiatePieChart());
 
         checkForResources();
-
-        controller.calcPieChartData();
-        initiatePieChart();
     }
 
     private void initScreenManager() {
@@ -76,17 +76,18 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
                 getWindow(),
                 false);
     }
-    private void checkForResources(){
+
+    private void checkForResources() {
         String important = "", regular = "", unimportant = "";
-        if(getIntent().hasExtra("important") &&
+        if (getIntent().hasExtra("important") &&
                 getIntent().hasExtra("regular") &&
-                getIntent().hasExtra("unimportant")){
+                getIntent().hasExtra("unimportant")) {
             important = getIntent().getStringExtra("important");
             regular = getIntent().getStringExtra("regular");
             unimportant = getIntent().getStringExtra("unimportant");
 
-            controller.setValues(important, regular, unimportant);
-        }else{
+            viewModel.calculatePieChartData(important, regular, unimportant);
+        } else {
             Toast.makeText(this, "Not enough data!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -94,9 +95,14 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
     private void initiatePieChart() {
         pieChart = findViewById(R.id.pieChart);
         ArrayList<PieEntry> data = new ArrayList<>();
-        data.add(new PieEntry(controller.getImportantPercent(), getResources().getString(R.string.drawer_one_priority) + " %"));
-        data.add(new PieEntry(controller.getRegularPercent(), getResources().getString(R.string.drawer_two_priority) + " %"));
-        data.add(new PieEntry(controller.getUnimportantDouble(), getResources().getString(R.string.drawer_three_priority) + " %"));
+
+        Float imp = viewModel.importantPercent.getValue();
+        Float reg = viewModel.regularPercent.getValue();
+        Float uni = viewModel.unimportantPercent.getValue();
+
+        data.add(new PieEntry(imp != null ? imp : 0f, getResources().getString(R.string.drawer_one_priority) + " %"));
+        data.add(new PieEntry(reg != null ? reg : 0f, getResources().getString(R.string.drawer_two_priority) + " %"));
+        data.add(new PieEntry(uni != null ? uni : 0f, getResources().getString(R.string.drawer_three_priority) + " %"));
 
         PieDataSet pieDataSet = new PieDataSet(data, getResources().getString(R.string.events));
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -111,11 +117,6 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
         pieChart.animate();
     }
 
-    //    private void changeArrowBackBtn(){
-//        ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
-//        actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
-//        controller = new ChartActivityController(this);
-//    }
     @Override
     public void updateAppSettings() {
         PreferencesManager preferencesManager = new PreferencesManager(this);
@@ -125,4 +126,5 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
             default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
     }
+
 }

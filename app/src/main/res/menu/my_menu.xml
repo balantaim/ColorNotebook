@@ -30,5 +30,5 @@
     <item android:id="@+id/delete_all"
         android:title="@string/my_menu_dell"
         android:icon="@drawable/ic_delete"
-        app:showAsAction="never|collapseActionView"/>
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

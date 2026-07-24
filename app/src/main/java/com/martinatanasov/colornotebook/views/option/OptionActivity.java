@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -41,14 +42,14 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.BuildConfig;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.controllers.OptionActivityController;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.viewmodels.OptionViewModel;
 
 public class OptionActivity extends AppCompatActivity implements AppSettings {
 
-    private OptionActivityController controller;
+    private OptionViewModel viewModel;
     Switch switchDarkMode;
     TextView txtSize, txtVersion;
     Spinner spinner;
@@ -63,6 +64,8 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
+
+        viewModel = new ViewModelProvider(this).get(OptionViewModel.class);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar_option);
 //        setSupportActionBar(toolbar);
@@ -91,9 +94,8 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
 
         //Check for current version and store it in TextView
         updateVersionTxt();
-        //Setup controller
-        controller = new OptionActivityController(this);
-        updateSwitchPosition();
+
+        initObservers();
 
         //Load image from webserver
         initiateGlideResource();
@@ -101,19 +103,14 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
         switchDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
-                controller.setForceDarkValue(switchDarkMode.isChecked());
+                viewModel.setForceDarkMode(isChecked);
             }
         });
-        spinner.setSelection(theme);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                theme = position;
-                controller.setTheme(position);
-//                if(parent.getItemAtPosition(position).equals("Choice color")){
-//                }else{
-////                    String item = parent.getItemAtPosition(position).toString();
-//                }
+                viewModel.setTheme(position);
             }
 
             @Override
@@ -125,6 +122,19 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
         btnApply.setOnClickListener(v -> {
             startActivity(new Intent(OptionActivity.this, OptionActivity.class));
             finish();
+        });
+    }
+
+    private void initObservers() {
+        viewModel.forceDarkMode.observe(this, isChecked -> {
+            if (switchDarkMode.isChecked() != isChecked) {
+                switchDarkMode.setChecked(isChecked);
+            }
+        });
+        viewModel.currentTheme.observe(this, t -> {
+            if (spinner.getSelectedItemPosition() != t) {
+                spinner.setSelection(t);
+            }
         });
     }
 
@@ -161,10 +171,6 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(R.drawable.ic_logo)
                 .into(loadImage);
-    }
-
-    private void updateSwitchPosition() {
-        switchDarkMode.setChecked(controller.getForceDarkValue());
     }
 
     private void updateVersionTxt() {

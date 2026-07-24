@@ -37,17 +37,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.controllers.AddActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
-import com.martinatanasov.colornotebook.dto.AddEvent;
 import com.martinatanasov.colornotebook.dto.UserPermission;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.ActionBarIconSetter;
@@ -57,6 +54,7 @@ import com.martinatanasov.colornotebook.utils.EventValidator;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
+import com.martinatanasov.colornotebook.viewmodels.AddViewModel;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 import com.martinatanasov.colornotebook.views.map.MapActivity;
 
@@ -89,13 +87,10 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     );
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
-    private AddActivityController controller;
+    private AddViewModel viewModel;
     private SelectColor selectColor = new SelectColor();
-    private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
-    private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
     private Calendar calendar, calendar1;
-    private boolean firstTimeFocusText = true, isExpanded = false;
-    private int dayEvent = 0, soundNotification = 0, silentNotification = 0, colorPicker = 0, priorityPicker = 1;
+    private boolean firstTimeFocusText = true;
     TimePickerDialog timePickerDialog;
 
     @Override
@@ -107,6 +102,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         updateAppSettings();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        viewModel = new ViewModelProvider(this).get(AddViewModel.class);
 
         //hide Status Bar
         initScreenManager();
@@ -143,37 +140,108 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         calendar.set(Calendar.SECOND, 0);
         calendar1.set(Calendar.SECOND, 0);
 
-        //Custom dialog set event priority
-        //colorDialog = new Dialog(this);
+        initObservers();
+        initClickListeners();
+    }
 
-        //Set up On Click Listeners
+    private void initObservers() {
+        viewModel.title.observe(this, s -> {
+            if (!eventTitle.getText().toString().equals(s)) {
+                eventTitle.setText(s);
+            }
+        });
+        viewModel.location.observe(this, s -> {
+            if (!eventLocation.getText().toString().equals(s)) {
+                eventLocation.setText(s);
+            }
+        });
+        viewModel.input.observe(this, s -> {
+            if (!eventInput.getText().toString().equals(s)) {
+                eventInput.setText(s);
+            }
+        });
+        viewModel.colorPicker.observe(this, this::updateColorText);
+        viewModel.priorityPicker.observe(this, this::updatePriorityText);
+        viewModel.isAllDay.observe(this, isAllDay -> {
+            allDaySw.setChecked(isAllDay);
+            manageAllDaySw();
+        });
+        viewModel.isSoundNotification.observe(this, soundNotSw::setChecked);
+        viewModel.isSilentNotification.observe(this, silentNotSw::setChecked);
+        viewModel.isExpanded.observe(this, isExpanded -> {
+            if (isExpanded) {
+                expandableLayout.setVisibility(View.VISIBLE);
+                advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
+            } else {
+                expandableLayout.setVisibility(View.GONE);
+                advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
+            }
+        });
+
+        viewModel.startYear.observe(this, year -> calendar.set(Calendar.YEAR, year));
+        viewModel.startMonth.observe(this, month -> calendar.set(Calendar.MONTH, month));
+        viewModel.startDay.observe(this, day -> calendar.set(Calendar.DATE, day));
+        viewModel.startHour.observe(this, hour -> calendar.set(Calendar.HOUR_OF_DAY, hour));
+        viewModel.startMinutes.observe(this, minutes -> calendar.set(Calendar.MINUTE, minutes));
+
+        viewModel.endYear.observe(this, year -> calendar1.set(Calendar.YEAR, year));
+        viewModel.endMonth.observe(this, month -> calendar1.set(Calendar.MONTH, month));
+        viewModel.endDay.observe(this, day -> calendar1.set(Calendar.DATE, day));
+        viewModel.endHour.observe(this, hour -> calendar1.set(Calendar.HOUR_OF_DAY, hour));
+        viewModel.endMinutes.observe(this, minutes -> calendar1.set(Calendar.MINUTE, minutes));
+
+        viewModel.eventAddedEvent.observe(this, newId -> {
+            if (newId != -1) {
+                if (Boolean.TRUE.equals(viewModel.isSoundNotification.getValue())) {
+                    initiateAlarm(String.valueOf(newId));
+                }
+                if (Boolean.TRUE.equals(viewModel.isSilentNotification.getValue())) {
+                    initiateSilentNotification(String.valueOf(newId));
+                }
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
+        });
+
+        // Update Date/Time displays when any date/time component changes
+        viewModel.startYear.observe(this, v -> manageDateAndTime());
+        viewModel.startMonth.observe(this, v -> manageDateAndTime());
+        viewModel.startDay.observe(this, v -> manageDateAndTime());
+        viewModel.startHour.observe(this, v -> manageDateAndTime());
+        viewModel.startMinutes.observe(this, v -> manageDateAndTime());
+        viewModel.endYear.observe(this, v -> manageDateAndTime());
+        viewModel.endMonth.observe(this, v -> manageDateAndTime());
+        viewModel.endDay.observe(this, v -> manageDateAndTime());
+        viewModel.endHour.observe(this, v -> manageDateAndTime());
+        viewModel.endMinutes.observe(this, v -> manageDateAndTime());
+    }
+
+    private void initClickListeners() {
         btnAdd.setOnClickListener(v -> onAddBtn());
         eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
-        advOptions.setOnClickListener(view -> expandView());
+        advOptions.setOnClickListener(view -> viewModel.toggleExpanded());
         dateStart.setOnClickListener(view -> setStartDate());
         timeStart.setOnClickListener(view -> setStartTime());
         dateEnd.setOnClickListener(view -> setEndDate());
         timeEnd.setOnClickListener(view -> setEndTime());
         eventColor.setOnClickListener(view -> selectColor());
         priority.setOnClickListener(v -> managePriority());
-        //Set up Switches
         allDaySw.setOnClickListener(view -> {
-            dayEvent = allDaySw.isChecked() ? 1 : 0;
-            manageAllDaySw();
+            viewModel.isAllDay.setValue(allDaySw.isChecked());
         });
         soundNotSw.setOnClickListener(view -> {
-            soundNotification = soundNotSw.isChecked() ? 1 : 0;
-            if (soundNotification == 1) {
-                //Check for alarm permission
+            boolean checked = soundNotSw.isChecked();
+            viewModel.isSoundNotification.setValue(checked);
+            if (checked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     managePermissionForNotifications();
                 }
             }
         });
         silentNotSw.setOnClickListener(view -> {
-            silentNotification = silentNotSw.isChecked() ? 1 : 0;
-            if (silentNotification == 1) {
-                //Check for alarm permission
+            boolean checked = silentNotSw.isChecked();
+            viewModel.isSilentNotification.setValue(checked);
+            if (checked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     managePermissionForNotifications();
                 }
@@ -213,34 +281,27 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     private void selectColor() {
-        Log.d("ADD", "selectColor: " + colorPicker);
         String tag = String.valueOf(R.string.pickColor);
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             if (selectColor == null) {
                 selectColor = new SelectColor();
             }
-            selectColor.colorInit(colorPicker);
+            selectColor.colorInit(viewModel.colorPicker.getValue());
             selectColor.show(getSupportFragmentManager(), tag);
         }
     }
 
     private void managePriority() {
-        Log.d("ADD", "managePriority: " + priorityPicker);
         String tag = "PriorityDialog";
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            PriorityDialog priorityDialog = PriorityDialog.newInstance(priorityPicker);
+            PriorityDialog priorityDialog = PriorityDialog.newInstance(viewModel.priorityPicker.getValue());
             priorityDialog.show(getSupportFragmentManager(), tag);
         }
     }
 
     @Override
     public void setPriority(int status) {
-        priorityPicker = status;
-        switch (status) {
-            case 1 -> priority.setText(R.string.set_regular);
-            case 2 -> priority.setText(R.string.set_unimportant);
-            default -> priority.setText(R.string.set_important);
-        }
+        viewModel.priorityPicker.setValue(status);
     }
 
     private void manageAllDaySw() {
@@ -249,8 +310,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
             silentNotSw.setChecked(false);
             soundNotSw.setEnabled(false);
             silentNotSw.setEnabled(false);
-            soundNotification = 0;
-            silentNotification = 0;
+            viewModel.isSoundNotification.setValue(false);
+            viewModel.isSilentNotification.setValue(false);
             timeStart.setEnabled(false);
             timeEnd.setEnabled(false);
             timeStart.setAlpha(0.5f);
@@ -283,8 +344,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                     eventTitle.getText().toString(),
                     eventInput.getText().toString(),
                     calendar,
-                    priorityPicker,
-                    colorPicker);
+                    viewModel.priorityPicker.getValue(),
+                    viewModel.colorPicker.getValue());
         }
 
         Log.d("ALARM", "The alarm is set to " + checker);
@@ -301,8 +362,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                     id,
                     eventTitle.getText().toString(),
                     eventInput.getText().toString(),
-                    colorPicker,
-                    priorityPicker,
+                    viewModel.colorPicker.getValue(),
+                    viewModel.priorityPicker.getValue(),
                     delay
             );
             checker = true;
@@ -311,34 +372,13 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     private void onAddBtn() {
+        viewModel.title.setValue(eventTitle.getText().toString().trim());
+        viewModel.location.setValue(eventLocation.getText().toString().trim());
+        viewModel.input.setValue(eventInput.getText().toString().trim());
+
         if (eventTitle.getText().toString().length() > 1) {
             if (isEventTitleValid(eventTitle.getText().toString())) {
-                long timestamp = Calendar.getInstance().getTimeInMillis();
-                long newId = controller.AddUserEvent(
-                        new AddEvent(eventTitle.getText().toString().trim(),
-                                eventLocation.getText().toString().trim(),
-                                eventInput.getText().toString().trim(),
-                                colorPicker,
-                                priorityPicker,
-                                YEAR, MONTH, DAY, HOUR, MINUTES,
-                                YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
-                                timestamp,
-                                timestamp,
-                                dayEvent,
-                                soundNotification,
-                                silentNotification)
-                );
-
-                if (soundNotification == 1 && newId != -1) {
-                    initiateAlarm(String.valueOf(newId));
-                }
-
-                if (silentNotification == 1 && newId != -1) {
-                    initiateSilentNotification(String.valueOf(newId));
-                }
-
-                //Redirect to Main Activity
-                startActivity(new Intent(this, MainActivity.class));
+                viewModel.addEvent();
             }
         } else {
             Toast.makeText(this, R.string.event_title_empty, Toast.LENGTH_SHORT).show();
@@ -351,28 +391,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 //    }
 
     public void initAdvancedOptions() {
-        if ((YEAR == 0) || (YEAR2 == 0)) {
-            //Get the values from the calendar instance from now
-            HOUR = HOUR2 = calendar.get(Calendar.HOUR_OF_DAY);
-            MINUTES = MINUTES2 = calendar.get(Calendar.MINUTE);
-            YEAR = YEAR2 = calendar.get(Calendar.YEAR);
-            MONTH = MONTH2 = calendar.get(Calendar.MONTH);
-            DAY = DAY2 = calendar.get(Calendar.DATE);
-        } else {
-            //First calendar
-            calendar.set(Calendar.YEAR, YEAR);
-            calendar.set(Calendar.MONTH, MONTH);
-            calendar.set(Calendar.DATE, DAY);
-            calendar.set(Calendar.HOUR_OF_DAY, HOUR);
-            calendar.set(Calendar.MINUTE, MINUTES);
-            //Second calendar
-            calendar1.set(Calendar.YEAR, YEAR2);
-            calendar1.set(Calendar.MONTH, MONTH2);
-            calendar1.set(Calendar.DATE, DAY2);
-            calendar1.set(Calendar.HOUR_OF_DAY, HOUR2);
-            calendar1.set(Calendar.MINUTE, MINUTES2);
-        }
-        //Set up date and time pickers
         manageDateAndTime();
         manageAllDaySw();
     }
@@ -385,8 +403,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         dateStart.setText(charSequenceStart);
         dateEnd.setText(charSequenceEnd);
         if (is24format) {
-            timeStart.setText(timeToString.intToTxtTime(HOUR, MINUTES));
-            timeEnd.setText(timeToString.intToTxtTime(HOUR2, MINUTES2));
+            timeStart.setText(timeToString.intToTxtTime(viewModel.startHour.getValue(), viewModel.startMinutes.getValue()));
+            timeEnd.setText(timeToString.intToTxtTime(viewModel.endHour.getValue(), viewModel.endMinutes.getValue()));
         } else {
             CharSequence charSequenceStart1 = DateFormat.format("hh:mm aa", calendar);
             CharSequence charSequenceEnd1 = DateFormat.format("hh:mm aa", calendar1);
@@ -397,36 +415,24 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
     private void setEndDate() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
-            calendar1.set(Calendar.YEAR, year);
-            calendar1.set(Calendar.MONTH, month);
-            calendar1.set(Calendar.DATE, day);
-            CharSequence charSequence = DateFormat.format("MMM d, yyyy", calendar1);
-
-            dateEnd.setText(charSequence);
-            //save data for next reuse
-            YEAR2 = year;
-            MONTH2 = month;
-            DAY2 = day;
+            viewModel.endYear.setValue(year);
+            viewModel.endMonth.setValue(month);
+            viewModel.endDay.setValue(day);
         };
-        datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR2, MONTH2, DAY2);
+        datePickerDialog = new DatePickerDialog(this, dateSetListener,
+                viewModel.endYear.getValue(), viewModel.endMonth.getValue(), viewModel.endDay.getValue());
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
     }
 
     private void setStartDate() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DATE, day);
-            CharSequence charSequence = DateFormat.format("MMM d, yyyy", calendar);
-
-            dateStart.setText(charSequence);
-            //save data for next reuse
-            YEAR = year;
-            MONTH = month;
-            DAY = day;
+            viewModel.startYear.setValue(year);
+            viewModel.startMonth.setValue(month);
+            viewModel.startDay.setValue(day);
         };
-        datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR, MONTH, DAY);
+        datePickerDialog = new DatePickerDialog(this, dateSetListener,
+                viewModel.startYear.getValue(), viewModel.startMonth.getValue(), viewModel.startDay.getValue());
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
     }
@@ -435,20 +441,11 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
-            calendar1.set(Calendar.HOUR_OF_DAY, Hour);
-            calendar1.set(Calendar.MINUTE, Minutes);
-            CharSequence charSequence = DateFormat.format("hh:mm aa", calendar1);
-
-            if (is24format) {
-                timeEnd.setText(timeToString.intToTxtTime(Hour, Minutes));
-            } else {
-                timeEnd.setText(charSequence);
-            }
-            HOUR2 = Hour;
-            MINUTES2 = Minutes;
+            viewModel.endHour.setValue(Hour);
+            viewModel.endMinutes.setValue(Minutes);
         };
-        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
-        //timePickerDialog.setTitle("Select Time");
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
+                viewModel.endHour.getValue(), viewModel.endMinutes.getValue(), is24format);
         timePickerDialog.show();
     }
 
@@ -456,20 +453,11 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
-            calendar.set(Calendar.HOUR_OF_DAY, Hour);
-            calendar.set(Calendar.MINUTE, Minutes);
-            CharSequence charSequence = DateFormat.format("hh:mm aa", calendar);
-
-            if (is24format) {
-                timeStart.setText(timeToString.intToTxtTime(Hour, Minutes));
-            } else {
-                timeStart.setText(charSequence);
-            }
-            HOUR = Hour;
-            MINUTES = Minutes;
+            viewModel.startHour.setValue(Hour);
+            viewModel.startMinutes.setValue(Minutes);
         };
-        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
-        //timePickerDialog.setTitle("Select Time");
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
+                viewModel.startHour.getValue(), viewModel.startMinutes.getValue(), is24format);
         timePickerDialog.show();
     }
 
@@ -494,44 +482,30 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     public void checkIfCardIsExpanded() {
-        if (isExpanded) {
+        if (Boolean.TRUE.equals(viewModel.isExpanded.getValue())) {
             expandView();
         }
     }
 
     public void expandView() {
-        if (expandableLayout.getVisibility() == View.GONE) {
-            isExpanded = true;
-            TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
-            expandableLayout.setVisibility(View.VISIBLE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
-        } else {
-            isExpanded = false;
-            TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
-            expandableLayout.setVisibility(View.GONE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
-        }
+        viewModel.toggleExpanded();
     }
 
     public void updateSwValues() {
-        dayEvent = allDaySw.isChecked() ? 1 : 0;
-        soundNotification = soundNotSw.isChecked() ? 1 : 0;
-        silentNotification = silentNotSw.isChecked() ? 1 : 0;
+        viewModel.isAllDay.setValue(allDaySw.isChecked());
+        viewModel.isSoundNotification.setValue(soundNotSw.isChecked());
+        viewModel.isSilentNotification.setValue(silentNotSw.isChecked());
     }
 
     public void setSwValues() {
-        allDaySw.setChecked(dayEvent == 1);
-        soundNotSw.setChecked(soundNotification == 1);
-        silentNotSw.setChecked(silentNotification == 1);
+        allDaySw.setChecked(Boolean.TRUE.equals(viewModel.isAllDay.getValue()));
+        soundNotSw.setChecked(Boolean.TRUE.equals(viewModel.isSoundNotification.getValue()));
+        silentNotSw.setChecked(Boolean.TRUE.equals(viewModel.isSilentNotification.getValue()));
     }
 
     public void updateOnConfigurationChanges() {
-        if (colorPicker != 0) {
-            updateColorText(colorPicker);
-        }
-        if (priorityPicker != 1) {
-            updatePriorityText(priorityPicker);
-        }
+        updateColorText(viewModel.colorPicker.getValue());
+        updatePriorityText(viewModel.priorityPicker.getValue());
     }
 
     private void updatePriorityText(int value) {
@@ -549,9 +523,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
     @Override
     public void setColor(int color) {
-        Log.d("ADD", "setColor: " + color);
-        colorPicker = color;
-        updateColorText(color);
+        viewModel.colorPicker.setValue(color);
     }
 
     @Override
@@ -583,8 +555,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                 //Reset switchers
                 soundNotSw.setChecked(false);
                 silentNotSw.setChecked(false);
-                soundNotification = 0;
-                silentNotification = 0;
+                viewModel.isSoundNotification.setValue(false);
+                viewModel.isSilentNotification.setValue(false);
             }
         }
     }
@@ -635,61 +607,20 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         silentNotSw = findViewById(R.id.silentNotificationSw);
         eventColor = findViewById(R.id.eventColor);
         priority = findViewById(R.id.priority);
-        //Add controller
-        controller = new AddActivityController(this);
     }
 
     //Save Instance when you rotate the device or use recreate
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        //Set up Start/End time
-        outState.putInt("key_year", YEAR);
-        outState.putInt("key_year2", YEAR2);
-        outState.putInt("key_month", MONTH);
-        outState.putInt("key_month2", MONTH2);
-        outState.putInt("key_day", DAY);
-        outState.putInt("key_day2", DAY2);
-        outState.putInt("key_hour", HOUR);
-        outState.putInt("key_hour2", HOUR2);
-        outState.putInt("key_minutes", MINUTES);
-        outState.putInt("key_minutes2", MINUTES2);
-
-        outState.putBoolean("key_expanded_card", isExpanded);
-        outState.putBoolean("key_focus_text", firstTimeFocusText);
-        outState.putInt("key_day_event", dayEvent);
-        outState.putInt("key_sound_notification", soundNotification);
-        outState.putInt("key_silent_notification", silentNotification);
-        outState.putInt("key_color", colorPicker);
-        outState.putInt("key_priority", priorityPicker);
-
+        viewModel.title.setValue(eventTitle.getText().toString());
+        viewModel.location.setValue(eventLocation.getText().toString());
+        viewModel.input.setValue(eventInput.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
     //Restore the instance settings
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        //Set up Start/End time
-        YEAR = savedInstanceState.getInt("key_year", 0);
-        YEAR2 = savedInstanceState.getInt("key_year2", 0);
-        MONTH = savedInstanceState.getInt("key_month", 0);
-        MONTH2 = savedInstanceState.getInt("key_month2", 0);
-        DAY = savedInstanceState.getInt("key_day", 0);
-        DAY2 = savedInstanceState.getInt("key_day2", 0);
-        HOUR = savedInstanceState.getInt("key_hour", 0);
-        HOUR2 = savedInstanceState.getInt("key_hour2", 0);
-        MINUTES = savedInstanceState.getInt("key_minutes", 0);
-        MINUTES2 = savedInstanceState.getInt("key_minutes2", 0);
-
-        isExpanded = savedInstanceState.getBoolean("key_expanded_card", false);
-        firstTimeFocusText = savedInstanceState.getBoolean("key_focus_text", false);
-        dayEvent = savedInstanceState.getInt("key_day_event", 0);
-        soundNotification = savedInstanceState.getInt("key_sound_notification", 0);
-        silentNotification = savedInstanceState.getInt("key_silent_notification", 0);
-        colorPicker = savedInstanceState.getInt("key_color");
-        priorityPicker = savedInstanceState.getInt("key_priority");
-
-        setSwValues();
-        manageAllDaySw();
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -700,9 +631,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         }
         if (timePickerDialog != null && timePickerDialog.isShowing()) {
             timePickerDialog.dismiss();
-        }
-        if (controller != null) {
-            controller.close();
         }
         super.onDestroy();
     }
