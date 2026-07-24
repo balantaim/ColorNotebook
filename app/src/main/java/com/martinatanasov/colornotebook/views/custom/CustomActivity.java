@@ -22,19 +22,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.controllers.CustomActivityController;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
+import com.martinatanasov.colornotebook.viewmodels.CustomViewModel;
 
 public class CustomActivity extends AppCompatActivity implements AppSettings {
+
     Button cancelBtn;
     TextView titleTxt, nodeTxt;
     ImageView priorityIcon;
-    CustomActivityController controller;
-    private boolean isDone = false;
+    CustomViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,8 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
+
+        viewModel = new ViewModelProvider(this).get(CustomViewModel.class);
 
         //hide Status Bar
         initScreenManager();
@@ -57,7 +60,7 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
 
         updateTextFields(title, node, priority, color);
         //Cancel alarm
-        cancelBtn.setOnClickListener(view -> cancel(id));
+        cancelBtn.setOnClickListener(view -> viewModel.cancelAlarm(id));
     }
 
     private void initScreenManager() {
@@ -92,14 +95,6 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
         };
     }
 
-    private void cancel(String id){
-        if (!isDone) {
-            controller.cancelCurrentAlarm(id);
-            controller.removeSoundNotificationFrom(id);
-            controller.removeSilentNotificationFrom(id);
-            isDone = true;
-        }
-    }
     private void darkModeChecker(PreferencesManager preferencesManager) {
         if (preferencesManager.getForceDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -121,26 +116,24 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
             default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
     }
-    private void initViews(){
+
+    private void initViews() {
         cancelBtn = findViewById(R.id.cancelAlarm);
         titleTxt = findViewById(R.id.txtHeader);
         nodeTxt = findViewById(R.id.txtNode);
         priorityIcon = findViewById(R.id.priorityIcon);
-        controller = new CustomActivityController(this);
     }
 
     //Save Instance when you rotate the device or use recreate
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean("isDone", isDone);
-
         super.onSaveInstanceState(outState);
     }
+
     //Restore the instance settings
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        isDone = savedInstanceState.getBoolean("isDone", false);
-
         super.onRestoreInstanceState(savedInstanceState);
     }
+
 }

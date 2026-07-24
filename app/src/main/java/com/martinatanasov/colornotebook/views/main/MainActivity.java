@@ -34,9 +34,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,13 +47,13 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.controllers.MainActivityController;
 import com.martinatanasov.colornotebook.dto.UserEvent;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.services.RescheduleWorkerService;
 import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
+import com.martinatanasov.colornotebook.viewmodels.MainViewModel;
 import com.martinatanasov.colornotebook.views.add.AddActivity;
 import com.martinatanasov.colornotebook.views.chart.ChartActivity;
 import com.martinatanasov.colornotebook.views.option.OptionActivity;
@@ -61,10 +61,11 @@ import com.martinatanasov.colornotebook.views.tutorial.TutorialActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AppSettings {
 
-    private MainActivityController controller;
+    private MainViewModel viewModel;
     RecyclerView recyclerView;
     FloatingActionButton scroll_top;
     ExtendedFloatingActionButton add_button;
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
         //Set top toolbar
         initToolbar();
         //hide Status Bar
@@ -92,38 +96,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Make navigation drawer responsive
         navigationView.bringToFront();
 
-        //storeDataInArrays();
-        //customAdapter = new CustomAdapter(MainActivity.this, this, storeDataInObjects());
+        initObservers();
 
-        //Swipe to delete
-        /*
-        swipeAction();
-        //SimpleCallback - Drag and Drop function
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-        //recycler view Layout
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) {
-                    scroll_top.setVisibility(View.VISIBLE);
-                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
-                    scroll_top.setVisibility(View.GONE);
-            }
+        if (viewModel.shouldShowTutorial()) {
+            loadTutorial();
+        } else {
+            viewModel.init();
+            viewModel.loadData();
+            rescheduleWork();
         }
-    });
-        scroll_top.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.smoothScrollToPosition(0);
+    }
+
+    private void initObservers() {
+        viewModel.filteredEvents.observe(this, events -> {
+            if (customAdapter == null) {
+                setUpRecyclerView(events);
+            } else {
+                customAdapter.updateData(events);
+            }
+
+            if (events.isEmpty()) {
+                extendMenuButton();
+            } else {
+                shrinkMenuButton();
             }
         });
 
-         */
+        viewModel.importantCount.observe(this, imp -> updateCounters());
+        viewModel.regularCount.observe(this, reg -> updateCounters());
+        viewModel.unimportantCount.observe(this, uni -> updateCounters());
+        viewModel.soundNotificationsCount.observe(this, sound -> updateCounters());
+    }
 
-        //createDrawerCounters();
+    private void updateCounters() {
+        Integer imp = viewModel.importantCount.getValue();
+        Integer reg = viewModel.regularCount.getValue();
+        Integer uni = viewModel.unimportantCount.getValue();
+        Integer sound = viewModel.soundNotificationsCount.getValue();
+        Integer total = viewModel.events.getValue() != null ? viewModel.events.getValue().size() : 0;
+
+        if (imp != null && reg != null && uni != null && sound != null) {
+            if (counter == null) {
+                createDrawerCounters(imp, reg, uni, sound, total);
+            } else {
+                updateDrawerCounter(counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents,
+                        imp, reg, uni, sound, total);
+            }
+        }
     }
 
     public static void updateDrawerCounter(TextView counter, TextView activeAlarms, TextView importantEvents,
@@ -139,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_settings));
         setSupportActionBar(toolbar);
     }
 
@@ -232,13 +250,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int itemId = item.getItemId();
 
         if (itemId == R.id.events_chart) {
-            if (controller.isAvailableData()) {
-                controller.initiateChartFragment();
+            if (Boolean.FALSE.equals(viewModel.isDataEmpty.getValue())) {
+                initiateChartFragment();
             } else {
                 Toast.makeText(this, R.string.no_data_to_show, Toast.LENGTH_SHORT).show();
             }
         } else if (itemId == R.id.website) {
-            controller.openWebsite();
+            startActivity(viewModel.getWebsiteIntent());
+            moveTaskToBack(true);
         } else if (itemId == R.id.about) {
             if (getSupportFragmentManager().findFragmentByTag("InfoPopupFragment") == null) {
                 InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
@@ -253,6 +272,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void initiateChartFragment() {
+        openChartFragment(
+                viewModel.importantCount.getValue() != null ? viewModel.importantCount.getValue() : 0,
+                viewModel.regularCount.getValue() != null ? viewModel.regularCount.getValue() : 0,
+                viewModel.unimportantCount.getValue() != null ? viewModel.unimportantCount.getValue() : 0
+        );
     }
 
     public void openChartFragment(int important, int regular, int unimportant) {
@@ -271,6 +298,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem menuItemSearch = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) menuItemSearch.getActionView();
         assert searchView != null;
+
+        // Restore search query if it exists
+        String currentQuery = viewModel.searchQuery.getValue();
+        if (currentQuery != null && !currentQuery.isEmpty()) {
+            menuItemSearch.expandActionView();
+            searchView.setQuery(currentQuery, false);
+            searchView.clearFocus();
+        }
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -279,8 +315,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText != null && customAdapter != null) {
-                    customAdapter.getFilter().filter(newText);
+                if (newText != null) {
+                    viewModel.setSearchQuery(newText);
                 }
                 return false;
             }
@@ -291,8 +327,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Disable and Hide Menu buttons if there are no events
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (controller != null) {
-            if (!controller.isAvailableData()) {
+        if (viewModel != null) {
+            if (Boolean.TRUE.equals(viewModel.isDataEmpty.getValue())) {
                 if (menu != null) {
                     MenuItem deleteAll = menu.findItem(R.id.delete_all);
                     if (deleteAll != null) {
@@ -350,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.setTitle(R.string.alert_dialog_title);
         builder.setMessage(R.string.alert_dialog_message_dell);
         builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-            controller.deleteBDRecords();
+            viewModel.deleteBatch();
             //Refresh activity
             Intent intent = new Intent(MainActivity.this, MainActivity.class);
             startActivity(intent);
@@ -376,13 +412,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 List<String> event_id = new ArrayList<>();
 
                 long id = viewHolder.getAbsoluteAdapterPosition();
-                String idString = String.valueOf(id);
-                controller.removeRowOnSwipe(idString);
+                UserEvent event = Objects.requireNonNull(viewModel.events.getValue()).get((int) id);
+                viewModel.removeEvent(event.txtEventId());
 
-//            txtBookId
-                event_id.remove(viewHolder.getAbsoluteAdapterPosition());
-                String delItem = String.valueOf(event_id);
-//            swipeDeleteItem(delItem);
                 customAdapter.notifyDataSetChanged();
             }
         };
@@ -464,15 +496,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         scroll_top = findViewById(R.id.scrollTop);
         drawerLayout = findViewById(R.id.layoutDrawer);
         navigationView = findViewById(R.id.navDrawer);
-        controller = new MainActivityController(this);
         vibration = new VibrationUtil(this);
     }
 
     @Override
-    protected void onDestroy() {
-        if (controller != null) {
-            controller.close();
+    protected void onResume() {
+        super.onResume();
+        if (viewModel != null) {
+            viewModel.loadData();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 

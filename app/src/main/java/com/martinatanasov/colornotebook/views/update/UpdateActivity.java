@@ -39,17 +39,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.colornotebook.R;
-import com.martinatanasov.colornotebook.controllers.UpdateActivityController;
 import com.martinatanasov.colornotebook.dialog_views.ApplyColor;
 import com.martinatanasov.colornotebook.dialog_views.ApplyPriority;
 import com.martinatanasov.colornotebook.dialog_views.PriorityDialog;
 import com.martinatanasov.colornotebook.dialog_views.SelectColor;
-import com.martinatanasov.colornotebook.dto.UpdateEvent;
 import com.martinatanasov.colornotebook.dto.UserPermission;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
@@ -59,6 +56,7 @@ import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
 import com.martinatanasov.colornotebook.utils.events.VibrationUtil;
+import com.martinatanasov.colornotebook.viewmodels.UpdateViewModel;
 import com.martinatanasov.colornotebook.views.main.MainActivity;
 import com.martinatanasov.colornotebook.views.map.MapActivity;
 
@@ -83,15 +81,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
-    private String id;
-    private boolean isExpanded = false;
     private Calendar calendar, calendar1;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
-    private UpdateActivityController controller;
-    private int YEAR = 0, MONTH = 0, DAY = 0, HOUR = 0, MINUTES = 0;
-    private int YEAR2 = 0, MONTH2 = 0, DAY2 = 0, HOUR2 = 0, MINUTES2 = 0;
-    private int dayEventBool = 0, soundNotificationBool = 0, silentNotificationBool = 0, colorPicker = 0, priorityPicker = 0;
-    private long eventCreatedDate = 0, eventModifiedDate = 0;
+    private UpdateViewModel viewModel;
     private SelectColor selectColor = new SelectColor();
     private VibrationUtil vibration;
     private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
@@ -114,6 +106,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+
+        viewModel = new ViewModelProvider(this).get(UpdateViewModel.class);
 
         //hide Status Bar
         initScreenManager();
@@ -140,13 +134,19 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         //Seconds is set to 0
         calendar.set(Calendar.SECOND, 0);
         calendar1.set(Calendar.SECOND, 0);
-        //getAndSetIntentData();
+
+        initObservers();
+
+        if (savedInstanceState == null) {
+            getAndSetIntentData();
+        }
 
         initClickListeners();
 
         //Click event for edit text's icon
         eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
     }
+
     AlertDialog confirmDialog;
 
     private void initScreenManager() {
@@ -155,10 +155,98 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                 false);
     }
 
+    private void initObservers() {
+        viewModel.title.observe(this, s -> {
+            if (!eventTitle.getText().toString().equals(s)) {
+                eventTitle.setText(s);
+                setActionBarTitle();
+            }
+        });
+        viewModel.location.observe(this, s -> {
+            if (!eventLocation.getText().toString().equals(s)) {
+                eventLocation.setText(s);
+            }
+        });
+        viewModel.input.observe(this, s -> {
+            if (!eventInput.getText().toString().equals(s)) {
+                eventInput.setText(s);
+            }
+        });
+        viewModel.colorPicker.observe(this, this::updateColorText);
+        viewModel.priorityPicker.observe(this, this::updatePriorityText);
+        viewModel.isAllDay.observe(this, isAllDay -> {
+            allDaySw.setChecked(isAllDay);
+            manageAllDaySw();
+        });
+        viewModel.isSoundNotification.observe(this, soundNotSw::setChecked);
+        viewModel.isSilentNotification.observe(this, silentNotSw::setChecked);
+        viewModel.isExpanded.observe(this, isExpanded -> {
+            if (isExpanded) {
+                expandableLayout.setVisibility(View.VISIBLE);
+                advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
+            } else {
+                expandableLayout.setVisibility(View.GONE);
+                advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
+            }
+        });
+
+        viewModel.startYear.observe(this, year -> calendar.set(Calendar.YEAR, year));
+        viewModel.startMonth.observe(this, month -> calendar.set(Calendar.MONTH, month));
+        viewModel.startDay.observe(this, day -> calendar.set(Calendar.DATE, day));
+        viewModel.startHour.observe(this, hour -> calendar.set(Calendar.HOUR_OF_DAY, hour));
+        viewModel.startMinutes.observe(this, minutes -> calendar.set(Calendar.MINUTE, minutes));
+
+        viewModel.endYear.observe(this, year -> calendar1.set(Calendar.YEAR, year));
+        viewModel.endMonth.observe(this, month -> calendar1.set(Calendar.MONTH, month));
+        viewModel.endDay.observe(this, day -> calendar1.set(Calendar.DATE, day));
+        viewModel.endHour.observe(this, hour -> calendar1.set(Calendar.HOUR_OF_DAY, hour));
+        viewModel.endMinutes.observe(this, minutes -> calendar1.set(Calendar.MINUTE, minutes));
+
+        // Update displays
+        viewModel.startYear.observe(this, v -> manageDataAndTime());
+        viewModel.startMonth.observe(this, v -> manageDataAndTime());
+        viewModel.startDay.observe(this, v -> manageDataAndTime());
+        viewModel.startHour.observe(this, v -> manageDataAndTime());
+        viewModel.startMinutes.observe(this, v -> manageDataAndTime());
+        viewModel.endYear.observe(this, v -> manageDataAndTime());
+        viewModel.endMonth.observe(this, v -> manageDataAndTime());
+        viewModel.endDay.observe(this, v -> manageDataAndTime());
+        viewModel.endHour.observe(this, v -> manageDataAndTime());
+        viewModel.endMinutes.observe(this, v -> manageDataAndTime());
+        viewModel.createdDate.observe(this, v -> manageDataAndTime());
+
+        viewModel.eventUpdatedEvent.observe(this, updated -> {
+            if (updated) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        viewModel.eventDeletedEvent.observe(this, deleted -> {
+            if (deleted) {
+                finish();
+            }
+        });
+
+        viewModel.isDeleteDialogShowing.observe(this, isShowing -> {
+            if (isShowing) {
+                if (confirmDialog == null || !confirmDialog.isShowing()) {
+                    showDeleteDialog();
+                }
+            } else {
+                if (confirmDialog != null && confirmDialog.isShowing()) {
+                    confirmDialog.dismiss();
+                }
+            }
+        });
+    }
+
     private void initClickListeners() {
         btnUpdate.setOnClickListener(v -> onUpdateBtn());
         btnDelete.setOnClickListener(v -> confirmDialog());
-        advOptions.setOnClickListener(view -> expandView());
+        advOptions.setOnClickListener(view -> viewModel.toggleExpanded());
         dateStart.setOnClickListener(view -> setStartDate());
         timeStart.setOnClickListener(view -> setStartTime());
         dateEnd.setOnClickListener(view -> setEndDate());
@@ -166,22 +254,21 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         eventColor.setOnClickListener(view -> selectColor());
         priority.setOnClickListener(v -> managePriority());
         allDaySw.setOnClickListener(view -> {
-            dayEventBool = allDaySw.isChecked() ? 1 : 0;
-            manageAllDaySw();
+            viewModel.isAllDay.setValue(allDaySw.isChecked());
         });
         soundNotSw.setOnClickListener(view -> {
-            soundNotificationBool = soundNotSw.isChecked() ? 1 : 0;
-            if (soundNotificationBool == 1) {
-                //Check for alarm permission
+            boolean checked = soundNotSw.isChecked();
+            viewModel.isSoundNotification.setValue(checked);
+            if (checked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     managePermissionForNotifications();
                 }
             }
         });
         silentNotSw.setOnClickListener(view -> {
-            silentNotificationBool = silentNotSw.isChecked() ? 1 : 0;
-            if (silentNotificationBool == 1) {
-                //Check for alarm permission
+            boolean checked = silentNotSw.isChecked();
+            viewModel.isSilentNotification.setValue(checked);
+            if (checked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     managePermissionForNotifications();
                 }
@@ -211,15 +298,14 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     private void managePriority() {
         String tag = "PriorityDialog";
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            PriorityDialog priorityDialog = PriorityDialog.newInstance(priorityPicker);
+            PriorityDialog priorityDialog = PriorityDialog.newInstance(viewModel.priorityPicker.getValue());
             priorityDialog.show(getSupportFragmentManager(), getString(R.string.dialog_priority));
         }
     }
 
     @Override
     public void setPriority(int status) {
-        priorityPicker = status;
-        getPriorityString();
+        viewModel.priorityPicker.setValue(status);
     }
 
     private void manageAllDaySw() {
@@ -228,8 +314,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             silentNotSw.setChecked(false);
             soundNotSw.setEnabled(false);
             silentNotSw.setEnabled(false);
-            soundNotificationBool = 0;
-            silentNotificationBool = 0;
+            viewModel.isSoundNotification.setValue(false);
+            viewModel.isSilentNotification.setValue(false);
             timeStart.setEnabled(false);
             timeEnd.setEnabled(false);
             timeStart.setAlpha(0.5f);
@@ -250,49 +336,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         }
     }
 
-//    private boolean initiateAlarm(){
-//        boolean checker = false;
-//
-//        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//
-//        Intent intent = new Intent(this, AlarmReceiver.class);
-//        intent.putExtra("id", id);
-//        intent.putExtra("title", eventTitle.getText().toString());
-//        intent.putExtra("node", eventInput.getText().toString());
-//
-//        int requestCode = Integer.parseInt(id);
-//        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-//
-//        Calendar calendarNow = Calendar.getInstance();
-
-    /// /        if (pendingIntent != null && alarmManager != null) {
-    /// /            alarmManager.cancel(pendingIntent);
-    /// /            Log.d("ALARM", "The alarm is canceled");
-    /// /        }
-//        if (calendarNow.compareTo(calendar) < 0){
-//            //Toast.makeText(this, "Time is valid", Toast.LENGTH_SHORT).show();
-//            Log.d("ALARM", "Time is valid");
-//            checker = true;
-//        }
-//
-//        boolean exactRequired = false;
-//        //Set alarm repeating
-//        if(exactRequired) {
-//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-//                    calendar.getTimeInMillis(),
-//                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-//                    pendingIntent);
-//        } else {
-//            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-//                    calendar.getTimeInMillis(),
-//                    AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-//                    pendingIntent);
-//        }
-//
-//        //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
-//        Log.d("ALARM", "The alarm is set to " + checker);
-//        return checker;
-//    }
     private boolean initiateAlarm() {
         boolean checker = false;
 
@@ -302,12 +345,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             Log.d("ALARM", "Time is valid");
             checker = true;
             AlarmEvent alarm = new AlarmEvent(this);
-            alarm.setUpAlarm(id,
+            alarm.setUpAlarm(viewModel.id.getValue(),
                     eventTitle.getText().toString(),
                     eventInput.getText().toString(),
                     calendar,
-                    priorityPicker,
-                    colorPicker);
+                    viewModel.priorityPicker.getValue(),
+                    viewModel.colorPicker.getValue());
         }
 
         //Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
@@ -322,11 +365,11 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             long delay = calendar.getTimeInMillis() - calendarNow.getTimeInMillis();
             SilentNotificationWorker.scheduleSilentNotification(
                     this,
-                    id,
+                    viewModel.id.getValue(),
                     eventTitle.getText().toString(),
                     eventInput.getText().toString(),
-                    colorPicker,
-                    priorityPicker,
+                    viewModel.colorPicker.getValue(),
+                    viewModel.priorityPicker.getValue(),
                     delay
             );
             checker = true;
@@ -335,104 +378,77 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     private void onUpdateBtn() {
+        viewModel.title.setValue(eventTitle.getText().toString());
+        viewModel.location.setValue(eventLocation.getText().toString());
+        viewModel.input.setValue(eventInput.getText().toString());
+
         boolean checkAlarmState = true;
         if (isEventTitleValid(eventTitle.getText().toString())) {
-            if (soundNotificationBool == 1) {
+            if (Boolean.TRUE.equals(viewModel.isSoundNotification.getValue())) {
                 checkAlarmState = initiateAlarm();
                 if (!checkAlarmState) {
                     // Time is not valid, cancel existing alarm
                     AlarmEvent alarm = new AlarmEvent(this);
-                    alarm.cancelAlarm(id);
+                    alarm.cancelAlarm(viewModel.id.getValue());
                 }
             } else {
                 // Cancel existing alarm if sound notification is turned off
                 AlarmEvent alarm = new AlarmEvent(this);
-                alarm.cancelAlarm(id);
+                alarm.cancelAlarm(viewModel.id.getValue());
             }
 
-            if (silentNotificationBool == 1) {
+            if (Boolean.TRUE.equals(viewModel.isSilentNotification.getValue())) {
                 boolean checkSilentState = initiateSilentNotification();
                 if (!checkSilentState) {
-                    SilentNotificationWorker.cancelSilentNotification(this, id);
+                    SilentNotificationWorker.cancelSilentNotification(this, viewModel.id.getValue());
                 }
             } else {
-                SilentNotificationWorker.cancelSilentNotification(this, id);
+                SilentNotificationWorker.cancelSilentNotification(this, viewModel.id.getValue());
             }
 
             if (!checkAlarmState) {
-                //soundNotSw.setChecked(false);
-                soundNotificationBool = 0;
-                //return;
+                viewModel.isSoundNotification.setValue(false);
             }
             //Update DB
-            long timestamp = Calendar.getInstance().getTimeInMillis();
-            controller.updateUserEvent(new UpdateEvent(
-                    id,
-                    eventTitle.getText().toString(),
-                    eventLocation.getText().toString(),
-                    eventInput.getText().toString(),
-                    colorPicker,
-                    priorityPicker,
-                    YEAR, MONTH, DAY, HOUR, MINUTES,
-                    YEAR2, MONTH2, DAY2, HOUR2, MINUTES2,
-                    eventCreatedDate,
-                    timestamp,
-                    dayEventBool,
-                    soundNotificationBool,
-                    silentNotificationBool
-            ));
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            viewModel.updateEvent();
         } else {
             Toast.makeText(this, R.string.event_title_empty, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void getAndSetIntentData() {
-        String title, location, input;
         if (getIntent().hasExtra("id") && getIntent().hasExtra("title")) {
             // Getting data from Intent
-            if (id == null) {
-                //Log.d("update", "getAndSetIntentData: ID = null");
-                id = getIntent().getStringExtra("id");
-                title = getIntent().getStringExtra("title");
-                location = getIntent().getStringExtra("location");
-                input = getIntent().getStringExtra("input");
-                eventTitle.setText(title);
-                eventLocation.setText(location);
-                eventInput.setText(input);
+            viewModel.id.setValue(getIntent().getStringExtra("id"));
+            viewModel.title.setValue(getIntent().getStringExtra("title"));
+            viewModel.location.setValue(getIntent().getStringExtra("location"));
+            viewModel.input.setValue(getIntent().getStringExtra("input"));
 
-                setActionBarTitle();
+            setActionBarTitle();
 
-                //colorPicker = Integer.parseInt(getIntent().getStringExtra("color"));
-                colorPicker = getIntent().getIntExtra("color", 0);
-                priorityPicker = getIntent().getIntExtra("avatar", 0);
-                YEAR = getIntent().getIntExtra("start_year", 0);
-                MONTH = getIntent().getIntExtra("start_mouth", 0);
-                DAY = getIntent().getIntExtra("start_day", 0);
-                HOUR = getIntent().getIntExtra("start_hour", 0);
-                MINUTES = getIntent().getIntExtra("start_minutes", 0);
-                YEAR2 = getIntent().getIntExtra("end_year", 0);
-                MONTH2 = getIntent().getIntExtra("end_month", 0);
-                DAY2 = getIntent().getIntExtra("end_day", 0);
-                HOUR2 = getIntent().getIntExtra("end_hour", 0);
-                MINUTES2 = getIntent().getIntExtra("end_minutes", 0);
+            viewModel.colorPicker.setValue(getIntent().getIntExtra("color", 0));
+            viewModel.priorityPicker.setValue(getIntent().getIntExtra("avatar", 0));
 
-                eventCreatedDate = getIntent().getLongExtra("created_date", 0);
-                eventModifiedDate = getIntent().getLongExtra("modified_date", 0);
+            viewModel.startYear.setValue(getIntent().getIntExtra("start_year", 0));
+            viewModel.startMonth.setValue(getIntent().getIntExtra("start_mouth", 0));
+            viewModel.startDay.setValue(getIntent().getIntExtra("start_day", 0));
+            viewModel.startHour.setValue(getIntent().getIntExtra("start_hour", 0));
+            viewModel.startMinutes.setValue(getIntent().getIntExtra("start_minutes", 0));
 
-                dayEventBool = getIntent().getIntExtra("all_day", 0);
-                soundNotificationBool = getIntent().getIntExtra("sound_notifications", 0);
-                silentNotificationBool = getIntent().getIntExtra("silent_notifications", 0);
-                //Setting Intent data
-                allDaySw.setChecked(dayEventBool == 1);
-                soundNotSw.setChecked(soundNotificationBool == 1);
-                silentNotSw.setChecked(silentNotificationBool == 1);
-                manageAllDaySw();
-            }
-            //Log.d("update", "getAndSetIntentData: ID is valid");
-            //Update date and time data
+            viewModel.endYear.setValue(getIntent().getIntExtra("end_year", 0));
+            viewModel.endMonth.setValue(getIntent().getIntExtra("end_month", 0));
+            viewModel.endDay.setValue(getIntent().getIntExtra("end_day", 0));
+            viewModel.endHour.setValue(getIntent().getIntExtra("end_hour", 0));
+            viewModel.endMinutes.setValue(getIntent().getIntExtra("end_minutes", 0));
+
+            viewModel.createdDate.setValue(getIntent().getLongExtra("created_date", 0));
+            viewModel.modifiedDate.setValue(getIntent().getLongExtra("modified_date", 0));
+
+            viewModel.isAllDay.setValue(getIntent().getIntExtra("all_day", 0) == 1);
+            viewModel.isSoundNotification.setValue(getIntent().getIntExtra("sound_notifications", 0) == 1);
+            viewModel.isSilentNotification.setValue(getIntent().getIntExtra("silent_notifications", 0) == 1);
+
+            manageAllDaySw();
             manageDataAndTime();
         } else {
             Toast.makeText(this, R.string.toast_no_data, Toast.LENGTH_SHORT).show();
@@ -443,29 +459,19 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     private void manageDataAndTime() {
         //Import data to calendar 1 and 2
         boolean is24format = DateFormat.is24HourFormat(this);
-        calendar.set(Calendar.YEAR, YEAR);
-        calendar.set(Calendar.MONTH, MONTH);
-        calendar.set(Calendar.DATE, DAY);
-        calendar.set(Calendar.HOUR_OF_DAY, HOUR);
-        calendar.set(Calendar.MINUTE, MINUTES);
-        calendar1.set(Calendar.YEAR, YEAR2);
-        calendar1.set(Calendar.MONTH, MONTH2);
-        calendar1.set(Calendar.DATE, DAY2);
-        calendar1.set(Calendar.HOUR_OF_DAY, HOUR2);
-        calendar1.set(Calendar.MINUTE, MINUTES2);
 
         CharSequence charSequence = DateFormat.format("MMM d, yyyy", calendar);
         CharSequence charSequence1 = DateFormat.format("MMM d, yyyy", calendar1);
         dateStart.setText(charSequence);
         dateEnd.setText(charSequence1);
         //Set color picker text
-        updateColorText(colorPicker);
+        updateColorText(viewModel.colorPicker.getValue());
         //Update create/modified date
-        createdDate.setText(timestampToDate(eventCreatedDate, is24format));
-        modifiedDate.setText(timestampToDate(eventModifiedDate, is24format));
+        createdDate.setText(timestampToDate(viewModel.createdDate.getValue(), is24format));
+        modifiedDate.setText(timestampToDate(viewModel.modifiedDate.getValue(), is24format));
         if (is24format) {
-            timeStart.setText(timeToString.intToTxtTime(HOUR, MINUTES));
-            timeEnd.setText(timeToString.intToTxtTime(HOUR2, MINUTES2));
+            timeStart.setText(timeToString.intToTxtTime(viewModel.startHour.getValue(), viewModel.startMinutes.getValue()));
+            timeEnd.setText(timeToString.intToTxtTime(viewModel.endHour.getValue(), viewModel.endMinutes.getValue()));
         } else {
             CharSequence timeSequence = DateFormat.format("hh:mm aa", calendar);
             CharSequence timeSequence1 = DateFormat.format("hh:mm aa", calendar1);
@@ -480,13 +486,17 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             if (selectColor == null) {
                 selectColor = new SelectColor();
             }
-            selectColor.colorInit(colorPicker);
+            selectColor.colorInit(viewModel.colorPicker.getValue());
             selectColor.show(getSupportFragmentManager(), tag);
         }
     }
 
     private void getPriorityString() {
-        switch (priorityPicker) {
+        Integer priorityVal = viewModel.priorityPicker.getValue();
+        if (priorityVal == null) {
+            return;
+        }
+        switch (priorityVal) {
             case 1 -> priority.setText(R.string.set_regular);
             case 2 -> priority.setText(R.string.set_unimportant);
             default -> priority.setText(R.string.set_important);
@@ -495,35 +505,23 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
     private void setEndDate() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
-            calendar1.set(Calendar.YEAR, year);
-            calendar1.set(Calendar.MONTH, month);
-            calendar1.set(Calendar.DATE, day);
-            CharSequence charSequence = DateFormat.format("MMM d, yyyy", calendar1);
-            dateEnd.setText(charSequence);
-            //save data for next reuse
-            YEAR2 = year;
-            MONTH2 = month;
-            DAY2 = day;
+            viewModel.endYear.setValue(year);
+            viewModel.endMonth.setValue(month);
+            viewModel.endDay.setValue(day);
         };
-        datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR2, MONTH2, DAY2);
-        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog = new DatePickerDialog(this, dateSetListener,
+                viewModel.endYear.getValue(), viewModel.endMonth.getValue(), viewModel.endDay.getValue());
         datePickerDialog.show();
     }
 
     private void setStartDate() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DATE, day);
-            CharSequence charSequence = DateFormat.format("MMM d, yyyy", calendar);
-            dateStart.setText(charSequence);
-            //save data for next reuse
-            YEAR = year;
-            MONTH = month;
-            DAY = day;
+            viewModel.startYear.setValue(year);
+            viewModel.startMonth.setValue(month);
+            viewModel.startDay.setValue(day);
         };
-        datePickerDialog = new DatePickerDialog(this, dateSetListener, YEAR, MONTH, DAY);
-        //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog = new DatePickerDialog(this, dateSetListener,
+                viewModel.startYear.getValue(), viewModel.startMonth.getValue(), viewModel.startDay.getValue());
         datePickerDialog.show();
     }
 
@@ -531,19 +529,11 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
-            calendar1.set(Calendar.HOUR_OF_DAY, Hour);
-            calendar1.set(Calendar.MINUTE, Minutes);
-            CharSequence charSequence = DateFormat.format("hh:mm aa", calendar1);
-            if (is24format) {
-                timeEnd.setText(timeToString.intToTxtTime(Hour, Minutes));
-            } else {
-                timeEnd.setText(charSequence);
-            }
-            HOUR2 = Hour;
-            MINUTES2 = Minutes;
+            viewModel.endHour.setValue(Hour);
+            viewModel.endMinutes.setValue(Minutes);
         };
-        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR2, MINUTES2, is24format);
-        //timePickerDialog.setTitle("Select Time");
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
+                viewModel.endHour.getValue(), viewModel.endMinutes.getValue(), is24format);
         timePickerDialog.show();
     }
 
@@ -551,19 +541,11 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
-            calendar.set(Calendar.HOUR_OF_DAY, Hour);
-            calendar.set(Calendar.MINUTE, Minutes);
-            CharSequence charSequence = DateFormat.format("hh:mm aa", calendar);
-            if (is24format) {
-                timeStart.setText(timeToString.intToTxtTime(Hour, Minutes));
-            } else {
-                timeStart.setText(charSequence);
-            }
-            HOUR = Hour;
-            MINUTES = Minutes;
+            viewModel.startHour.setValue(Hour);
+            viewModel.startMinutes.setValue(Minutes);
         };
-        timePickerDialog = new TimePickerDialog(this, onTimeSetListener, HOUR, MINUTES, is24format);
-        //timePickerDialog.setTitle("Select Time");
+        timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
+                viewModel.startHour.getValue(), viewModel.startMinutes.getValue(), is24format);
         timePickerDialog.show();
     }
 
@@ -574,7 +556,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         //Add vibration effect
         vibration.vibrate();
 
-        showDeleteDialog();
+        viewModel.isDeleteDialogShowing.setValue(true);
     }
 
     private void showDeleteDialog() {
@@ -590,11 +572,14 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         builder.setTitle(displayTitle);
         builder.setMessage(getString(R.string.alert_dialog_message_sure_to_dell));
         builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-            controller.deleteCurrentEvent(id);
-            finish();
+            viewModel.isDeleteDialogShowing.setValue(false);
+            viewModel.deleteEvent();
         });
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
-
+            viewModel.isDeleteDialogShowing.setValue(false);
+        });
+        builder.setOnCancelListener(dialog -> {
+            viewModel.isDeleteDialogShowing.setValue(false);
         });
         confirmDialog = builder.create();
         confirmDialog.show();
@@ -617,17 +602,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     public void expandView() {
-        if (expandableLayout.getVisibility() == View.GONE) {
-            isExpanded = true;
-            TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
-            expandableLayout.setVisibility(View.VISIBLE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_up, 0);
-        } else {
-            isExpanded = false;
-            TransitionManager.beginDelayedTransition(cardView, new AutoTransition());
-            expandableLayout.setVisibility(View.GONE);
-            advOptions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_event_settings, 0, R.drawable.ic_arrow_down, 0);
-        }
+        viewModel.toggleExpanded();
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -644,16 +619,14 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     public void checkIfCardIsExpanded() {
-        if (isExpanded) {
+        if (Boolean.TRUE.equals(viewModel.isExpanded.getValue())) {
             expandView();
         }
     }
 
     public void updateOnConfigurationChanges() {
-//        Log.d("ADD", "update On ConfigurationChanges Color: " + colorPicker);
-//        Log.d("ADD", "update On ConfigurationChanges Priority: " + priorityPicker);
-        updateColorText(colorPicker);
-        updatePriorityText(priorityPicker);
+        updateColorText(viewModel.colorPicker.getValue());
+        updatePriorityText(viewModel.priorityPicker.getValue());
     }
 
     private void updatePriorityText(int value) {
@@ -667,15 +640,15 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     }
 
     public void updateSwValues() {
-        dayEventBool = allDaySw.isChecked() ? 1 : 0;
-        soundNotificationBool = soundNotSw.isChecked() ? 1 : 0;
-        silentNotificationBool = silentNotSw.isChecked() ? 1 : 0;
+        viewModel.isAllDay.setValue(allDaySw.isChecked());
+        viewModel.isSoundNotification.setValue(soundNotSw.isChecked());
+        viewModel.isSilentNotification.setValue(silentNotSw.isChecked());
     }
 
     public void setSwValues() {
-        allDaySw.setChecked(dayEventBool == 1);
-        soundNotSw.setChecked(soundNotificationBool == 1);
-        silentNotSw.setChecked(silentNotificationBool == 1);
+        allDaySw.setChecked(Boolean.TRUE.equals(viewModel.isAllDay.getValue()));
+        soundNotSw.setChecked(Boolean.TRUE.equals(viewModel.isSoundNotification.getValue()));
+        silentNotSw.setChecked(Boolean.TRUE.equals(viewModel.isSilentNotification.getValue()));
     }
 
     private void updateColorText(int color) {
@@ -685,8 +658,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
     @Override
     public void setColor(int color) {
-        colorPicker = color;
-        updateColorText(color);
+        viewModel.colorPicker.setValue(color);
     }
 
     @Override
@@ -718,8 +690,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
                 //Reset switchers
                 soundNotSw.setChecked(false);
                 silentNotSw.setChecked(false);
-                soundNotificationBool = 0;
-                silentNotificationBool = 0;
+                viewModel.isSoundNotification.setValue(false);
+                viewModel.isSilentNotification.setValue(false);
             }
         }
     }
@@ -773,70 +745,21 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         priority = findViewById(R.id.priority2);
         createdDate = findViewById(R.id.created);
         modifiedDate = findViewById(R.id.modified);
-        controller = new UpdateActivityController(this);
         vibration = new VibrationUtil(this);
     }
 
     //Save Instance when you rotate the device or use recreate
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        //Set up Start/End time
-        outState.putInt("key_year", YEAR);
-        outState.putInt("key_year2", YEAR2);
-        outState.putInt("key_month", MONTH);
-        outState.putInt("key_month2", MONTH2);
-        outState.putInt("key_day", DAY);
-        outState.putInt("key_day2", DAY2);
-        outState.putInt("key_hour", HOUR);
-        outState.putInt("key_hour2", HOUR2);
-        outState.putInt("key_minutes", MINUTES);
-        outState.putInt("key_minutes2", MINUTES2);
-
-        outState.putBoolean("key_expanded_card", isExpanded);
-        outState.putInt("key_day_event", dayEventBool);
-        outState.putInt("key_sound_notification", soundNotificationBool);
-        outState.putInt("key_silent_notification", silentNotificationBool);
-        outState.putInt("key_color", colorPicker);
-        outState.putInt("key_priority", priorityPicker);
-        outState.putLong("key_created", eventCreatedDate);
-        outState.putLong("key_modified", eventModifiedDate);
-        outState.putString("key_id", id);
-        outState.putBoolean("key_confirm_dialog_showing", confirmDialog != null && confirmDialog.isShowing());
-
+        viewModel.title.setValue(eventTitle.getText().toString());
+        viewModel.location.setValue(eventLocation.getText().toString());
+        viewModel.input.setValue(eventInput.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
     //Restore the instance settings
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        //Set up Start/End time
-        YEAR = savedInstanceState.getInt("key_year", 0);
-        YEAR2 = savedInstanceState.getInt("key_year2", 0);
-        MONTH = savedInstanceState.getInt("key_month", 0);
-        MONTH2 = savedInstanceState.getInt("key_month2", 0);
-        DAY = savedInstanceState.getInt("key_day", 0);
-        DAY2 = savedInstanceState.getInt("key_day2", 0);
-        HOUR = savedInstanceState.getInt("key_hour", 0);
-        HOUR2 = savedInstanceState.getInt("key_hour2", 0);
-        MINUTES = savedInstanceState.getInt("key_minutes", 0);
-        MINUTES2 = savedInstanceState.getInt("key_minutes2", 0);
-
-        isExpanded = savedInstanceState.getBoolean("key_expanded_card", false);
-        dayEventBool = savedInstanceState.getInt("key_day_event", 0);
-        soundNotificationBool = savedInstanceState.getInt("key_sound_notification", 0);
-        silentNotificationBool = savedInstanceState.getInt("key_silent_notification", 0);
-        colorPicker = savedInstanceState.getInt("key_color");
-        priorityPicker = savedInstanceState.getInt("key_priority");
-        eventCreatedDate = savedInstanceState.getLong("key_created");
-        eventModifiedDate = savedInstanceState.getLong("key_modified");
-        id = savedInstanceState.getString("key_id");
-
-        setSwValues();
-        manageAllDaySw();
-        if (savedInstanceState.getBoolean("key_confirm_dialog_showing", false)) {
-            showDeleteDialog();
-        }
-
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -850,9 +773,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         }
         if (confirmDialog != null && confirmDialog.isShowing()) {
             confirmDialog.dismiss();
-        }
-        if (controller != null) {
-            controller.close();
         }
         super.onDestroy();
     }

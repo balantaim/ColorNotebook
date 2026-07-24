@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> implements Filterable {
+
     private final Context context;
     //private static final String TAG = "CustomAdapter";
     private List<UserEvent> userModelList;
@@ -194,6 +195,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return userFilteredList;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateData(List<UserEvent> events) {
+        this.userModelListFiltered = events;
+        this.userModelList = events;
+        notifyDataSetChanged();
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView allDayIcon, soundNotificationsIcon, silentNotificationIcon;
@@ -213,5 +221,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             soundNotificationsIcon = itemView.findViewById(R.id.soundNotificationsIcon);
             silentNotificationIcon = itemView.findViewById(R.id.silentNotificationIcon);
         }
+
     }
+
 }

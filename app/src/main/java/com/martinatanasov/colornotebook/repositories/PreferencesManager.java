@@ -14,10 +14,11 @@ package com.martinatanasov.colornotebook.repositories;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PreferencesManager {
+
     private static final String SHARED_PREF = "sharedPref";
     private static final String THEME = "theme";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
@@ -26,14 +27,14 @@ public class PreferencesManager {
     private static int theme = -1;
     private static boolean darkThemeOn = false, disableTutorial = false;
 
-    public PreferencesManager(Activity myActivity) {
-        sharedPreferences = myActivity.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+    public PreferencesManager(Context context) {
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         darkThemeOn = checkForceDarkMode();
         theme = getThemeValue();
     }
 
-    public PreferencesManager(Activity myActivity, boolean visualResources, boolean statusTutorial) {
-        sharedPreferences = myActivity.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+    public PreferencesManager(Context context, boolean visualResources, boolean statusTutorial) {
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         if (visualResources) {
             darkThemeOn = checkForceDarkMode();
             theme = getThemeValue();
@@ -87,4 +88,5 @@ public class PreferencesManager {
     private boolean checkForceDarkMode() {
         return sharedPreferences.getBoolean(SWITCH_DARK_MODE, false);
     }
+
 }

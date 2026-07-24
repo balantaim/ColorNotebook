@@ -52,6 +52,11 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
     private static final int QUERY_LIMIT = 5;
     private static final double DEFAULT_LOCATION_ZOOM = 10.0D;
     private static final double FOCUSED_LOCATION_ZOOM = 18.0D;
+    private static final String KEY_LOCATION_NAME = "key_location_name";
+    private static final String KEY_LATITUDE = "key_latitude";
+    private static final String KEY_LONGITUDE = "key_longitude";
+    private static final String KEY_ZOOM_LEVEL = "key_zoom_level";
+    private static final String KEY_HAS_MARKER = "key_has_marker";
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -77,6 +82,9 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
         Configuration.getInstance().setUserAgentValue(getPackageName());
 
         initViews();
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
         initAdapter();
         setOnClickListeners();
     }
@@ -239,6 +247,32 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_LOCATION_NAME, location);
+        outState.putDouble(KEY_LATITUDE, mapView.getMapCenter().getLatitude());
+        outState.putDouble(KEY_LONGITUDE, mapView.getMapCenter().getLongitude());
+        outState.putDouble(KEY_ZOOM_LEVEL, mapView.getZoomLevelDouble());
+        outState.putBoolean(KEY_HAS_MARKER, mapView.getOverlays().contains(marker));
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        location = savedInstanceState.getString(KEY_LOCATION_NAME, "");
+        double lat = savedInstanceState.getDouble(KEY_LATITUDE);
+        double lon = savedInstanceState.getDouble(KEY_LONGITUDE);
+        double zoom = savedInstanceState.getDouble(KEY_ZOOM_LEVEL, DEFAULT_LOCATION_ZOOM);
+        boolean hasMarker = savedInstanceState.getBoolean(KEY_HAS_MARKER, false);
+
+        GeoPoint point = new GeoPoint(lat, lon);
+        mapView.getController().setCenter(point);
+        mapView.getController().setZoom(zoom);
+
+        if (hasMarker) {
+            setMarker(point, location);
+        }
     }
 
     @Override

@@ -161,5 +161,7 @@
     <string name="silent_notifications_content_text">You have new notes</string>
     <string name="silent_notifications_name">Silent notifications</string>
     <string name="silent_notifications_description">Channel for silent notifications</string>
+    <string name="channel_name_silent_notifications">Silent notifications</string>
+    <string name="channel_name_sound_notifications">Sound notifications</string>
 
 </resources>
