@@ -48,6 +48,10 @@ public class AddViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isSoundNotification = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> isSilentNotification = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> isExpanded = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isStartDatePickerShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isEndDatePickerShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isStartTimePickerShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isEndTimePickerShowing = new MutableLiveData<>(false);
     public LiveData<Long> eventAddedEvent = _eventAddedEvent;
 
     public AddViewModel(@NonNull Application application) {

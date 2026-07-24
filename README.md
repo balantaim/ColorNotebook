@@ -5,11 +5,12 @@
 > [!IMPORTANT]
 > Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos, is excluded from this license. Any use of these file types or logos requires prior permission from the respective owner or copyright holder.
 
-Software architecture: Layered (n-tier) architecture using the MVC design pattern in the presentation layer
+Software architecture: Layered (n-tier) architecture using the MVVM (Model-View-ViewModel) design
+pattern in the presentation layer
 
 Project status: in development
 
-This is notebook for life events. 
+This is notebook for life events.
 
 Features: App themes, CRUD new Event, add location, avatar and priority, start-end time (time and date picker), android notifications, alarm manager, notification channels, custom dialogs, tutorial guide, navigation menu, animated views, REST requests, UI test example with Espresso.
 

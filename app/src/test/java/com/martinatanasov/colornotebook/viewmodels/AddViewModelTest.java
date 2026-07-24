@@ -23,10 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 34)
 public class AddViewModelTest {
 
     private AddViewModel viewModel;
@@ -43,6 +41,10 @@ public class AddViewModelTest {
         assertEquals(0, (int) viewModel.colorPicker.getValue());
         assertEquals(1, (int) viewModel.priorityPicker.getValue());
         assertNotNull(viewModel.startYear.getValue());
+        assertEquals(false, viewModel.isStartDatePickerShowing.getValue());
+        assertEquals(false, viewModel.isEndDatePickerShowing.getValue());
+        assertEquals(false, viewModel.isStartTimePickerShowing.getValue());
+        assertEquals(false, viewModel.isEndTimePickerShowing.getValue());
     }
 
     @Test

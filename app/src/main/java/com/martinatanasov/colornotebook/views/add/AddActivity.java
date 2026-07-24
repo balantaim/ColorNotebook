@@ -178,6 +178,27 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
             }
         });
 
+        viewModel.isStartDatePickerShowing.observe(this, isShowing -> {
+            if (isShowing && (datePickerDialog == null || !datePickerDialog.isShowing())) {
+                showStartDatePicker();
+            }
+        });
+        viewModel.isEndDatePickerShowing.observe(this, isShowing -> {
+            if (isShowing && (datePickerDialog == null || !datePickerDialog.isShowing())) {
+                showEndDatePicker();
+            }
+        });
+        viewModel.isStartTimePickerShowing.observe(this, isShowing -> {
+            if (isShowing && (timePickerDialog == null || !timePickerDialog.isShowing())) {
+                showStartTimePicker();
+            }
+        });
+        viewModel.isEndTimePickerShowing.observe(this, isShowing -> {
+            if (isShowing && (timePickerDialog == null || !timePickerDialog.isShowing())) {
+                showEndTimePicker();
+            }
+        });
+
         viewModel.startYear.observe(this, year -> calendar.set(Calendar.YEAR, year));
         viewModel.startMonth.observe(this, month -> calendar.set(Calendar.MONTH, month));
         viewModel.startDay.observe(this, day -> calendar.set(Calendar.DATE, day));
@@ -414,6 +435,10 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     private void setEndDate() {
+        viewModel.isEndDatePickerShowing.setValue(true);
+    }
+
+    private void showEndDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
             viewModel.endYear.setValue(year);
             viewModel.endMonth.setValue(month);
@@ -422,10 +447,19 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         datePickerDialog = new DatePickerDialog(this, dateSetListener,
                 viewModel.endYear.getValue(), viewModel.endMonth.getValue(), viewModel.endDay.getValue());
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.setOnDismissListener(dialog -> {
+            if (!isChangingConfigurations()) {
+                viewModel.isEndDatePickerShowing.setValue(false);
+            }
+        });
         datePickerDialog.show();
     }
 
     private void setStartDate() {
+        viewModel.isStartDatePickerShowing.setValue(true);
+    }
+
+    private void showStartDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
             viewModel.startYear.setValue(year);
             viewModel.startMonth.setValue(month);
@@ -434,10 +468,19 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         datePickerDialog = new DatePickerDialog(this, dateSetListener,
                 viewModel.startYear.getValue(), viewModel.startMonth.getValue(), viewModel.startDay.getValue());
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.setOnDismissListener(dialog -> {
+            if (!isChangingConfigurations()) {
+                viewModel.isStartDatePickerShowing.setValue(false);
+            }
+        });
         datePickerDialog.show();
     }
 
     private void setEndTime() {
+        viewModel.isEndTimePickerShowing.setValue(true);
+    }
+
+    private void showEndTimePicker() {
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
@@ -446,10 +489,19 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         };
         timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
                 viewModel.endHour.getValue(), viewModel.endMinutes.getValue(), is24format);
+        timePickerDialog.setOnDismissListener(dialog -> {
+            if (!isChangingConfigurations()) {
+                viewModel.isEndTimePickerShowing.setValue(false);
+            }
+        });
         timePickerDialog.show();
     }
 
     private void setStartTime() {
+        viewModel.isStartTimePickerShowing.setValue(true);
+    }
+
+    private void showStartTimePicker() {
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
@@ -458,6 +510,11 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         };
         timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
                 viewModel.startHour.getValue(), viewModel.startMinutes.getValue(), is24format);
+        timePickerDialog.setOnDismissListener(dialog -> {
+            if (!isChangingConfigurations()) {
+                viewModel.isStartTimePickerShowing.setValue(false);
+            }
+        });
         timePickerDialog.show();
     }
 

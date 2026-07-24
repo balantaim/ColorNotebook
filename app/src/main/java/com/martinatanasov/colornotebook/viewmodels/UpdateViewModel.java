@@ -53,6 +53,10 @@ public class UpdateViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isSilentNotification = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> isExpanded = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> isDeleteDialogShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isStartDatePickerShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isEndDatePickerShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isStartTimePickerShowing = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isEndTimePickerShowing = new MutableLiveData<>(false);
     public LiveData<Boolean> eventUpdatedEvent = _eventUpdatedEvent;
     public LiveData<Boolean> eventDeletedEvent = _eventDeletedEvent;
 
