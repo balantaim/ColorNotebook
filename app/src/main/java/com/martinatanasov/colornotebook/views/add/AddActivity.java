@@ -611,6 +611,8 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     private void updatePriorityText(int value) {
         if (value == 0) {
             priority.setText(R.string.set_important);
+        } else if (value == 1) {
+            priority.setText(R.string.set_regular);
         } else {
             priority.setText(R.string.set_unimportant);
         }
