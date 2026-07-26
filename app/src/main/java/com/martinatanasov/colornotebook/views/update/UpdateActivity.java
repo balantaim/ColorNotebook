@@ -536,6 +536,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         };
         datePickerDialog = new DatePickerDialog(this, dateSetListener,
                 viewModel.endYear.getValue(), viewModel.endMonth.getValue(), viewModel.endDay.getValue());
+
+        Calendar minDate = Calendar.getInstance();
+        minDate.set(viewModel.startYear.getValue(), viewModel.startMonth.getValue(), viewModel.startDay.getValue(), 0, 0, 0);
+        minDate.set(Calendar.MILLISECOND, 0);
+        datePickerDialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
+
         datePickerDialog.setOnDismissListener(dialog -> {
             if (!isChangingConfigurations()) {
                 viewModel.isEndDatePickerShowing.setValue(false);
@@ -553,6 +559,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             viewModel.startYear.setValue(year);
             viewModel.startMonth.setValue(month);
             viewModel.startDay.setValue(day);
+            syncEndWithStartIfNeeded(year, month, day, viewModel.startHour.getValue(), viewModel.startMinutes.getValue());
         };
         datePickerDialog = new DatePickerDialog(this, dateSetListener,
                 viewModel.startYear.getValue(), viewModel.startMonth.getValue(), viewModel.startDay.getValue());
@@ -572,6 +579,17 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         boolean is24format = DateFormat.is24HourFormat(this);
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
+            if (Objects.equals(viewModel.startYear.getValue(), viewModel.endYear.getValue()) &&
+                    Objects.equals(viewModel.startMonth.getValue(), viewModel.endMonth.getValue()) &&
+                    Objects.equals(viewModel.startDay.getValue(), viewModel.endDay.getValue())) {
+
+                if (Hour < viewModel.startHour.getValue() || (Hour == viewModel.startHour.getValue() && Minutes < viewModel.startMinutes.getValue())) {
+                    Toast.makeText(this, R.string.toast_invalid_time, Toast.LENGTH_SHORT).show();
+                    viewModel.endHour.setValue(viewModel.startHour.getValue());
+                    viewModel.endMinutes.setValue(viewModel.startMinutes.getValue());
+                    return;
+                }
+            }
             viewModel.endHour.setValue(Hour);
             viewModel.endMinutes.setValue(Minutes);
         };
@@ -595,6 +613,8 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         TimePickerDialog.OnTimeSetListener onTimeSetListener = (timePicker, Hour, Minutes) -> {
             viewModel.startHour.setValue(Hour);
             viewModel.startMinutes.setValue(Minutes);
+            syncEndWithStartIfNeeded(viewModel.startYear.getValue(), viewModel.startMonth.getValue(),
+                    viewModel.startDay.getValue(), Hour, Minutes);
         };
         timePickerDialog = new TimePickerDialog(this, onTimeSetListener,
                 viewModel.startHour.getValue(), viewModel.startMinutes.getValue(), is24format);
@@ -604,6 +624,25 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             }
         });
         timePickerDialog.show();
+    }
+
+    private void syncEndWithStartIfNeeded(int sYear, int sMonth, int sDay, int sHour, int sMin) {
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(sYear, sMonth, sDay, sHour, sMin, 0);
+        startCal.set(Calendar.MILLISECOND, 0);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(viewModel.endYear.getValue(), viewModel.endMonth.getValue(), viewModel.endDay.getValue(),
+                viewModel.endHour.getValue(), viewModel.endMinutes.getValue(), 0);
+        endCal.set(Calendar.MILLISECOND, 0);
+
+        if (startCal.after(endCal)) {
+            viewModel.endYear.setValue(sYear);
+            viewModel.endMonth.setValue(sMonth);
+            viewModel.endDay.setValue(sDay);
+            viewModel.endHour.setValue(sHour);
+            viewModel.endMinutes.setValue(sMin);
+        }
     }
 
     void confirmDialog() {

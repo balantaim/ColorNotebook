@@ -117,6 +117,7 @@
     <string name="toast_enter_location">Please enter a location</string>
     <string name="toast_not_found_location">Location not found</string>
     <string name="toast_error_search_location">Error searching location</string>
+    <string name="toast_invalid_time">Invalid time: End time cannot be before start time!</string>
     <!--    Priority picker-->
     <string name="set_important">Important</string>
     <string name="set_regular">Regular</string>
