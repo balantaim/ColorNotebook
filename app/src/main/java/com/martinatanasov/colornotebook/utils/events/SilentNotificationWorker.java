@@ -101,7 +101,7 @@ public class SilentNotificationWorker extends Worker {
             int colorRes = getEventColor(colorIndex);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.drawable.ic_bookmark_check)
                     .setContentTitle(title)
                     .setContentText(stripNote(note))
                     .setColor(ContextCompat.getColor(context, colorRes))
@@ -110,7 +110,7 @@ public class SilentNotificationWorker extends Worker {
                     .setGroup(GROUP_KEY_SILENT);
 
             NotificationCompat.Builder summaryBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.drawable.ic_bookmark_check)
                     .setContentTitle(context.getString(R.string.silent_notifications_title))
                     .setContentText(context.getString(R.string.silent_notifications_content_text))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
