@@ -59,6 +59,7 @@
     <string name="location">Location</string>
     <string name="hintTitle">Event Title</string>
     <string name="hintLocation">Add Location</string>
+    <string name="hintFindLocation">Find location</string>
     <string name="hintNote">Add your event node</string>
     <string name="advanced_options">Advanced Options</string>
     <string name="from">From:</string>

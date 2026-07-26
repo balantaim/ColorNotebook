@@ -304,7 +304,12 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
 
-                mapActivityLauncher.launch(new Intent(this, MapActivity.class));
+                Intent intent = new Intent(this, MapActivity.class);
+                String locationText = eventLocation.getText().toString().trim();
+                if (!locationText.isEmpty()) {
+                    intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
+                }
+                mapActivityLauncher.launch(intent);
                 return true;
             }
         }

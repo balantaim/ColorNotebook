@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -126,6 +127,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel.regularCount.observe(this, reg -> updateCounters());
         viewModel.unimportantCount.observe(this, uni -> updateCounters());
         viewModel.soundNotificationsCount.observe(this, sound -> updateCounters());
+
+        viewModel.isDataEmpty.observe(this, isEmpty -> {
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            if (toolbar != null) {
+                if (Boolean.FALSE.equals(isEmpty)) {
+                    toolbar.setOverflowIcon(AppCompatResources.getDrawable(this, R.drawable.ic_settings));
+                } else {
+                    toolbar.setOverflowIcon(null);
+                }
+            }
+        });
     }
 
     private void updateCounters() {

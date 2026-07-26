@@ -289,7 +289,12 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                mapActivityLauncher.launch(new Intent(this, MapActivity.class));
+                Intent intent = new Intent(this, MapActivity.class);
+                String locationText = eventLocation.getText().toString().trim();
+                if (!locationText.isEmpty()) {
+                    intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
+                }
+                mapActivityLauncher.launch(intent);
                 return true;
             }
         }

@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -39,6 +40,7 @@ import java.util.function.Consumer;
 
 public class MapActivity extends AppCompatActivity implements AppSettings {
 
+    public static final String EXTRA_LOCATION = "extra_location";
     private MapView mapView;
     private AutoCompleteTextView searchEditText;
     private Button searchButton;
@@ -84,6 +86,8 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
         initViews();
         if (savedInstanceState != null) {
             restoreState(savedInstanceState);
+        } else {
+            handleIntent(getIntent());
         }
         initAdapter();
         setOnClickListeners();
@@ -111,6 +115,7 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                confirmButton.setEnabled(false);
                 searchHandler.removeCallbacks(searchRunnable);
                 searchRunnable = () -> loadSuggestions(s.toString(), suggestions -> {
                     adapter.clear();
@@ -135,6 +140,7 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
             Toast.makeText(this, R.string.toast_enter_location, Toast.LENGTH_SHORT).show();
             return;
         }
+        hideKeyboard();
         new Thread(() -> {
             try {
                 LocationResult result = mapService.search(query);
@@ -150,6 +156,7 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
 
                         setMarker(point, result.locationName());
                         location = result.locationName();
+                        confirmButton.setEnabled(true);
                         mapView.invalidate();
                     });
                 } else {
@@ -210,6 +217,13 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
 
     private void setOnClickListeners() {
         searchButton.setOnClickListener(v -> searchLocation(searchEditText.getText().toString()));
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchLocation(searchEditText.getText().toString());
+                return true;
+            }
+            return false;
+        });
         this.searchEditText.setOnItemClickListener((parent, view, position, id) -> {
             String selected = (String) parent.getItemAtPosition(position);
             searchLocation(selected);
@@ -223,11 +237,22 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
         });
     }
 
+    private void hideKeyboard() {
+        android.view.View view = this.getCurrentFocus();
+        if (view != null) {
+            android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+    }
+
     private void initViews() {
         mapView = findViewById(R.id.mapView);
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = findViewById(R.id.searchButton);
         confirmButton = findViewById(R.id.confirmButton);
+        confirmButton.setEnabled(false);
         mapService = new MapService(getString(R.string.app_name_full));
         marker = new Marker(mapView);
 
@@ -272,6 +297,16 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
 
         if (hasMarker) {
             setMarker(point, location);
+        }
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent != null && intent.hasExtra(EXTRA_LOCATION)) {
+            String initialLocation = intent.getStringExtra(EXTRA_LOCATION);
+            if (initialLocation != null && !initialLocation.trim().isEmpty()) {
+                searchEditText.setText(initialLocation);
+                searchLocation(initialLocation);
+            }
         }
     }
 
