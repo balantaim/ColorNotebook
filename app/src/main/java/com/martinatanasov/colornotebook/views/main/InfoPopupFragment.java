@@ -70,8 +70,7 @@ public class InfoPopupFragment extends DialogFragment {
                         try {
                             JSONObject objectAppList = response.getJSONObject(0);
                             String devName = objectAppList.getString("developer");
-                            txtDevelopers.setText("Created by:\n\n" + devName
-                                    + "\n\nVersion " + BuildConfig.VERSION_NAME);
+                            txtDevelopers.setText(getString(R.string.about_dev_info, devName, BuildConfig.VERSION_NAME));
                         } catch (JSONException e) {
                             txtDevelopers.setText(getResources().getString(R.string.error_404));
                             e.printStackTrace();

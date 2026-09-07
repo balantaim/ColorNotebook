@@ -27,13 +27,13 @@
                     android:title="@string/drawer_sound_notifications"/>
                 <item android:id="@+id/importantEvents"
                     android:icon="@drawable/ic_important_priority"
-                    android:title="@string/drawer_one_priority"/>
+                    android:title="@string/drawer_one_priority_important" />
                 <item android:id="@+id/regularEvents"
                     android:icon="@drawable/ic_regular_priority"
-                    android:title="@string/drawer_two_priority"/>
+                    android:title="@string/drawer_two_priority_regular" />
                 <item android:id="@+id/lowPriorityEvents"
                     android:icon="@drawable/ic_unimportant_priority"
-                    android:title="@string/drawer_three_priority"/>
+                    android:title="@string/drawer_three_priority_unimportant" />
             </group>
         </menu>
    </item>

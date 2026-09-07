@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     TextView counter, activeAlarms, importantEvents, regularEvents, lowPriorityEvents;
     private VibrationUtil vibration;
+    private View sortBar;
+    private TextView txtFilterSummary;
     private static ItemTouchHelper.SimpleCallback itemTouchHelperCallback = null;
 
     @Override
@@ -133,11 +135,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (toolbar != null) {
                 if (Boolean.FALSE.equals(isEmpty)) {
                     toolbar.setOverflowIcon(AppCompatResources.getDrawable(this, R.drawable.ic_settings));
+                    if (sortBar != null) {
+                        sortBar.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     toolbar.setOverflowIcon(null);
+                    if (sortBar != null) {
+                        sortBar.setVisibility(View.GONE);
+                    }
                 }
             }
         });
+
+        viewModel.orderFilter.observe(this, order -> updateFilterSummary());
+        viewModel.priorityFilter.observe(this, priority -> updateFilterSummary());
+    }
+
+    private void updateFilterSummary() {
+        OrderFilter order = viewModel.orderFilter.getValue();
+        PriorityFilter priority = viewModel.priorityFilter.getValue();
+        if (order != null && priority != null) {
+            String summary = getString(R.string.filter_summary_format, getString(order.getDisplayNameResId()), getString(priority.getDisplayNameResId()));
+            txtFilterSummary.setText(summary);
+        }
     }
 
     private void updateCounters() {
@@ -187,6 +207,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         add_button.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddActivity.class);
             startActivity(intent);
+        });
+
+        sortBar.setOnClickListener(v -> {
+            FilterBottomSheetFragment filterFragment = new FilterBottomSheetFragment();
+            filterFragment.show(getSupportFragmentManager(), "FilterFragment");
         });
     }
 
@@ -275,6 +300,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 InfoPopupFragment infoPopupFragment = new InfoPopupFragment();
                 infoPopupFragment.show(getSupportFragmentManager(), "InfoPopupFragment");
             }
+        } else if (itemId == R.id.importantEvents) {
+            viewModel.setPriorityFilter(PriorityFilter.IMPORTANT);
+        } else if (itemId == R.id.regularEvents) {
+            viewModel.setPriorityFilter(PriorityFilter.REGULAR);
+        } else if (itemId == R.id.lowPriorityEvents) {
+            viewModel.setPriorityFilter(PriorityFilter.UNIMPORTANT);
         } else if (itemId == R.id.exit) {
             finishAffinity();
         } else {
@@ -509,6 +540,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.layoutDrawer);
         navigationView = findViewById(R.id.navDrawer);
         vibration = new VibrationUtil(this);
+        sortBar = findViewById(R.id.sortBar);
+        txtFilterSummary = findViewById(R.id.txtFilterSummary);
     }
 
     @Override

@@ -101,9 +101,9 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
         Float reg = viewModel.regularPercent.getValue();
         Float uni = viewModel.unimportantPercent.getValue();
 
-        data.add(new PieEntry(imp != null ? imp : 0f, getResources().getString(R.string.drawer_one_priority) + " %"));
-        data.add(new PieEntry(reg != null ? reg : 0f, getResources().getString(R.string.drawer_two_priority) + " %"));
-        data.add(new PieEntry(uni != null ? uni : 0f, getResources().getString(R.string.drawer_three_priority) + " %"));
+        data.add(new PieEntry(imp != null ? imp : 0f, getResources().getString(R.string.drawer_one_priority_important) + " %"));
+        data.add(new PieEntry(reg != null ? reg : 0f, getResources().getString(R.string.drawer_two_priority_regular) + " %"));
+        data.add(new PieEntry(uni != null ? uni : 0f, getResources().getString(R.string.drawer_three_priority_unimportant) + " %"));
 
         int textColor = getThemeTextColor();
 
