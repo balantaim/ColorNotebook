@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,10 +42,10 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         //Load skin resource
         updateAppSettings();
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
         viewModel = new ViewModelProvider(this).get(ChartViewModel.class);
@@ -139,6 +140,7 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
             case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
             default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
+        EdgeToEdge.enable(this);
     }
 
 }
