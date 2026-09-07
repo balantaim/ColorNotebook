@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Load skin resource
         updateAppSettings();
 
-        setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
@@ -523,7 +523,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Load Theme Setting
     @Override
     public void updateAppSettings() {
-        EdgeToEdge.enable(this);
         PreferencesManager preferencesManager = new PreferencesManager(this, true, false);
         darkModeChecker(preferencesManager);
         switch (preferencesManager.getCurrentTheme()) {
@@ -531,6 +530,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
             default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
+        EdgeToEdge.enable(this);
     }
 
     private void initViews() {
