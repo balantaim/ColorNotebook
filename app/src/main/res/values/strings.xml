@@ -43,9 +43,9 @@
     <string name="drawer_exit">Exit</string>
     <string name="drawer_total">Total events</string>
     <string name="drawer_sound_notifications">Active alarms</string>
-    <string name="drawer_one_priority">Important</string>
-    <string name="drawer_two_priority">Regular</string>
-    <string name="drawer_three_priority">Unimportant</string>
+    <string name="drawer_one_priority_important">Important</string>
+    <string name="drawer_two_priority_regular">Regular</string>
+    <string name="drawer_three_priority_unimportant">Unimportant</string>
     <string name="drawer_about">About DEV</string>
     <string name="drawer_website">Website</string>
     <!-- Strings used for fragments for navigation -->
@@ -105,6 +105,7 @@
     <string name="ok">OK</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
     <string name="select_priority">Select event priority</string>
     <string name="dialog_priority">Priority Dialog</string>
     <!--    Toast-->
@@ -166,4 +167,16 @@
     <string name="channel_name_silent_notifications">Silent notifications</string>
     <string name="channel_name_sound_notifications">Sound notifications</string>
 
+    <!-- Sorting & Filtering -->
+    <string name="filter_title">Filters</string>
+    <string name="filter_order_label">Order Filter</string>
+    <string name="filter_priority_label">Priority Filter</string>
+    <string name="filter_a_z">A-Z</string>
+    <string name="filter_z_a">Z-A</string>
+    <string name="filter_date">Date</string>
+    <string name="filter_reverse_date">Reverse Date</string>
+    <string name="filter_no_preference">No preference</string>
+    <string name="about_dev_info">Created by:\n\n%1$s\n\nVersion %2$s</string>
+    <string name="filter_summary_format">Filter - %1$s, %2$s</string>
+    <string name="filter_icon">Filter icon</string>
 </resources>

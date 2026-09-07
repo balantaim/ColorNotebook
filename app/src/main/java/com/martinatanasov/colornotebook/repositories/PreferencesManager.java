@@ -17,12 +17,17 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.martinatanasov.colornotebook.views.main.OrderFilter;
+import com.martinatanasov.colornotebook.views.main.PriorityFilter;
+
 public class PreferencesManager {
 
     private static final String SHARED_PREF = "sharedPref";
     private static final String THEME = "theme";
     private static final String DISABLE_TUTORIAL = "disableTutorial";
     private static final String SWITCH_DARK_MODE = "switchDarkMode";
+    private static final String ORDER_FILTER = "orderFilter";
+    private static final String PRIORITY_FILTER = "priorityFilter";
     private static SharedPreferences sharedPreferences;
     private static int theme = -1;
     private static boolean darkThemeOn = false, disableTutorial = false;
@@ -31,6 +36,7 @@ public class PreferencesManager {
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         darkThemeOn = checkForceDarkMode();
         theme = getThemeValue();
+        disableTutorial = checkTutorial();
     }
 
     public PreferencesManager(Context context, boolean visualResources, boolean statusTutorial) {
@@ -74,6 +80,36 @@ public class PreferencesManager {
         darkThemeOn = forceDarkValue;
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SWITCH_DARK_MODE, forceDarkValue);
+        editor.apply();
+    }
+
+    public OrderFilter getOrderFilter() {
+        String name = sharedPreferences.getString(ORDER_FILTER, OrderFilter.DATE.name());
+        try {
+            return OrderFilter.valueOf(name);
+        } catch (IllegalArgumentException e) {
+            return OrderFilter.DATE;
+        }
+    }
+
+    public void setOrderFilter(OrderFilter orderFilter) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(ORDER_FILTER, orderFilter.name());
+        editor.apply();
+    }
+
+    public PriorityFilter getPriorityFilter() {
+        String name = sharedPreferences.getString(PRIORITY_FILTER, PriorityFilter.NONE.name());
+        try {
+            return PriorityFilter.valueOf(name);
+        } catch (IllegalArgumentException e) {
+            return PriorityFilter.NONE;
+        }
+    }
+
+    public void setPriorityFilter(PriorityFilter priorityFilter) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PRIORITY_FILTER, priorityFilter.name());
         editor.apply();
     }
 

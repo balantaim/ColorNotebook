@@ -15,7 +15,6 @@ package com.martinatanasov.colornotebook.viewmodels;
 import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -31,10 +30,11 @@ import com.martinatanasov.colornotebook.services.EventServiceImpl;
 import com.martinatanasov.colornotebook.utils.events.AlarmEvent;
 import com.martinatanasov.colornotebook.utils.events.NotificationCreator;
 import com.martinatanasov.colornotebook.utils.events.SilentNotificationWorker;
+import com.martinatanasov.colornotebook.views.main.OrderFilter;
+import com.martinatanasov.colornotebook.views.main.PriorityFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
@@ -43,6 +43,8 @@ public class MainViewModel extends AndroidViewModel {
     private final PreferencesManager preferencesManager;
     private final MutableLiveData<List<UserEvent>> _events = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> _searchQuery = new MutableLiveData<>("");
+    private final MutableLiveData<OrderFilter> _orderFilter = new MutableLiveData<>(OrderFilter.DATE);
+    private final MutableLiveData<PriorityFilter> _priorityFilter = new MutableLiveData<>(PriorityFilter.NONE);
     private final MediatorLiveData<List<UserEvent>> _filteredEvents = new MediatorLiveData<>();
     private final MutableLiveData<Integer> _importantCount = new MutableLiveData<>(0);
     private final MutableLiveData<Integer> _regularCount = new MutableLiveData<>(0);
@@ -51,6 +53,8 @@ public class MainViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> _isDataEmpty = new MutableLiveData<>(true);
     public LiveData<List<UserEvent>> events = _events;
     public LiveData<String> searchQuery = _searchQuery;
+    public LiveData<OrderFilter> orderFilter = _orderFilter;
+    public LiveData<PriorityFilter> priorityFilter = _priorityFilter;
     public LiveData<List<UserEvent>> filteredEvents = _filteredEvents;
     public LiveData<Integer> importantCount = _importantCount;
     public LiveData<Integer> regularCount = _regularCount;
@@ -61,44 +65,108 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
         this.eventService = new EventServiceImpl(application);
-        this.preferencesManager = new PreferencesManager(application, false, true);
+        this.preferencesManager = new PreferencesManager(application);
+        _orderFilter.setValue(preferencesManager.getOrderFilter());
+        _priorityFilter.setValue(preferencesManager.getPriorityFilter());
         setupFiltering();
     }
 
     private void setupFiltering() {
         _filteredEvents.addSource(_events, events -> applyFilter());
         _filteredEvents.addSource(_searchQuery, query -> applyFilter());
+        _filteredEvents.addSource(_orderFilter, order -> applyFilter());
+        _filteredEvents.addSource(_priorityFilter, priority -> applyFilter());
         applyFilter();
     }
 
     private void applyFilter() {
         List<UserEvent> allEvents = _events.getValue();
         String query = _searchQuery.getValue();
+        OrderFilter order = _orderFilter.getValue();
+        PriorityFilter priority = _priorityFilter.getValue();
 
         if (allEvents == null) {
             _filteredEvents.setValue(new ArrayList<>());
             return;
         }
 
-        if (query == null || query.isEmpty()) {
-            _filteredEvents.setValue(allEvents);
-            return;
+        List<UserEvent> result = new ArrayList<>(allEvents);
+
+        // Apply Search
+        if (query != null && !query.isEmpty()) {
+            String search = query.toLowerCase();
+            List<UserEvent> filtered = new ArrayList<>();
+            for (UserEvent event : result) {
+                if (event.txtEventTitle().toLowerCase().contains(search) ||
+                        event.txtNode().toLowerCase().contains(search) ||
+                        event.txtEventLocation().toLowerCase().contains(search)) {
+                    filtered.add(event);
+                }
+            }
+            result = filtered;
         }
 
-        String search = query.toLowerCase();
-        List<UserEvent> filtered = new ArrayList<>();
-        for (UserEvent event : allEvents) {
-            if (event.txtEventTitle().toLowerCase().contains(search) ||
-                    event.txtNode().toLowerCase().contains(search) ||
-                    event.txtEventLocation().toLowerCase().contains(search)) {
-                filtered.add(event);
-            }
+        // Apply Priority Filter (Now as sorting primary key)
+        int targetPriority = -1;
+        if (priority != null && priority != PriorityFilter.NONE) {
+            targetPriority = switch (priority) {
+                case IMPORTANT -> 0;
+                case REGULAR -> 1;
+                case UNIMPORTANT -> 2;
+                default -> -1;
+            };
         }
-        _filteredEvents.setValue(filtered);
+
+        final int finalTargetPriority = targetPriority;
+
+        // Apply Ordering & Priority Sorting
+        Collections.sort(result, (e1, e2) -> {
+            if (finalTargetPriority != -1) {
+                int p1 = e1.int_avatar_picker();
+                int p2 = e2.int_avatar_picker();
+                if (p1 == finalTargetPriority && p2 != finalTargetPriority) {
+                    return -1;
+                }
+                if (p1 != finalTargetPriority && p2 == finalTargetPriority) {
+                    return 1;
+                }
+            }
+
+            // Apply OrderFilter
+            if (order != null) {
+                return switch (order) {
+                    case A_Z -> e1.txtEventTitle().compareToIgnoreCase(e2.txtEventTitle());
+                    case Z_A -> e2.txtEventTitle().compareToIgnoreCase(e1.txtEventTitle());
+                    case DATE -> Long.compare(e2.long_created_date(), e1.long_created_date());
+                    case REVERSE_DATE ->
+                            Long.compare(e1.long_created_date(), e2.long_created_date());
+                };
+            }
+            return 0;
+        });
+
+        _filteredEvents.setValue(result);
     }
 
     public void setSearchQuery(String query) {
         _searchQuery.setValue(query);
+    }
+
+    /**
+     * Set events directly for testing purposes.
+     */
+    public void setEvents(List<UserEvent> events) {
+        _events.setValue(events);
+    }
+
+    public void setOrderFilter(OrderFilter order) {
+        _orderFilter.setValue(order);
+        preferencesManager.setOrderFilter(order);
+    }
+
+    public void setPriorityFilter(PriorityFilter priority) {
+        _priorityFilter.setValue(priority);
+        preferencesManager.setPriorityFilter(priority);
     }
 
     public void init() {
@@ -134,14 +202,6 @@ public class MainViewModel extends AndroidViewModel {
         _soundNotificationsCount.setValue(sound);
     }
 
-    public void sortEvents() {
-        List<UserEvent> currentEvents = _events.getValue();
-        if (currentEvents != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            List<UserEvent> sorted = new ArrayList<>(currentEvents);
-            Collections.sort(sorted, Comparator.comparing(UserEvent::txtEventTitle).reversed());
-            _events.setValue(sorted);
-        }
-    }
 
     public void deleteBatch() {
         AlarmEvent alarmEvent = new AlarmEvent(getApplication());

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
+  ~
+  ~ IMPORTANT!
+  ~ Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+  ~ is excluded from this license. Any use of these file types or logos requires
+  ~ prior permission from the respective owner or copyright holder.
+  ~
+  ~ This work is licensed under the terms of the MIT license.
+  ~ For a copy, see <https://opensource.org/licenses/MIT>.
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+
+    <path
+        android:fillColor="?attr/colorOnPrimary"
+        android:pathData="M400,720L400,640L560,640L560,720L400,720ZM240,520L240,440L720,440L720,520L240,520ZM120,320L120,240L840,240L840,320L120,320Z" />
+
+</vector>
