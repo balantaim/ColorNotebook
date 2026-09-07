@@ -72,7 +72,7 @@
         <!-- Navigation bar color. -->
         <item name="android:navigationBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/gray</item>
+        <item name="android:windowBackground">@color/gray_new</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
@@ -111,6 +111,14 @@
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
+    </style>
+
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 <!--    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">-->

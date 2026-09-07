@@ -32,6 +32,11 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private MainViewModel viewModel;
 
+    @Override
+    public int getTheme() {
+        return R.style.CustomBottomSheetDialogTheme;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
