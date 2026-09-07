@@ -29,10 +29,10 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ToolbarTheme"
-        app:navigationIconTint="?attr/customColorValue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIconTint="?attr/customColorValue"
         app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
         app:title="@string/add_event"
         app:titleTextColor="?attr/customColorValue" />
@@ -182,15 +182,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
+                            android:drawablePadding="8dp"
                             android:elevation="8dp"
                             android:paddingVertical="10dp"
                             android:text="@string/advanced_options"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:drawablePadding="8dp"
-                            app:drawableStartCompat="@drawable/ic_event_settings"
-                            app:drawableRightCompat="@drawable/ic_arrow_down" />
+                            app:drawableRightCompat="@drawable/ic_arrow_down"
+                            app:drawableStartCompat="@drawable/ic_event_settings" />
 
                     </LinearLayout>
 
@@ -212,6 +212,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="32dp"
                                 android:focusable="false"
+                                android:paddingVertical="8dp"
                                 android:text="@string/from"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -223,6 +224,7 @@
                                 android:layout_marginTop="32dp"
                                 android:contentDescription="@string/startTime"
                                 android:focusable="false"
+                                android:paddingVertical="8dp"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -234,6 +236,7 @@
                                 android:layout_marginTop="32dp"
                                 android:contentDescription="@string/startDate"
                                 android:focusable="false"
+                                android:paddingVertical="8dp"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                                 app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -245,6 +248,7 @@
                                 android:layout_height="wrap_content"
                                 android:contentDescription="@string/endTime"
                                 android:focusable="false"
+                                android:paddingVertical="8dp"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintBottom_toBottomOf="@+id/txtTo"
@@ -259,6 +263,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="48dp"
                                 android:focusable="false"
+                                android:paddingVertical="8dp"
                                 android:paddingBottom="16dp"
                                 android:text="@string/to"
                                 app:layout_constraintBottom_toTopOf="@+id/allDaySw"
@@ -271,6 +276,7 @@
                                 android:layout_height="wrap_content"
                                 android:contentDescription="@string/endTime"
                                 android:focusable="false"
+                                android:paddingVertical="8dp"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
                                 app:layout_constraintBottom_toBottomOf="@+id/endDate"

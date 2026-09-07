@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.color.MaterialColors;
 import com.martinatanasov.colornotebook.R;
 import com.martinatanasov.colornotebook.repositories.PreferencesManager;
 import com.martinatanasov.colornotebook.utils.AppSettings;
@@ -104,9 +105,11 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
         data.add(new PieEntry(reg != null ? reg : 0f, getResources().getString(R.string.drawer_two_priority) + " %"));
         data.add(new PieEntry(uni != null ? uni : 0f, getResources().getString(R.string.drawer_three_priority) + " %"));
 
+        int textColor = getThemeTextColor();
+
         PieDataSet pieDataSet = new PieDataSet(data, getResources().getString(R.string.events));
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setValueTextColor(textColor);
         pieDataSet.setValueTextSize(18f);
 
         PieData pieData = new PieData(pieDataSet);
@@ -114,7 +117,18 @@ public class ChartActivity extends AppCompatActivity implements AppSettings {
         pieChart.setData(pieData);
         pieChart.getDescription().setEnabled(false);
         pieChart.setCenterText(getResources().getString(R.string.events));
+        pieChart.setCenterTextColor(textColor);
+        pieChart.setCenterTextSize(18f);
+        pieChart.setEntryLabelColor(textColor);
+        pieChart.setEntryLabelTextSize(14f);
+        pieChart.getLegend().setTextColor(textColor);
+        pieChart.getLegend().setTextSize(14f);
+        pieChart.setHoleColor(Color.TRANSPARENT);
         pieChart.animate();
+    }
+
+    private int getThemeTextColor() {
+        return MaterialColors.getColor(this, android.R.attr.textColorPrimary, Color.BLACK);
     }
 
     @Override
