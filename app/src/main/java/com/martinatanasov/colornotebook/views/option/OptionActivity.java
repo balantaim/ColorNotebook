@@ -67,36 +67,23 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
 
         viewModel = new ViewModelProvider(this).get(OptionViewModel.class);
 
-//        Toolbar toolbar = findViewById(R.id.toolbar_option);
-//        setSupportActionBar(toolbar);
-
         MaterialToolbar toolbar = findViewById(R.id.toolbar_option);
         setSupportActionBar(toolbar);
 
         // Enable back button
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);// show back arrow
-//            Drawable arrow = getResources().getDrawable(R.drawable.ic_custom_arrow);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                arrow.setTint(getResources().getColor(R.color.white, getTheme())); // set color
-//            }
-//            getSupportActionBar().setHomeAsUpIndicator(arrow);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
         }
 
-        //hide Status Bar
+        //Hide Status Bar
         initScreenManager();
-
-        //Change Back arrow button
-//        setupActionBar();
         //Find units by ID
         initViews();
 
         //Check for current version and store it in TextView
         updateVersionTxt();
-
         initObservers();
-
         //Load image from webserver
         initiateGlideResource();
 
@@ -145,7 +132,7 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
     }
 
     private void initiateGlideResource() {
-        final String imgUrl = BuildConfig.LOADING_IMAGE + ".png";
+        final String imgUrl = BuildConfig.LOADING_IMAGE;
         Glide.with(OptionActivity.this)
                 .load(imgUrl)
                 .listener(new RequestListener<Drawable>() {

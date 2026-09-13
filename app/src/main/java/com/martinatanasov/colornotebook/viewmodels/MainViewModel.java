@@ -202,7 +202,6 @@ public class MainViewModel extends AndroidViewModel {
         _soundNotificationsCount.setValue(sound);
     }
 
-
     public void deleteBatch() {
         AlarmEvent alarmEvent = new AlarmEvent(getApplication());
         alarmEvent.cancelAllAlarms();
