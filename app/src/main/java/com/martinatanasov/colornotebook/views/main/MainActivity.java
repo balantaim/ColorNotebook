@@ -193,10 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
     }
 
-    public CustomAdapter getAdapter() {
-        return customAdapter;
-    }
-
     private void initScreenManager() {
         new ScreenManager(findViewById(R.id.layoutDrawer),
                 getWindow(),

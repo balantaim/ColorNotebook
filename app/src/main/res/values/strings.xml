@@ -15,6 +15,7 @@
     <string name="app_name_full">Oasis - Color Events</string>
     <string name="creator">Created by Rainbow Infinium</string>
     <string name="app_logo">Application logo</string>
+    <string name="developer_name">Martin Atanasov</string>
 
     <string-array name="skin_array">
         <item>Teal</item>
