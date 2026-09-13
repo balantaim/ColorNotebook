@@ -131,7 +131,7 @@
     <string name="set_important">Важно</string>
     <string name="set_regular">Стандартно</string>
     <string name="set_unimportant">Маловажно</string>
-    <string name="events_chart">Графика на събитията - ДЕМО</string>
+    <string name="events_chart">Графика на събитията</string>
     <string name="events">Събития</string>
     <!--    Manifest label activity-->
     <string name="chart">Графика</string>
