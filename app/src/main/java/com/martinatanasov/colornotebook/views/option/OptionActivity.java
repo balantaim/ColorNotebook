@@ -12,14 +12,12 @@
 
 package com.martinatanasov.colornotebook.views.option;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -30,6 +28,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -47,16 +47,16 @@ import com.martinatanasov.colornotebook.utils.AppSettings;
 import com.martinatanasov.colornotebook.utils.ScreenManager;
 import com.martinatanasov.colornotebook.viewmodels.OptionViewModel;
 
+import java.util.Objects;
+
 public class OptionActivity extends AppCompatActivity implements AppSettings {
 
     private OptionViewModel viewModel;
     Switch switchDarkMode;
-    TextView txtSize, txtVersion;
-    Spinner spinner;
-    Button btnApply;
+    TextView txtVersion;
+    Spinner spinnerThemeColor, spinnerLanguage;
     ImageView loadImage, shimmerView;
     ShimmerFrameLayout shimmer;
-    private static int theme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
             }
         });
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerThemeColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 viewModel.setTheme(position);
@@ -106,10 +106,40 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
             }
         });
 
-        btnApply.setOnClickListener(v -> {
-            startActivity(new Intent(OptionActivity.this, OptionActivity.class));
-            finish();
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                AppLanguage language = switch (position) {
+                    case 1 -> AppLanguage.ENGLISH;
+                    case 2 -> AppLanguage.BULGARIAN;
+                    case 3 -> AppLanguage.RUSSIAN;
+                    default -> AppLanguage.SYSTEM_DEFAULT;
+                };
+
+                // Only apply if it's different from current application locales to avoid loops
+                LocaleListCompat currentAppLocales = AppCompatDelegate.getApplicationLocales();
+                AppLanguage currentAppLanguage = currentAppLocales.isEmpty() ?
+                        AppLanguage.SYSTEM_DEFAULT :
+                        AppLanguage.fromTag(Objects.requireNonNull(currentAppLocales.get(0)).getLanguage());
+
+                if (language != currentAppLanguage) {
+                    viewModel.setLanguage(language);
+                    applyLanguage(language.getTag());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
+    }
+
+    private void applyLanguage(String languageTag) {
+        LocaleListCompat appLocales = languageTag.isEmpty() ?
+                LocaleListCompat.getEmptyLocaleList() :
+                LocaleListCompat.forLanguageTags(languageTag);
+        AppCompatDelegate.setApplicationLocales(appLocales);
     }
 
     private void initObservers() {
@@ -119,8 +149,19 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
             }
         });
         viewModel.currentTheme.observe(this, t -> {
-            if (spinner.getSelectedItemPosition() != t) {
-                spinner.setSelection(t);
+            if (spinnerThemeColor.getSelectedItemPosition() != t) {
+                spinnerThemeColor.setSelection(t);
+            }
+        });
+        viewModel.currentLanguage.observe(this, lang -> {
+            int position = switch (lang) {
+                case ENGLISH -> 1;
+                case BULGARIAN -> 2;
+                case RUSSIAN -> 3;
+                default -> 0;
+            };
+            if (spinnerLanguage.getSelectedItemPosition() != position) {
+                spinnerLanguage.setSelection(position);
             }
         });
     }
@@ -178,9 +219,8 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
         txtVersion = findViewById(R.id.version);
         loadImage = findViewById(R.id.loadImage);
         switchDarkMode = findViewById(R.id.switchDarkMode);
-        txtSize = findViewById(R.id.txtSize);
-        spinner = findViewById(R.id.spinnerSkins);
-        btnApply = findViewById(R.id.btnApply);
+        spinnerThemeColor = findViewById(R.id.spinnerSkins);
+        spinnerLanguage = findViewById(R.id.spinnerLanguage);
         shimmerView = findViewById(R.id.shimmerView);
         //init Shimmer container
         shimmer = findViewById(R.id.shimmerFrameLayout);
@@ -189,7 +229,7 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
     @Override
     public void updateAppSettings() {
         PreferencesManager preferencesManager = new PreferencesManager(this);
-        theme = preferencesManager.getCurrentTheme();
+        int theme = preferencesManager.getCurrentTheme();
         switch (theme) {
             case 1 -> setTheme(R.style.Theme_BlueColorNotebook);
             case 2 -> setTheme(R.style.Theme_DarkColorNotebook);

@@ -93,18 +93,6 @@
             app:layout_constraintTop_toBottomOf="@+id/txtHeader" />
 
         <TextView
-            android:id="@+id/txtFontSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="66dp"
-            android:text="@string/fontSize"
-            android:visibility="gone"
-            android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtColorSkin" />
-
-        <TextView
             android:id="@+id/txtColorSkin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,6 +102,28 @@
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtDarkMode" />
+
+        <TextView
+            android:id="@+id/txtLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="66dp"
+            android:text="@string/language"
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtColorSkin" />
+
+        <Spinner
+            android:id="@+id/spinnerLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/language_array"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txtLanguage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/txtLanguage" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -125,37 +135,6 @@
             app:layout_constraintGuide_percent="0.50121653"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Normal"
-            android:visibility="gone"
-            android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="@+id/txtFontSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/txtFontSize" />
-
-        <Button
-            android:id="@+id/btnApply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="90dp"
-            android:enabled="false"
-            android:minHeight="56dp"
-            android:text="Try changes"
-            android:textAllCaps="false"
-            android:textColor="?attr/customColorValue"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtFontSize" />
 
         <ImageView
             android:id="@+id/loadImage"
@@ -169,7 +148,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnApply"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerLanguage"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -181,7 +160,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnApply"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerLanguage"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_chainStyle="packed"
             app:shimmer_auto_start="true"

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
+  ~
+  ~ IMPORTANT!
+  ~ Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+  ~ is excluded from this license. Any use of these file types or logos requires
+  ~ prior permission from the respective owner or copyright holder.
+  ~
+  ~ This work is licensed under the terms of the MIT license.
+  ~ For a copy, see <https://opensource.org/licenses/MIT>.
+  -->
+
+<resources>
+    <string name="app_name">Oasis</string>
+    <string name="app_name_full">Oasis - Цветные события</string>
+    <string name="creator">Создано Rainbow Infinium</string>
+    <string name="app_logo">Логотип приложения</string>
+    <string name="developer_name">Мартин Атанасов</string>
+
+    <string-array name="skin_array">
+        <item>Бирюзовый</item>
+        <item>Синий</item>
+        <item>Черный</item>
+    </string-array>
+    <string-array name="language_array">
+        <item>Системные настройки</item>
+        <item>Английский</item>
+        <item>Болгарский</item>
+        <item>Русский</item>
+    </string-array>
+    <string-array name="color_picker_array">
+        <item>По умолчанию</item>
+        <item>Небесно-голубой</item>
+        <item>Зеленый</item>
+        <item>Желтый</item>
+        <item>Оранжевый</item>
+        <item>Красный</item>
+        <item>Синий</item>
+        <item>Фиолетовый</item>
+        <item>Серый</item>
+    </string-array>
+    <!--    My Menu-->
+    <string name="my_menu_options">Опции</string>
+    <string name="my_menu_dell">Удалить все</string>
+    <string name="my_menu_advanced">Дополнительные инструменты</string>
+    <string name="my_menu_search">Поиск</string>
+    <!--    Drawer Menu-->
+    <string name="drawer_statistic">Статистика</string>
+    <string name="drawer_app">Приложение</string>
+    <string name="drawer_exit">Выход</string>
+    <string name="drawer_total">Всего событий</string>
+    <string name="drawer_sound_notifications">Активные будильники</string>
+    <string name="drawer_one_priority_important">Важные</string>
+    <string name="drawer_two_priority_regular">Обычные</string>
+    <string name="drawer_three_priority_unimportant">Неважные</string>
+    <string name="drawer_about">О разработчике</string>
+    <string name="drawer_website">Веб-сайт</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Первый фрагмент</string>
+    <string name="second_fragment_label">Второй фрагмент</string>
+    <string name="next">Далее</string>
+    <string name="previous">Назад</string>
+    <string name="done">Готово</string>
+    <string name="delete">Удалить</string>
+    <string name="update">Обновить</string>
+    <string name="location">Местоположение</string>
+    <string name="hintTitle">Заголовок события</string>
+    <string name="hintLocation">Добавить местоположение</string>
+    <string name="hintFindLocation">Найти местоположение</string>
+    <string name="hintNote">Добавьте заметку к событию</string>
+    <string name="advanced_options">Дополнительные опции</string>
+    <string name="from">От:</string>
+    <string name="to">До:</string>
+    <string name="allDay">Событие на весь день</string>
+    <string name="pickColor">Цвет события</string>
+    <string name="priorityIcon">Приоритет</string>
+    <string name="default_value">По умолчанию</string>
+    <string name="silentNotifications">Тихие уведомления</string>
+    <string name="alarmNotifications">Звуковые уведомления</string>
+    <string name="error_404">Ошибка: 404\nПроверьте интернет-соединение</string>
+    <!--    tutorial fragments-->
+    <string name="description_first_fragment">Создавайте и редактируйте события</string>
+    <string name="description_second_fragment">Введите данные в текстовые поля</string>
+    <string name="description_third_fragment">Найдите местоположение</string>
+    <string name="add_item">Добавить элемент</string>
+    <string name="scroll_top">Прокрутить вверх</string>
+    <string name="fragThreeHeader">Добавьте местоположение к событию</string>
+    <string name="fragTwoHeader">Создайте свое событие</string>
+    <string name="fragOneHeader">Добро пожаловать в руководство</string>
+    <string name="checkInfoDev">О приложении</string>
+    <!--    Description-->
+    <string name="startDate">Дата начала события</string>
+    <string name="endDate">Дата окончания события</string>
+    <string name="startTime">Время начала события</string>
+    <string name="endTime">Время окончания события</string>
+    <string name="loadWelcomeImage">Загрузить приветственное изображение</string>
+    <string name="loadAppVersion">Загрузить версию приложения</string>
+    <string name="descImportant">Установить статус события: Важное</string>
+    <string name="descRegular">Установить статус события: Обычное</string>
+    <string name="descUnimportant">Установить статус события: Неважное</string>
+    <!--    Menu-->
+    <string name="forceDarkMode">Темный режим</string>
+    <string name="skinColor">Цвет темы</string>
+    <string name="language">Язык</string>
+    <string name="fontSize">Размер шрифта</string>
+    <!--    Alert Dialog-->
+    <string name="alert_dialog_title">Удалить все</string>
+    <string name="alert_dialog_message_dell">Вы уверены, что хотите удалить все данные?</string>
+    <string name="alert_dialog_message_sure_to_dell">Вы уверены, что хотите удалить это событие?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="ok">ОК</string>
+    <string name="apply">Применить</string>
+    <string name="cancel">Отмена</string>
+    <string name="close">Закрыть</string>
+    <string name="select_priority">Выберите приоритет события</string>
+    <string name="dialog_priority">Диалог приоритета</string>
+    <!--    Toast-->
+    <string name="toast_failed">Ошибка</string>
+    <string name="toast_no_data">Данных нет</string>
+    <string name="toast_added">Успешно добавлено</string>
+    <string name="toast_failed_to_update">Не удалось обновить</string>
+    <string name="toast_successfully_updated">Успешно обновлено!</string>
+    <string name="toast_fail_to_delete">Не удалось удалить</string>
+    <string name="toast_successfully_deleted">Успешно удалено</string>
+    <string name="toast_enter_location">Пожалуйста, введите местоположение</string>
+    <string name="toast_not_found_location">Местоположение не найдено</string>
+    <string name="toast_error_search_location">Ошибка при поиске местоположения</string>
+    <string name="toast_invalid_time">Неверное время: время окончания не может быть раньше времени начала!</string>
+    <!--    Priority picker-->
+    <string name="set_important">Важное</string>
+    <string name="set_regular">Обычное</string>
+    <string name="set_unimportant">Неважное</string>
+    <string name="events_chart">График событий - ДЕМО</string>
+    <string name="events">События</string>
+    <!--    Manifest label activity-->
+    <string name="chart">График</string>
+    <string name="add_event">Добавить событие</string>
+    <!--    Color description-->
+    <string name="default_color">Цвет по умолчанию</string>
+    <string name="sky_blue_color">Небесно-голубой цвет</string>
+    <string name="green_color">Зеленый цвет</string>
+    <string name="yellow_color">Желтый цвет</string>
+    <string name="orange_color">Оранжевый цвет</string>
+    <string name="red_color">Красный цвет</string>
+    <string name="blue_color">Синий цвет</string>
+    <string name="purple_color">Фиолетовый цвет</string>
+    <string name="brown_color">Коричневый цвет</string>
+    <string name="grey_color">Серый цвет</string>
+    <string name="channel_description_sound_notifications">Канал звуковых уведомлений</string>
+    <!--    <string name="channel_description_regular">Обычное уведомление</string>-->
+    <string name="channel_description_silent_notifications">Канал тихих уведомлений</string>
+    <string name="cancel_alarm">Отменить будильник</string>
+    <string name="alarm_information">Информация о будильнике</string>
+    <string name="permission_reason">Для показа уведомлений требуется разрешение!</string>
+    <string name="permission_granted">Разрешение предоставлено!</string>
+    <string name="toast_fail_to_remove_alarm">Будильник не удален!</string>
+    <string name="toast_alarm_cancel">Будильник отменен!</string>
+    <string name="no_data_to_show">У вас нет событий!</string>
+    <!-- Validation -->
+    <string name="event_title_empty">Заголовок должен содержать не менее 2 символов!</string>
+    <string name="find_location">Найти местоположение</string>
+    <string name="search">Поиск</string>
+    <string name="confirm_btn">Подтвердить</string>
+    <!-- Notifications -->
+    <string name="alarms_active_title">Активные будильники</string>
+    <string name="alarms_active_content_text">У вас есть активные будильники</string>
+    <string name="sound_notifications_name">Звуковые уведомления</string>
+    <string name="sound_notifications_description">Канал для звуковых уведомлений</string>
+    <string name="silent_notifications_title">Тихие уведомления</string>
+    <string name="silent_notifications_content_text">У вас есть новые заметки</string>
+    <string name="silent_notifications_name">Тихие уведомления</string>
+    <string name="silent_notifications_description">Канал для тихих уведомлений</string>
+    <string name="channel_name_silent_notifications">Тихие уведомления</string>
+    <string name="channel_name_sound_notifications">Звуковые уведомления</string>
+
+    <!-- Sorting & Filtering -->
+    <string name="filter_title">Фильтры</string>
+    <string name="filter_order_label">Фильтр сортировки</string>
+    <string name="filter_priority_label">Фильтр приоритета</string>
+    <string name="filter_a_z">А-Я</string>
+    <string name="filter_z_a">Я-А</string>
+    <string name="filter_date">Дата</string>
+    <string name="filter_reverse_date">Обратная дата</string>
+    <string name="filter_no_preference">Без предпочтений</string>
+    <string name="about_dev_info">Создано:\n\n%1$s\n\nВерсия %2$s</string>
+    <string name="filter_summary_format">Фильтр - %1$s, %2$s</string>
+    <string name="filter_icon">Иконка фильтра</string>
+</resources>

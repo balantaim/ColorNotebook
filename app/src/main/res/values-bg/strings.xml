@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
+  ~
+  ~ IMPORTANT!
+  ~ Use of .xml vector path, .svg, .png and .bmp files, as well as all brand logos,
+  ~ is excluded from this license. Any use of these file types or logos requires
+  ~ prior permission from the respective owner or copyright holder.
+  ~
+  ~ This work is licensed under the terms of the MIT license.
+  ~ For a copy, see <https://opensource.org/licenses/MIT>.
+  -->
+
+<resources>
+    <string name="app_name">Oasis</string>
+    <string name="app_name_full">Oasis - Цветни събития</string>
+    <string name="creator">Създадено от Rainbow Infinium</string>
+    <string name="app_logo">Лого на приложението</string>
+    <string name="developer_name">Мартин Атанасов</string>
+
+    <string-array name="skin_array">
+        <item>Тюркоаз</item>
+        <item>Синьо</item>
+        <item>Черно</item>
+    </string-array>
+    <string-array name="language_array">
+        <item>Според системата</item>
+        <item>Английски</item>
+        <item>Български</item>
+        <item>Руски</item>
+    </string-array>
+    <string-array name="color_picker_array">
+        <item>По подразбиране</item>
+        <item>Небесно синьо</item>
+        <item>Зелено</item>
+        <item>Жълто</item>
+        <item>Оранжево</item>
+        <item>Червено</item>
+        <item>Синьо</item>
+        <item>Лилаво</item>
+        <item>Сиво</item>
+    </string-array>
+    <!--    My Menu-->
+    <string name="my_menu_options">Опции</string>
+    <string name="my_menu_dell">Изтрий всички</string>
+    <string name="my_menu_advanced">Разширени инструменти</string>
+    <string name="my_menu_search">Търсене</string>
+    <!--    Drawer Menu-->
+    <string name="drawer_statistic">Статистика</string>
+    <string name="drawer_app">Приложение</string>
+    <string name="drawer_exit">Изход</string>
+    <string name="drawer_total">Общо събития</string>
+    <string name="drawer_sound_notifications">Активни аларми</string>
+    <string name="drawer_one_priority_important">Важни</string>
+    <string name="drawer_two_priority_regular">Стандартни</string>
+    <string name="drawer_three_priority_unimportant">Маловажни</string>
+    <string name="drawer_about">За разработчика</string>
+    <string name="drawer_website">Уебсайт</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Първи фрагмент</string>
+    <string name="second_fragment_label">Втори фрагмент</string>
+    <string name="next">Напред</string>
+    <string name="previous">Назад</string>
+    <string name="done">Готово</string>
+    <string name="delete">Изтрий</string>
+    <string name="update">Актуализирай</string>
+    <string name="location">Местоположение</string>
+    <string name="hintTitle">Заглавие на събитието</string>
+    <string name="hintLocation">Добави местоположение</string>
+    <string name="hintFindLocation">Намери местоположение</string>
+    <string name="hintNote">Добавете бележка към събитието</string>
+    <string name="advanced_options">Разширени опции</string>
+    <string name="from">От:</string>
+    <string name="to">До:</string>
+    <string name="allDay">Целодневно събитие</string>
+    <string name="pickColor">Цвят на събитието</string>
+    <string name="priorityIcon">Приоритет</string>
+    <string name="default_value">По подразбиране</string>
+    <string name="silentNotifications">Тихи известия</string>
+    <string name="alarmNotifications">Звукови известия</string>
+    <string name="error_404">Грешка: 404\nПроверете интернет връзката си</string>
+    <!--    tutorial fragments-->
+    <string name="description_first_fragment">Създавайте и редактирайте събития</string>
+    <string name="description_second_fragment">Въведете данните си в текстовите полета</string>
+    <string name="description_third_fragment">Намерете местоположение</string>
+    <string name="add_item">Добави елемент</string>
+    <string name="scroll_top">Скрол до горе</string>
+    <string name="fragThreeHeader">Добавете местоположение към вашето събитие</string>
+    <string name="fragTwoHeader">Създайте свое собствено събитие</string>
+    <string name="fragOneHeader">Добре дошли в ръководството</string>
+    <string name="checkInfoDev">Относно приложението</string>
+    <!--    Description-->
+    <string name="startDate">Начална дата</string>
+    <string name="endDate">Крайна дата</string>
+    <string name="startTime">Начален час</string>
+    <string name="endTime">Краен час</string>
+    <string name="loadWelcomeImage">Зареди изображение за добре дошли</string>
+    <string name="loadAppVersion">Зареди версия на приложението</string>
+    <string name="descImportant">Задай статус "Важно"</string>
+    <string name="descRegular">Задай статус "Стандартно"</string>
+    <string name="descUnimportant">Задай статус "Маловажно"</string>
+    <!--    Menu-->
+    <string name="forceDarkMode">Тъмен режим</string>
+    <string name="skinColor">Цвят на темата</string>
+    <string name="language">Език</string>
+    <string name="fontSize">Размер на шрифта</string>
+    <!--    Alert Dialog-->
+    <string name="alert_dialog_title">Изтрий всички</string>
+    <string name="alert_dialog_message_dell">Сигурни ли сте, че искате да изтриете всички данни?</string>
+    <string name="alert_dialog_message_sure_to_dell">Сигурни ли сте, че искате да изтриете това събитие?</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
+    <string name="ok">ОК</string>
+    <string name="apply">Приложи</string>
+    <string name="cancel">Отказ</string>
+    <string name="close">Затвори</string>
+    <string name="select_priority">Изберете приоритет на събитието</string>
+    <string name="dialog_priority">Диалог за приоритет</string>
+    <!--    Toast-->
+    <string name="toast_failed">Неуспешно</string>
+    <string name="toast_no_data">Няма данни</string>
+    <string name="toast_added">Добавено успешно</string>
+    <string name="toast_failed_to_update">Неуспешна актуализация</string>
+    <string name="toast_successfully_updated">Актуализирано успешно!</string>
+    <string name="toast_fail_to_delete">Неуспешно изтриване</string>
+    <string name="toast_successfully_deleted">Изтрито успешно</string>
+    <string name="toast_enter_location">Моля, въведете местоположение</string>
+    <string name="toast_not_found_location">Местоположението не е намерено</string>
+    <string name="toast_error_search_location">Грешка при търсене на местоположение</string>
+    <string name="toast_invalid_time">Невалидно време: Крайният час не може да бъде преди началния!</string>
+    <!--    Priority picker-->
+    <string name="set_important">Важно</string>
+    <string name="set_regular">Стандартно</string>
+    <string name="set_unimportant">Маловажно</string>
+    <string name="events_chart">Графика на събитията - ДЕМО</string>
+    <string name="events">Събития</string>
+    <!--    Manifest label activity-->
+    <string name="chart">Графика</string>
+    <string name="add_event">Добави събитие</string>
+    <!--    Color description-->
+    <string name="default_color">Цвят по подразбиране</string>
+    <string name="sky_blue_color">Небесно син цвят</string>
+    <string name="green_color">Зелен цвят</string>
+    <string name="yellow_color">Жълт цвят</string>
+    <string name="orange_color">Оранжев цвят</string>
+    <string name="red_color">Червен цвят</string>
+    <string name="blue_color">Син цвят</string>
+    <string name="purple_color">Лилав цвят</string>
+    <string name="brown_color">Кафяв цвят</string>
+    <string name="grey_color">Сив цвят</string>
+    <string name="channel_description_sound_notifications">Канал за звукови известия</string>
+    <!--    <string name="channel_description_regular">Редовно известие</string>-->
+    <string name="channel_description_silent_notifications">Канал за тихи известия</string>
+    <string name="cancel_alarm">Отказ на аларма</string>
+    <string name="alarm_information">Информация за алармата</string>
+    <string name="permission_reason">Необходимо е разрешение за показване на известия!</string>
+    <string name="permission_granted">Разрешението е дадено!</string>
+    <string name="toast_fail_to_remove_alarm">Алармата не е премахната!</string>
+    <string name="toast_alarm_cancel">Алармата е отменена!</string>
+    <string name="no_data_to_show">Нямате никакви събития!</string>
+    <!-- Validation -->
+    <string name="event_title_empty">Заглавието трябва да съдържа поне 2 символа!</string>
+    <string name="find_location">Намери местоположение</string>
+    <string name="search">Търсене</string>
+    <string name="confirm_btn">Потвърди</string>
+    <!-- Notifications -->
+    <string name="alarms_active_title">Активни аларми</string>
+    <string name="alarms_active_content_text">Имате активни аларми</string>
+    <string name="sound_notifications_name">Звукови известия</string>
+    <string name="sound_notifications_description">Канал за звукови известия</string>
+    <string name="silent_notifications_title">Тихи известия</string>
+    <string name="silent_notifications_content_text">Имате нови бележки</string>
+    <string name="silent_notifications_name">Тихи известия</string>
+    <string name="silent_notifications_description">Канал за тихи известия</string>
+    <string name="channel_name_silent_notifications">Тихи известия</string>
+    <string name="channel_name_sound_notifications">Звукови известия</string>
+
+    <!-- Sorting & Filtering -->
+    <string name="filter_title">Филтри</string>
+    <string name="filter_order_label">Филтър за подреждане</string>
+    <string name="filter_priority_label">Филтър за приоритет</string>
+    <string name="filter_a_z">А-Я</string>
+    <string name="filter_z_a">Я-А</string>
+    <string name="filter_date">Дата</string>
+    <string name="filter_reverse_date">Обратна дата</string>
+    <string name="filter_no_preference">Без предпочитание</string>
+    <string name="about_dev_info">Създадено от:\n\n%1$s\n\nВерсия %2$s</string>
+    <string name="filter_summary_format">Филтър - %1$s, %2$s</string>
+    <string name="filter_icon">Икона на филтър</string>
+</resources>

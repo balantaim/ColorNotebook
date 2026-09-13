@@ -22,6 +22,12 @@
         <item>Blue</item>
         <item>Black</item>
     </string-array>
+    <string-array name="language_array">
+        <item>System Default</item>
+        <item>English</item>
+        <item>Bulgarian</item>
+        <item>Russian</item>
+    </string-array>
     <string-array name="color_picker_array">
         <item>Default</item>
         <item>Sky blue</item>
@@ -96,6 +102,7 @@
     <!--    Menu-->
     <string name="forceDarkMode">Force dark mode</string>
     <string name="skinColor">Skin color</string>
+    <string name="language">Language</string>
     <string name="fontSize">Font size</string>
     <!--    Alert Dialog-->
     <string name="alert_dialog_title">Delete all</string>

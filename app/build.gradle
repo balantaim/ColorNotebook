@@ -23,7 +23,7 @@ android {
         buildConfigField "String", "APP_WEBSITE", "\"${properties.getProperty("APP_WEBSITE")}\""
 
         //Set supported per-app language
-        resourceConfigurations += ['en']
+        resourceConfigurations += ['en', 'bg', 'ru']
 
         //Support library for vector animations
         vectorDrawables.useSupportLibrary = true
