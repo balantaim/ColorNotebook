@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2022 Martin Atanasov. All rights reserved.
   ~
   ~ IMPORTANT!
@@ -14,7 +13,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout_add"
+    android:id="@+id/root_layout_update"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/badgeStyle"
@@ -23,7 +22,7 @@
 
     <!--    Navigation bar -->
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_add"
+        android:id="@+id/toolbar_update"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -34,7 +33,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIconTint="?attr/customColorValue"
         app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
-        app:title="@string/add_event"
         app:titleTextColor="?attr/customColorValue" />
 
     <ScrollView
@@ -44,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_add">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_update">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,14 +50,10 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="vertical"
-            android:padding="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="14dp">
 
             <EditText
-                android:id="@+id/eventTitle"
+                android:id="@+id/eventTitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
@@ -68,61 +62,69 @@
                 android:ems="10"
                 android:hint="@string/hintTitle"
                 android:inputType="textPersonName"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/eventLocation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autofillHints="postalAddress"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:ems="10"
-                    android:hint="@string/hintLocation"
-                    android:inputType="textPersonName"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:textSize="20sp" />
-
-                <ImageButton
-                    android:id="@+id/btnLocation"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginVertical="6dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/rounded_bg_location"
-                    android:contentDescription="@string/hintLocation"
-                    android:padding="8dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_location"
-                    app:tint="?attr/customColorValue" />
-            </LinearLayout>
+                android:minHeight="48dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:windowSoftInputMode="stateHidden" />
 
             <EditText
-                android:id="@+id/eventNode"
+                android:id="@+id/eventLocation2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="28dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="postalAddress"
+                android:backgroundTint="?attr/colorPrimary"
+                android:ems="10"
+                android:hint="@string/hintLocation"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnLocationLandscape2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="18dp"
+                    android:background="@drawable/rounded_bg_location"
+                    android:drawableStart="@drawable/ic_location"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:minWidth="360dp"
+                    android:minHeight="50dp"
+                    android:padding="8dp"
+                    android:text="@string/hintLocation"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/customColorValue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/eventInput2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="68dp"
                 android:autofillHints="node"
                 android:background="@drawable/rounded_bg"
                 android:ems="10"
                 android:gravity="top"
                 android:hint="@string/hintNote"
-                android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
                 android:minHeight="100dp"
                 android:paddingVertical="8dp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:singleLine="false"
-                android:textSize="20sp"/>
+                android:singleLine="false" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -130,7 +132,7 @@
                 android:layout_marginBottom="38dp">
 
                 <TextView
-                    android:id="@+id/textColor"
+                    android:id="@+id/textColor2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -143,19 +145,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/eventColor"
+                    android:id="@+id/eventColor2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:paddingVertical="10dp"
                     android:text="@string/default_value"
                     android:textColor="?attr/colorOnPrimary"
-                    app:layout_constraintBottom_toBottomOf="@+id/textColor"
+                    app:layout_constraintBottom_toBottomOf="@+id/textColor2"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textColor" />
+                    app:layout_constraintTop_toTopOf="@+id/textColor2" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textPriority2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -166,25 +168,51 @@
                     app:drawableStartCompat="@drawable/ic_priority"
                     app:drawableTint="?attr/colorOnPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textColor" />
+                    app:layout_constraintTop_toBottomOf="@+id/textColor2" />
 
                 <TextView
-                    android:id="@+id/priority"
+                    android:id="@+id/priority2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:paddingVertical="10dp"
-                    android:text="@string/set_regular"
                     android:textColor="?attr/colorOnPrimary"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                    app:layout_constraintBottom_toBottomOf="@+id/textPriority2"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView4" />
+                    app:layout_constraintTop_toTopOf="@+id/textPriority2" />
 
+                <TextView
+                    android:id="@+id/created"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="32dp"
+                    android:drawablePadding="6dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_created"
+                    app:drawableTint="?attr/colorOnPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textPriority2" />
+
+                <TextView
+                    android:id="@+id/modified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:drawablePadding="6dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    app:drawableStartCompat="@drawable/ic_modified"
+                    app:drawableTint="?attr/colorOnPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/created" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
+                android:id="@+id/cardView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="58dp"
@@ -201,7 +229,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/advOptions"
+                            android:id="@+id/advOptions2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
@@ -218,7 +246,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/expandableLayout"
+                        android:id="@+id/expandableLayout2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -229,7 +257,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/txtFrom"
+                                android:id="@+id/txtFrom2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -241,7 +269,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/startTime"
+                                android:id="@+id/startTime2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
@@ -253,7 +281,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/startDate"
+                                android:id="@+id/startDate2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
@@ -266,7 +294,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/endDate"
+                                android:id="@+id/endDate2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:contentDescription="@string/endTime"
@@ -274,13 +302,13 @@
                                 android:paddingVertical="8dp"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
-                                app:layout_constraintBottom_toBottomOf="@+id/txtTo"
+                                app:layout_constraintBottom_toBottomOf="@+id/txtTo2"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                                 app:layout_constraintStart_toStartOf="@+id/guideline6"
-                                app:layout_constraintTop_toTopOf="@+id/txtTo" />
+                                app:layout_constraintTop_toTopOf="@+id/txtTo2" />
 
                             <TextView
-                                android:id="@+id/txtTo"
+                                android:id="@+id/txtTo2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -289,12 +317,12 @@
                                 android:paddingVertical="8dp"
                                 android:paddingBottom="16dp"
                                 android:text="@string/to"
-                                app:layout_constraintBottom_toTopOf="@+id/allDaySw"
+                                app:layout_constraintBottom_toTopOf="@+id/allDaySw2"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
+                                app:layout_constraintTop_toBottomOf="@+id/txtFrom2" />
 
                             <TextView
-                                android:id="@+id/endTime"
+                                android:id="@+id/endTime2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:contentDescription="@string/endTime"
@@ -302,12 +330,12 @@
                                 android:paddingVertical="8dp"
                                 android:paddingBottom="16dp"
                                 android:textColor="?attr/colorOnPrimary"
-                                app:layout_constraintBottom_toBottomOf="@+id/endDate"
+                                app:layout_constraintBottom_toBottomOf="@+id/endDate2"
                                 app:layout_constraintStart_toStartOf="@+id/guideline7"
-                                app:layout_constraintTop_toTopOf="@+id/endDate" />
+                                app:layout_constraintTop_toTopOf="@+id/endDate2" />
 
                             <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/allDaySw"
+                                android:id="@+id/allDaySw2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -316,14 +344,14 @@
                                 android:checked="false"
                                 android:text="@string/allDay"
                                 android:thumb="@drawable/ic_thumb"
-                                app:layout_constraintBottom_toTopOf="@+id/soundNotSw"
+                                app:layout_constraintBottom_toTopOf="@+id/soundNotSw2"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txtTo"
+                                app:layout_constraintTop_toBottomOf="@+id/txtTo2"
                                 app:track="@drawable/my_switch_body" />
 
                             <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/soundNotSw"
+                                android:id="@+id/soundNotSw2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -334,11 +362,11 @@
                                 android:thumb="@drawable/ic_thumb"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/allDaySw"
+                                app:layout_constraintTop_toBottomOf="@+id/allDaySw2"
                                 app:track="@drawable/my_switch_body" />
 
                             <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/silentNotificationSw"
+                                android:id="@+id/silentNotificationSw2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -351,7 +379,7 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw"
+                                app:layout_constraintTop_toBottomOf="@+id/soundNotSw2"
                                 app:track="@drawable/my_switch_body" />
 
                             <androidx.constraintlayout.widget.Guideline
@@ -374,19 +402,51 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/btnAdd"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/btn_delete"
-                android:minHeight="50dp"
-                android:text="@string/done"
-                android:textColor="?attr/customColorValue"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/btn_custom"
+                    android:minWidth="360dp"
+                    android:minHeight="50dp"
+                    android:text="@string/update"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/customColorValue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnDelete"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/btn_delete"
+                    android:minWidth="360dp"
+                    android:minHeight="52dp"
+                    android:text="@string/delete"
+                    android:textAllCaps="false"
+                    android:textColor="@color/error"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnUpdate"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

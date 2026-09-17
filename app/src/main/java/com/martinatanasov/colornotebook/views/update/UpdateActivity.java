@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,6 +74,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnUpdate, btnDelete;
+    View btnLocation;
     TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority, createdDate, modifiedDate;
     LinearLayout expandableLayout;
     CardView cardView;
@@ -143,8 +143,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
         initClickListeners();
 
-        //Click event for edit text's icon
-        eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
+        btnLocation.setOnClickListener(v -> launchMapActivity());
     }
 
     AlertDialog confirmDialog;
@@ -297,23 +296,13 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         });
     }
 
-    private boolean locationEvent(MotionEvent motionEvent) {
-        final int DRAWABLE_RIGHT = 2;
-
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(this, MapActivity.class);
-                String locationText = eventLocation.getText().toString().trim();
-                if (!locationText.isEmpty()) {
-                    intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
-                }
-                mapActivityLauncher.launch(intent);
-                return true;
-            }
+    private void launchMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
+        String locationText = eventLocation.getText().toString().trim();
+        if (!locationText.isEmpty()) {
+            intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
         }
-        return false;
+        mapActivityLauncher.launch(intent);
     }
 
     //Set actionbar title after getAndSetIntentData method
@@ -782,7 +771,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     @AfterPermissionGranted(101)
     private void managePermissionForNotifications() {
         String[] permissionList;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionList = new String[]{Manifest.permission.POST_NOTIFICATIONS
                     //, Manifest.permission.READ_EXTERNAL_STORAGE //Example for multiple permissions
             };
@@ -841,6 +830,10 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         expandableLayout = findViewById(R.id.expandableLayout2);
         eventTitle = findViewById(R.id.eventTitle2);
         eventLocation = findViewById(R.id.eventLocation2);
+        btnLocation = findViewById(R.id.btnLocation2);
+        if (btnLocation == null) {
+            btnLocation = findViewById(R.id.btnLocationLandscape2);
+        }
         eventInput = findViewById(R.id.eventInput2);
         btnUpdate = findViewById(R.id.btnUpdate);
         btnDelete = findViewById(R.id.btnDelete);

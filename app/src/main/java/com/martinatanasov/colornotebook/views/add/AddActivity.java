@@ -23,7 +23,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,6 +69,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
     EditText eventTitle, eventLocation, eventInput;
     Button btnAdd;
+    View btnLocation;
     TextView advOptions, dateStart, dateEnd, timeStart, timeEnd, eventColor, priority;
     LinearLayout expandableLayout;
     CardView cardView;
@@ -239,7 +239,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
     private void initClickListeners() {
         btnAdd.setOnClickListener(v -> onAddBtn());
-        eventLocation.setOnTouchListener((view, motionEvent) -> locationEvent(motionEvent));
+        if (btnLocation != null) {
+            btnLocation.setOnClickListener(v -> launchMapActivity());
+        }
         advOptions.setOnClickListener(view -> viewModel.toggleExpanded());
         dateStart.setOnClickListener(view -> setStartDate());
         timeStart.setOnClickListener(view -> setStartTime());
@@ -284,21 +286,13 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                 false);
     }
 
-    private boolean locationEvent(MotionEvent motionEvent) {
-        final int DRAWABLE_RIGHT = 2;
-
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            if (motionEvent.getRawX() >= (eventLocation.getRight() - eventLocation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                Intent intent = new Intent(this, MapActivity.class);
-                String locationText = eventLocation.getText().toString().trim();
-                if (!locationText.isEmpty()) {
-                    intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
-                }
-                mapActivityLauncher.launch(intent);
-                return true;
-            }
+    private void launchMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
+        String locationText = eventLocation.getText().toString().trim();
+        if (!locationText.isEmpty()) {
+            intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
         }
-        return false;
+        mapActivityLauncher.launch(intent);
     }
 
     private void changeArrowBackBtn() {
@@ -643,7 +637,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     @AfterPermissionGranted(101)
     private void managePermissionForNotifications() {
         String[] permissionList;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionList = new String[]{Manifest.permission.POST_NOTIFICATIONS
                     //, Manifest.permission.READ_EXTERNAL_STORAGE //Example for multiple permissions
             };
@@ -704,6 +698,10 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         eventLocation = findViewById(R.id.eventLocation);
         eventInput = findViewById(R.id.eventNode);
         btnAdd = findViewById(R.id.btnAdd);
+        btnLocation = findViewById(R.id.btnLocation);
+        if (btnLocation == null) {
+            btnLocation = findViewById(R.id.btnLocationLandscape);
+        }
         allDaySw = findViewById(R.id.allDaySw);
         soundNotSw = findViewById(R.id.soundNotSw);
         silentNotSw = findViewById(R.id.silentNotificationSw);
