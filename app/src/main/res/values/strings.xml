@@ -56,8 +56,6 @@
     <string name="drawer_about">About DEV</string>
     <string name="drawer_website">Website</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="done">Done</string>
@@ -77,8 +75,6 @@
     <string name="default_value">Default</string>
     <string name="silentNotifications">Silent notifications</string>
     <string name="alarmNotifications">Sound notifications</string>
-    <string name="error_404">Error: 404
- Check your internet connection</string>
     <!--    tutorial fragments-->
     <string name="description_first_fragment">Create and edit events</string>
     <string name="description_second_fragment">Enter your data to the text fields</string>
@@ -103,7 +99,6 @@
     <string name="forceDarkMode">Force dark mode</string>
     <string name="skinColor">Skin color</string>
     <string name="language">Language</string>
-    <string name="fontSize">Font size</string>
     <!--    Alert Dialog-->
     <string name="alert_dialog_title">Delete all</string>
     <string name="alert_dialog_message_dell">Are you sure you want to delete all data</string>

@@ -7,11 +7,11 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace 'com.martinatanasov.colornotebook'
+    namespace 'com.martinatanasov.oasis'
     compileSdkVersion 37
 
     defaultConfig {
-        applicationId "com.martinatanasov.colornotebook"
+        applicationId "com.martinatanasov.oasis"
         minSdkVersion 24
         targetSdkVersion 37
         versionCode 1
@@ -158,6 +158,9 @@ dependencies {
 
     //Shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //JDK compatible with Java 8
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
     //WorkManager Java
     implementation "androidx.work:work-runtime:2.11.2"

@@ -56,8 +56,6 @@
     <string name="drawer_about">За разработчика</string>
     <string name="drawer_website">Уебсайт</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Първи фрагмент</string>
-    <string name="second_fragment_label">Втори фрагмент</string>
     <string name="next">Напред</string>
     <string name="previous">Назад</string>
     <string name="done">Готово</string>
@@ -77,7 +75,6 @@
     <string name="default_value">По подразбиране</string>
     <string name="silentNotifications">Тихи известия</string>
     <string name="alarmNotifications">Звукови известия</string>
-    <string name="error_404">Грешка: 404\nПроверете интернет връзката си</string>
     <!--    tutorial fragments-->
     <string name="description_first_fragment">Създавайте и редактирайте събития</string>
     <string name="description_second_fragment">Въведете данните си в текстовите полета</string>
@@ -102,7 +99,6 @@
     <string name="forceDarkMode">Тъмен режим</string>
     <string name="skinColor">Цвят на темата</string>
     <string name="language">Език</string>
-    <string name="fontSize">Размер на шрифта</string>
     <!--    Alert Dialog-->
     <string name="alert_dialog_title">Изтрий всички</string>
     <string name="alert_dialog_message_dell">Сигурни ли сте, че искате да изтриете всички данни?</string>
