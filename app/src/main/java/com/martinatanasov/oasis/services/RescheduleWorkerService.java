@@ -47,37 +47,33 @@ public class RescheduleWorkerService extends Worker {
 
             for (UserEventDTO event : events) {
                 // Sound notifications - only reschedule if in future
-                if (event.int_sound_notifications() == 1) {
-                    Calendar alarmTime = getCalendarFromEvent(event);
-                    if (alarmTime.after(now)) {
-                        alarmEvent.setUpAlarm(
-                                event.txtEventId(),
-                                event.txtEventTitle(),
-                                event.txtNode(),
-                                alarmTime,
-                                event.int_avatar_picker(),
-                                event.int_color_picker()
-                        );
-                        Log.d(TAG, "Rescheduled sound alarm for event: " + event.txtEventTitle());
-                    }
+                if (event.isSoundAlarmActive(now)) {
+                    Calendar alarmTime = event.getStartCalendar();
+                    alarmEvent.setUpAlarm(
+                            event.txtEventId(),
+                            event.txtEventTitle(),
+                            event.txtNode(),
+                            alarmTime,
+                            event.int_avatar_picker(),
+                            event.int_color_picker()
+                    );
+                    Log.d(TAG, "Rescheduled sound alarm for event: " + event.txtEventTitle());
                 }
 
                 // Silent notifications - only reschedule if in future
-                if (event.int_silent_notifications() == 1) {
-                    Calendar alarmTime = getCalendarFromEvent(event);
-                    if (alarmTime.after(now)) {
-                        long delay = alarmTime.getTimeInMillis() - now.getTimeInMillis();
-                        SilentNotificationWorker.scheduleSilentNotification(
-                                context,
-                                event.txtEventId(),
-                                event.txtEventTitle(),
-                                event.txtNode(),
-                                event.int_color_picker(),
-                                event.int_avatar_picker(),
-                                delay
-                        );
-                        Log.d(TAG, "Rescheduled silent notification for event: " + event.txtEventTitle());
-                    }
+                if (event.isSilentNotificationActive(now)) {
+                    Calendar alarmTime = event.getStartCalendar();
+                    long delay = alarmTime.getTimeInMillis() - now.getTimeInMillis();
+                    SilentNotificationWorker.scheduleSilentNotification(
+                            context,
+                            event.txtEventId(),
+                            event.txtEventTitle(),
+                            event.txtNode(),
+                            event.int_color_picker(),
+                            event.int_avatar_picker(),
+                            delay
+                    );
+                    Log.d(TAG, "Rescheduled silent notification for event: " + event.txtEventTitle());
                 }
             }
             return Result.success();
@@ -85,17 +81,6 @@ public class RescheduleWorkerService extends Worker {
             Log.e(TAG, "Error rescheduling alarms/notifications", e);
             return Result.failure();
         }
-    }
-
-    private Calendar getCalendarFromEvent(UserEventDTO event) {
-        Calendar alarmTime = Calendar.getInstance();
-        alarmTime.set(Calendar.YEAR, event.int_start_year());
-        alarmTime.set(Calendar.MONTH, event.byte_start_month());
-        alarmTime.set(Calendar.DAY_OF_MONTH, event.byte_start_day());
-        alarmTime.set(Calendar.HOUR_OF_DAY, event.byte_start_hour());
-        alarmTime.set(Calendar.MINUTE, event.byte_start_minutes());
-        alarmTime.set(Calendar.SECOND, 0);
-        return alarmTime;
     }
 
 }

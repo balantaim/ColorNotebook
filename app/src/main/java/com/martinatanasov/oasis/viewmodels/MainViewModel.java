@@ -195,37 +195,22 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     private void calculateCounters(List<UserEventDTO> eventList) {
-        int imp = 0, reg = 0, uni = 0, sound = 0;
+        int importantCount = 0, regularCount = 0, unimportantCount = 0, soundNotificationCounter = 0;
         Calendar calendarNow = Calendar.getInstance();
         for (UserEventDTO event : eventList) {
-            if (event.int_sound_notifications() > 0) {
-                Calendar alarmTime = getCalendarFromEvent(event);
-                if (alarmTime.after(calendarNow)) {
-                    sound++;
-                }
+            if (event.isSoundAlarmActive(calendarNow)) {
+                soundNotificationCounter++;
             }
             switch (event.int_avatar_picker()) {
-                case 1 -> reg++;
-                case 2 -> uni++;
-                default -> imp++;
+                case 1 -> regularCount++;
+                case 2 -> unimportantCount++;
+                default -> importantCount++;
             }
         }
-        _importantCount.setValue(imp);
-        _regularCount.setValue(reg);
-        _unimportantCount.setValue(uni);
-        _soundNotificationsCount.setValue(sound);
-    }
-
-    private Calendar getCalendarFromEvent(UserEventDTO event) {
-        Calendar alarmTime = Calendar.getInstance();
-        alarmTime.set(Calendar.YEAR, event.int_start_year());
-        alarmTime.set(Calendar.MONTH, event.byte_start_month());
-        alarmTime.set(Calendar.DAY_OF_MONTH, event.byte_start_day());
-        alarmTime.set(Calendar.HOUR_OF_DAY, event.byte_start_hour());
-        alarmTime.set(Calendar.MINUTE, event.byte_start_minutes());
-        alarmTime.set(Calendar.SECOND, 0);
-        alarmTime.set(Calendar.MILLISECOND, 0);
-        return alarmTime;
+        _importantCount.setValue(importantCount);
+        _regularCount.setValue(regularCount);
+        _unimportantCount.setValue(unimportantCount);
+        _soundNotificationsCount.setValue(soundNotificationCounter);
     }
 
     public void deleteBatch() {

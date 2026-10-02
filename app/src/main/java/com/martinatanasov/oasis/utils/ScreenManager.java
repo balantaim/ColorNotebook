@@ -25,7 +25,7 @@ public class ScreenManager {
 
     public ScreenManager(View content, Window window, final boolean decorFitsSystemWindows) {
         // Make application to be on full screen
-        setApplicationFullscreenMode(window, decorFitsSystemWindows);
+        setSystemBarsVisibility(window, decorFitsSystemWindows);
         // Apply padding to avoid navigation bar overlap
         setPaddingToRootLayout(content);
     }
@@ -43,13 +43,26 @@ public class ScreenManager {
         });
     }
 
-    private void setApplicationFullscreenMode(Window window, final boolean decorFitsSystemWindows) {
+    private void setSystemBarsVisibility(Window window, final boolean decorFitsSystemWindows) {
         WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
         WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.getDecorView());
         if (windowInsetsControllerCompat != null) {
-            windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.systemBars());
+            // Hide the status bar
+            windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
+            // Ensure the navigation bar is visible
+            windowInsetsControllerCompat.show(WindowInsetsCompat.Type.navigationBars());
+            // Set behavior to allow showing hidden bars by swipe
             windowInsetsControllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
     }
+
+//    private void setApplicationFullscreenMode(Window window, final boolean decorFitsSystemWindows) {
+//        WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
+//        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.getDecorView());
+//        if (windowInsetsControllerCompat != null) {
+//            windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.systemBars());
+//            windowInsetsControllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+//        }
+//    }
 
 }

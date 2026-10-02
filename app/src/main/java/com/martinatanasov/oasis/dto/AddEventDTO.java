@@ -14,9 +14,10 @@ package com.martinatanasov.oasis.dto;
 
 import java.time.Instant;
 
-public record AddEventDTO(String title, String location, String input, int color, int avatar,
-                          int startYear,
-                          int startMonth, int startDay, int startHour, int startMinutes,
+public record AddEventDTO(String title, String location, String input,
+                          int color, int avatar,
+                          int startYear, int startMonth, int startDay, int startHour,
+                          int startMinutes,
                           int endYear, int endMonth, int endDay, int endHour, int endMinutes,
                           Instant createdDate, Instant modifiedDate,
                           int allDay, int soundNotifications, int silentNotifications,

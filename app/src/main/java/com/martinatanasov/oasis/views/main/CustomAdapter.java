@@ -83,10 +83,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             );
         }
         //Show active reminder icon
-        setUpActiveIconReminder(holder,
-                userEventDTO.int_all_day(),
-                userEventDTO.int_sound_notifications(),
-                userEventDTO.int_silent_notifications());
+        setUpActiveIconReminder(holder, userEventDTO);
         holder.mainLayout.setOnClickListener(v -> navigateToSelectedEvent(userEventDTO));
     }
 
@@ -118,15 +115,23 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         activity.startActivityForResult(intent, 1);
     }
 
-    private void setUpActiveIconReminder(MyViewHolder holder, int allDay, int soundNotifications, int silentNotification) {
-        if (allDay == 1) {
+    private void setUpActiveIconReminder(MyViewHolder holder, UserEventDTO userEventDTO) {
+        if (userEventDTO.int_all_day() == 1) {
             holder.allDayIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.allDayIcon.setVisibility(View.GONE);
         }
-        if (soundNotifications == 1) {
+
+        if (userEventDTO.isSoundAlarmActive()) {
             holder.soundNotificationsIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.soundNotificationsIcon.setVisibility(View.GONE);
         }
-        if (silentNotification == 1) {
+
+        if (userEventDTO.isSilentNotificationActive()) {
             holder.silentNotificationIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.silentNotificationIcon.setVisibility(View.GONE);
         }
     }
 
