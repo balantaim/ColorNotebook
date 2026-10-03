@@ -20,6 +20,7 @@ import android.app.Application;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,6 +38,13 @@ public class CustomViewModelTest {
     public void setUp() {
         Application application = ApplicationProvider.getApplicationContext();
         viewModel = new CustomViewModel(application);
+    }
+
+    @After
+    public void tearDown() {
+        if (viewModel != null) {
+            viewModel.onCleared();
+        }
     }
 
     @Test

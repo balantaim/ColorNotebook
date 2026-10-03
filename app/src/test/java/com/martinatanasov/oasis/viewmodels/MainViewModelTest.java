@@ -20,6 +20,7 @@ import android.app.Application;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.work.testing.WorkManagerTestInitHelper;
 
 import com.martinatanasov.oasis.models.AddEventDTO;
 import com.martinatanasov.oasis.models.UserEventDTO;
@@ -28,13 +29,12 @@ import com.martinatanasov.oasis.services.EventServiceImpl;
 import com.martinatanasov.oasis.views.main.OrderFilter;
 import com.martinatanasov.oasis.views.main.PriorityFilter;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-
-import androidx.work.testing.WorkManagerTestInitHelper;
 
 import java.time.Instant;
 import java.util.Calendar;
@@ -53,6 +53,14 @@ public class MainViewModelTest {
         application = ApplicationProvider.getApplicationContext();
         WorkManagerTestInitHelper.initializeTestWorkManager(application);
         viewModel = new MainViewModel(application);
+    }
+
+    @After
+    public void tearDown() {
+        if (viewModel != null) {
+            viewModel.onCleared();
+        }
+        WorkManagerTestInitHelper.closeWorkDatabase();
     }
 
     @Test
@@ -122,6 +130,7 @@ public class MainViewModelTest {
         MainViewModel newViewModel = new MainViewModel(application);
         assertEquals(OrderFilter.A_Z, newViewModel.orderFilter.getValue());
         assertEquals(PriorityFilter.IMPORTANT, newViewModel.priorityFilter.getValue());
+        newViewModel.onCleared();
     }
 
     @Test
@@ -152,9 +161,10 @@ public class MainViewModelTest {
         );
 
         // We need to use EventService to add them to the real DB used by ViewModel
-        EventService eventService = new EventServiceImpl(application);
-        eventService.addEvent(eventWithSound);
-        eventService.addEvent(eventWithoutSound);
+        try (EventService eventService = new EventServiceImpl(application)) {
+            eventService.addEvent(eventWithSound);
+            eventService.addEvent(eventWithoutSound);
+        }
 
         // Load data in ViewModel
         viewModel.loadData();
@@ -194,9 +204,10 @@ public class MainViewModelTest {
                 0, 1, 0, 0
         );
 
-        EventService eventService = new EventServiceImpl(application);
-        eventService.addEvent(pastEvent);
-        eventService.addEvent(futureEvent);
+        try (EventService eventService = new EventServiceImpl(application)) {
+            eventService.addEvent(pastEvent);
+            eventService.addEvent(futureEvent);
+        }
 
         viewModel.loadData();
 

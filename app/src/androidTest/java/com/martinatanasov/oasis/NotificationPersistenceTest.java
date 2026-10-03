@@ -15,6 +15,7 @@ package com.martinatanasov.oasis;
 import static org.junit.Assert.assertTrue;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -36,6 +37,7 @@ import com.martinatanasov.oasis.services.EventService;
 import com.martinatanasov.oasis.services.EventServiceImpl;
 import com.martinatanasov.oasis.services.RescheduleWorkerService;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -61,7 +63,27 @@ public class NotificationPersistenceTest {
         context = ApplicationProvider.getApplicationContext();
         device.wakeUp();
         device.executeShellCommand("wm dismiss-keyguard");
+        device.executeShellCommand("cmd statusbar collapse");
         device.pressHome();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.cancelAll();
+        }
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (device != null) {
+            device.executeShellCommand("cmd statusbar collapse");
+            device.pressHome();
+        }
+        if (context != null) {
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.cancelAll();
+            }
+        }
     }
 
     @Test

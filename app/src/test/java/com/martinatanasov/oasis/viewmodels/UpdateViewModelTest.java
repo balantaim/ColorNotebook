@@ -18,6 +18,7 @@ import android.app.Application;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,13 @@ public class UpdateViewModelTest {
     public void setUp() {
         Application application = ApplicationProvider.getApplicationContext();
         viewModel = new UpdateViewModel(application);
+    }
+
+    @After
+    public void tearDown() {
+        if (viewModel != null) {
+            viewModel.onCleared();
+        }
     }
 
     @Test
