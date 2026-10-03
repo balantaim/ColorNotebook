@@ -32,7 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinatanasov.oasis.R;
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 import com.martinatanasov.oasis.views.update.UpdateActivity;
 
 import java.util.ArrayList;

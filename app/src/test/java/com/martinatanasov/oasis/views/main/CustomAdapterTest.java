@@ -25,7 +25,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.test.core.app.ApplicationProvider;
 
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 
 import org.junit.Before;
 import org.junit.Test;

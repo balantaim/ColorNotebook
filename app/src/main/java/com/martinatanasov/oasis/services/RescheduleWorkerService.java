@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 import com.martinatanasov.oasis.utils.events.AlarmEvent;
 import com.martinatanasov.oasis.utils.events.SilentNotificationWorker;
 

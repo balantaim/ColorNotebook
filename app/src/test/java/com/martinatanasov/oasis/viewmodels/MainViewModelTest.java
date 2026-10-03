@@ -21,8 +21,8 @@ import android.app.Application;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
 
-import com.martinatanasov.oasis.dto.AddEventDTO;
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.AddEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 import com.martinatanasov.oasis.services.EventService;
 import com.martinatanasov.oasis.services.EventServiceImpl;
 import com.martinatanasov.oasis.views.main.OrderFilter;

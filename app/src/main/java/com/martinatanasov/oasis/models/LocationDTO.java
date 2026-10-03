@@ -10,7 +10,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.oasis.dto;
+package com.martinatanasov.oasis.models;
 
 public record LocationDTO(double lat, double lon, String locationName) {
 

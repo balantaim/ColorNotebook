@@ -20,7 +20,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.martinatanasov.oasis.dto.AddEventDTO;
+import com.martinatanasov.oasis.models.AddEventDTO;
 import com.martinatanasov.oasis.services.EventService;
 import com.martinatanasov.oasis.services.EventServiceImpl;
 

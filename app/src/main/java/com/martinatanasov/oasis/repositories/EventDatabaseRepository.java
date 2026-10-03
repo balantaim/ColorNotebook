@@ -24,8 +24,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.martinatanasov.oasis.R;
-import com.martinatanasov.oasis.dto.AddEventDTO;
-import com.martinatanasov.oasis.dto.UpdateEventDTO;
+import com.martinatanasov.oasis.models.AddEventDTO;
+import com.martinatanasov.oasis.models.UpdateEventDTO;
 
 public class EventDatabaseRepository extends SQLiteOpenHelper {
 

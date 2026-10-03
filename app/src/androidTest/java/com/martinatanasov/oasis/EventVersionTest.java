@@ -22,9 +22,9 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.martinatanasov.oasis.dto.AddEventDTO;
-import com.martinatanasov.oasis.dto.UpdateEventDTO;
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.AddEventDTO;
+import com.martinatanasov.oasis.models.UpdateEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 import com.martinatanasov.oasis.services.EventService;
 import com.martinatanasov.oasis.services.EventServiceImpl;
 

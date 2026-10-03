@@ -44,7 +44,7 @@ import com.martinatanasov.oasis.dialog_views.ApplyColor;
 import com.martinatanasov.oasis.dialog_views.ApplyPriority;
 import com.martinatanasov.oasis.dialog_views.PriorityDialog;
 import com.martinatanasov.oasis.dialog_views.SelectColor;
-import com.martinatanasov.oasis.dto.UserPermission;
+import com.martinatanasov.oasis.models.UserPermission;
 import com.martinatanasov.oasis.repositories.PreferencesManager;
 import com.martinatanasov.oasis.utils.ActionBarIconSetter;
 import com.martinatanasov.oasis.utils.AppSettings;

@@ -30,7 +30,7 @@ import androidx.test.uiautomator.Until;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.martinatanasov.oasis.dto.AddEventDTO;
+import com.martinatanasov.oasis.models.AddEventDTO;
 import com.martinatanasov.oasis.services.AlarmReceiverService;
 import com.martinatanasov.oasis.services.EventService;
 import com.martinatanasov.oasis.services.EventServiceImpl;

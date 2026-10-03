@@ -48,7 +48,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.martinatanasov.oasis.R;
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 import com.martinatanasov.oasis.repositories.PreferencesManager;
 import com.martinatanasov.oasis.services.RescheduleWorkerService;
 import com.martinatanasov.oasis.utils.AppSettings;

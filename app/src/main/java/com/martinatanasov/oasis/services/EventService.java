@@ -14,9 +14,9 @@ package com.martinatanasov.oasis.services;
 
 import android.database.Cursor;
 
-import com.martinatanasov.oasis.dto.AddEventDTO;
-import com.martinatanasov.oasis.dto.UpdateEventDTO;
-import com.martinatanasov.oasis.dto.UserEventDTO;
+import com.martinatanasov.oasis.models.AddEventDTO;
+import com.martinatanasov.oasis.models.UpdateEventDTO;
+import com.martinatanasov.oasis.models.UserEventDTO;
 
 import java.util.List;
 

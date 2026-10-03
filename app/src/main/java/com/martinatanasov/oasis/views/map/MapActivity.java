@@ -21,9 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.martinatanasov.oasis.R;
-import com.martinatanasov.oasis.dto.LocationDTO;
+import com.martinatanasov.oasis.models.LocationDTO;
 import com.martinatanasov.oasis.repositories.PreferencesManager;
 import com.martinatanasov.oasis.services.MapService;
+import com.martinatanasov.oasis.services.MapServiceImpl;
 import com.martinatanasov.oasis.utils.AppSettings;
 import com.martinatanasov.oasis.utils.ScreenManager;
 
@@ -253,7 +254,7 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
         searchButton = findViewById(R.id.searchButton);
         confirmButton = findViewById(R.id.confirmButton);
         confirmButton.setEnabled(false);
-        mapService = new MapService(getString(R.string.app_name_full));
+        mapService = new MapServiceImpl(getString(R.string.app_name_full));
         marker = new Marker(mapView);
 
         mapView.setTileSource(TileSourceFactory.MAPNIK);
