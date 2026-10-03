@@ -53,22 +53,24 @@ public class EventVersionTest {
     @Test
     @SuppressLint("NewApi")
     public void testVersionIncrementsOnUpdate() {
-        try (EventService eventService = new EventServiceImpl(context)) {
-            // 1. Add event
-            final long[] idArr = new long[1];
-            AddEventDTO addDto = new AddEventDTO(
-                    "Version Test", "Location", "Input", 0, 0,
-                    2023, 10, 27, 10, 0,
-                    2023, 10, 27, 11, 0,
-                    Instant.now(), Instant.now(),
-                    0, 1, 1, 0
-            );
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+        // 1. Add event
+        final long[] idArr = new long[1];
+        AddEventDTO addDto = new AddEventDTO(
+                "Version Test", "Location", "Input", 0, 0,
+                2023, 10, 27, 10, 0,
+                2023, 10, 27, 11, 0,
+                Instant.now(), Instant.now(),
+                0, 1, 1, 0
+        );
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            try (EventService eventService = new EventServiceImpl(context)) {
                 idArr[0] = eventService.addEvent(addDto);
-            });
-            long id = idArr[0];
+            }
+        });
+        long id = idArr[0];
 
-            // 2. Verify initial version is 0
+        // 2. Verify initial version is 0
+        try (EventService eventService = new EventServiceImpl(context)) {
             List<UserEventDTO> events = eventService.getUserEventDto();
             UserEventDTO event = events.stream().filter(e -> e.txtEventId().equals(String.valueOf(id))).findFirst().orElse(null);
             assertNotNull(event);
@@ -84,7 +86,9 @@ public class EventVersionTest {
             );
 
             InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-                eventService.updateEvent(updateDto);
+                try (EventService es = new EventServiceImpl(context)) {
+                    es.updateEvent(updateDto);
+                }
             });
 
             // 4. Verify version is incremented to 1
@@ -98,21 +102,23 @@ public class EventVersionTest {
     @Test
     @SuppressLint("NewApi")
     public void testVersionDoesNotIncrementOnNotificationRemoval() {
-        try (EventService eventService = new EventServiceImpl(context)) {
-            // 1. Add event
-            final long[] idArr = new long[1];
-            AddEventDTO addDto = new AddEventDTO(
-                    "Notification Test", "Location", "Input", 0, 0,
-                    2023, 10, 27, 10, 0,
-                    2023, 10, 27, 11, 0,
-                    Instant.now(), Instant.now(),
-                    0, 1, 1, 0
-            );
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+        // 1. Add event
+        final long[] idArr = new long[1];
+        AddEventDTO addDto = new AddEventDTO(
+                "Notification Test", "Location", "Input", 0, 0,
+                2023, 10, 27, 10, 0,
+                2023, 10, 27, 11, 0,
+                Instant.now(), Instant.now(),
+                0, 1, 1, 0
+        );
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            try (EventService eventService = new EventServiceImpl(context)) {
                 idArr[0] = eventService.addEvent(addDto);
-            });
-            String idStr = String.valueOf(idArr[0]);
+            }
+        });
+        String idStr = String.valueOf(idArr[0]);
 
+        try (EventService eventService = new EventServiceImpl(context)) {
             // 2. Verify initial version is 0
             List<UserEventDTO> events = eventService.getUserEventDto();
             UserEventDTO event = events.stream().filter(e -> e.txtEventId().equals(idStr)).findFirst().orElse(null);
@@ -121,7 +127,9 @@ public class EventVersionTest {
 
             // 3. Remove sound notification
             InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-                eventService.removeSoundNotification(idStr);
+                try (EventService es = new EventServiceImpl(context)) {
+                    es.removeSoundNotification(idStr);
+                }
             });
 
             // 4. Verify version remains 0
@@ -132,7 +140,9 @@ public class EventVersionTest {
 
             // 5. Remove silent notification
             InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-                eventService.removeSilentNotification(idStr);
+                try (EventService es = new EventServiceImpl(context)) {
+                    es.removeSilentNotification(idStr);
+                }
             });
 
             // 6. Verify version still remains 0
@@ -146,21 +156,23 @@ public class EventVersionTest {
     @Test
     @SuppressLint("NewApi")
     public void testOptimisticLockingPreventsUpdateWithWrongVersion() {
-        try (EventService eventService = new EventServiceImpl(context)) {
-            // 1. Add event
-            final long[] idArr = new long[1];
-            AddEventDTO addDto = new AddEventDTO(
-                    "Locking Test", "Location", "Input", 0, 0,
-                    2023, 10, 27, 10, 0,
-                    2023, 10, 27, 11, 0,
-                    Instant.now(), Instant.now(),
-                    0, 0, 0, 0
-            );
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+        // 1. Add event
+        final long[] idArr = new long[1];
+        AddEventDTO addDto = new AddEventDTO(
+                "Locking Test", "Location", "Input", 0, 0,
+                2023, 10, 27, 10, 0,
+                2023, 10, 27, 11, 0,
+                Instant.now(), Instant.now(),
+                0, 0, 0, 0
+        );
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            try (EventService eventService = new EventServiceImpl(context)) {
                 idArr[0] = eventService.addEvent(addDto);
-            });
-            String idStr = String.valueOf(idArr[0]);
+            }
+        });
+        String idStr = String.valueOf(idArr[0]);
 
+        try (EventService eventService = new EventServiceImpl(context)) {
             // 2. Attempt update with wrong version (e.g., version 1 when DB has 0)
             UpdateEventDTO wrongVersionDto = new UpdateEventDTO(
                     idStr, "Stale Update", "Location", "Input", 0, 0,
@@ -171,7 +183,9 @@ public class EventVersionTest {
             );
 
             InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-                eventService.updateEvent(wrongVersionDto);
+                try (EventService es = new EventServiceImpl(context)) {
+                    es.updateEvent(wrongVersionDto);
+                }
             });
 
             // 3. Verify record was NOT updated and version is still 0

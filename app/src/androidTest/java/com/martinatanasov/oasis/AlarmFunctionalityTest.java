@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -36,7 +38,9 @@ import org.junit.runner.RunWith;
 public class AlarmFunctionalityTest {
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS);
+    public GrantPermissionRule permissionRule = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+            ? GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS)
+            : GrantPermissionRule.grant();
 
     private Context context;
     private UiDevice uiDevice;
@@ -44,8 +48,12 @@ public class AlarmFunctionalityTest {
     @Before
     public void setUp() throws Exception {
         context = ApplicationProvider.getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean("disableTutorial", true).commit();
+
         uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         uiDevice.wakeUp();
+        uiDevice.executeShellCommand("wm dismiss-keyguard");
         uiDevice.pressHome();
     }
 
@@ -98,10 +106,10 @@ public class AlarmFunctionalityTest {
         uiDevice.wait(Until.hasObject(By.textContains("Test Alarm")), 10000);
 
         // Verify CustomActivity is displayed with the stop button
-        assertTrue("Stop button not found", uiDevice.wait(Until.hasObject(By.res("com.martinatanasov.colornotebook:id/cancelAlarm")), 5000));
+        assertTrue("Stop button not found", uiDevice.wait(Until.hasObject(By.res(context.getPackageName(), "cancelAlarm")), 5000));
 
         // Cleanup: Click the cancel button to stop the alarm
-        uiDevice.findObject(By.res("com.martinatanasov.colornotebook:id/cancelAlarm")).click();
+        uiDevice.findObject(By.res(context.getPackageName(), "cancelAlarm")).click();
     }
 
 }

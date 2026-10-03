@@ -14,6 +14,9 @@ package com.martinatanasov.oasis;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -32,6 +35,8 @@ import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.martinatanasov.oasis.services.EventService;
+import com.martinatanasov.oasis.services.EventServiceImpl;
 import com.martinatanasov.oasis.views.main.MainActivity;
 
 import org.hamcrest.Description;
@@ -72,17 +77,22 @@ public class SyncDateTimeTest {
 
     @Before
     public void setUp() {
-        // Disable tutorial before launching activity
+        // Disable tutorial and clear database before launching activity
         Context context = ApplicationProvider.getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
         sharedPreferences.edit().putBoolean("disableTutorial", true).commit();
+        androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            try (EventService eventService = new EventServiceImpl(context)) {
+                eventService.deleteAllEvents();
+            }
+        });
     }
 
     @Test
     public void testSyncFutureDateUpdatesEndDate() {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             onView(withId(R.id.add_button)).perform(click());
-            onView(withId(R.id.advOptions)).perform(click());
+            onView(withId(R.id.advOptions)).perform(scrollTo(), click());
 
             Calendar futureDate = Calendar.getInstance();
             futureDate.add(Calendar.DAY_OF_MONTH, 2);
@@ -90,9 +100,9 @@ public class SyncDateTimeTest {
             int month = futureDate.get(Calendar.MONTH) + 1;
             int day = futureDate.get(Calendar.DAY_OF_MONTH);
 
-            onView(withId(R.id.startDate)).perform(click());
+            onView(withId(R.id.startDate)).perform(scrollTo(), click());
             onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate(year, month, day));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
             SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
             String expectedDate = sdf.format(futureDate.getTime());
@@ -106,20 +116,20 @@ public class SyncDateTimeTest {
     public void testSyncFutureTimeUpdatesEndTime() {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             onView(withId(R.id.add_button)).perform(click());
-            onView(withId(R.id.advOptions)).perform(click());
+            onView(withId(R.id.advOptions)).perform(scrollTo(), click());
 
             Calendar tomorrow = Calendar.getInstance();
             tomorrow.add(Calendar.DAY_OF_MONTH, 1);
-            onView(withId(R.id.startDate)).perform(click());
+            onView(withId(R.id.startDate)).perform(scrollTo(), click());
             onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate(
                     tomorrow.get(Calendar.YEAR),
                     tomorrow.get(Calendar.MONTH) + 1,
                     tomorrow.get(Calendar.DAY_OF_MONTH)));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
-            onView(withId(R.id.startTime)).perform(click());
+            onView(withId(R.id.startTime)).perform(scrollTo(), click());
             onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(20, 0));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
             onView(withId(R.id.endTime)).check(matches(withSameTextAs(R.id.startTime)));
         }
@@ -129,40 +139,40 @@ public class SyncDateTimeTest {
     public void testSyncOnUpdateActivity() {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             onView(withId(R.id.add_button)).perform(click());
-            onView(withId(R.id.eventTitle)).perform(androidx.test.espresso.action.ViewActions.typeText("Test Event"));
+            onView(withId(R.id.eventTitle)).perform(typeText("Test Event"), closeSoftKeyboard());
             onView(withId(R.id.btnAdd)).perform(click());
 
             onView(withId(R.id.recyclerView)).perform(androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition(0, click()));
-            onView(withId(R.id.advOptions2)).perform(click());
+            onView(withId(R.id.advOptions2)).perform(scrollTo(), click());
 
             Calendar toDate = Calendar.getInstance();
             toDate.add(Calendar.DAY_OF_MONTH, 2);
-            onView(withId(R.id.endDate2)).perform(click());
+            onView(withId(R.id.endDate2)).perform(scrollTo(), click());
             onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate(
                     toDate.get(Calendar.YEAR),
                     toDate.get(Calendar.MONTH) + 1,
                     toDate.get(Calendar.DAY_OF_MONTH)));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
-            onView(withId(R.id.endTime2)).perform(click());
+            onView(withId(R.id.endTime2)).perform(scrollTo(), click());
             onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(10, 0));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
             Calendar fromDate = Calendar.getInstance();
             fromDate.add(Calendar.DAY_OF_MONTH, 3);
-            onView(withId(R.id.startDate2)).perform(click());
+            onView(withId(R.id.startDate2)).perform(scrollTo(), click());
             onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate(
                     fromDate.get(Calendar.YEAR),
                     fromDate.get(Calendar.MONTH) + 1,
                     fromDate.get(Calendar.DAY_OF_MONTH)));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
             onView(withId(R.id.endDate2)).check(matches(withSameTextAs(R.id.startDate2)));
             onView(withId(R.id.endTime2)).check(matches(withSameTextAs(R.id.startTime2)));
 
-            onView(withId(R.id.startTime2)).perform(click());
+            onView(withId(R.id.startTime2)).perform(scrollTo(), click());
             onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(23, 0));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
             onView(withId(R.id.endTime2)).check(matches(withSameTextAs(R.id.startTime2)));
         }
@@ -172,15 +182,15 @@ public class SyncDateTimeTest {
     public void testEndTimeConstraint() {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             onView(withId(R.id.add_button)).perform(click());
-            onView(withId(R.id.advOptions)).perform(click());
+            onView(withId(R.id.advOptions)).perform(scrollTo(), click());
 
-            onView(withId(R.id.startTime)).perform(click());
+            onView(withId(R.id.startTime)).perform(scrollTo(), click());
             onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(15, 0));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
-            onView(withId(R.id.endTime)).perform(click());
+            onView(withId(R.id.endTime)).perform(scrollTo(), click());
             onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(14, 0));
-            onView(withText("OK")).perform(click());
+            onView(withId(android.R.id.button1)).perform(click());
 
             onView(withId(R.id.endTime)).check(matches(withSameTextAs(R.id.startTime)));
         }

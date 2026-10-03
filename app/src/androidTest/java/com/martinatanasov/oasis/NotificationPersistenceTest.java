@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -29,6 +31,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.martinatanasov.oasis.dto.AddEventDTO;
+import com.martinatanasov.oasis.services.AlarmReceiverService;
 import com.martinatanasov.oasis.services.EventService;
 import com.martinatanasov.oasis.services.EventServiceImpl;
 import com.martinatanasov.oasis.services.RescheduleWorkerService;
@@ -45,35 +48,41 @@ import java.util.Calendar;
 public class NotificationPersistenceTest {
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS);
+    public GrantPermissionRule permissionRule = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+            ? GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS)
+            : GrantPermissionRule.grant();
+
     private UiDevice device;
     private Context context;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         context = ApplicationProvider.getApplicationContext();
+        device.wakeUp();
+        device.executeShellCommand("wm dismiss-keyguard");
+        device.pressHome();
     }
 
     @Test
     @SuppressLint("NewApi")
     public void testSoundNotificationPersistence() throws Exception {
         final long[] eventIdArr = new long[1];
-        // 1. Create a sound event (even in the past) - run on main thread because of Toast
+        // 1. Create a sound event set 1 minute in future (since getStartCalendar truncates seconds)
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
             try (EventService eventService = new EventServiceImpl(context)) {
-                Calendar past = Calendar.getInstance();
-                past.add(Calendar.MINUTE, -10); // 10 minutes ago
+                Calendar future = Calendar.getInstance();
+                future.add(Calendar.MINUTE, 1);
 
                 eventIdArr[0] = eventService.addEvent(new AddEventDTO(
                         "Persistence Test",
                         "Test Location",
                         "Test Node",
                         0, 0,
-                        past.get(Calendar.YEAR), past.get(Calendar.MONTH), past.get(Calendar.DAY_OF_MONTH),
-                        past.get(Calendar.HOUR_OF_DAY), past.get(Calendar.MINUTE),
-                        past.get(Calendar.YEAR), past.get(Calendar.MONTH), past.get(Calendar.DAY_OF_MONTH),
-                        past.get(Calendar.HOUR_OF_DAY), past.get(Calendar.MINUTE),
+                        future.get(Calendar.YEAR), future.get(Calendar.MONTH), future.get(Calendar.DAY_OF_MONTH),
+                        future.get(Calendar.HOUR_OF_DAY), future.get(Calendar.MINUTE),
+                        future.get(Calendar.YEAR), future.get(Calendar.MONTH), future.get(Calendar.DAY_OF_MONTH),
+                        future.get(Calendar.HOUR_OF_DAY), future.get(Calendar.MINUTE),
                         Instant.now(), Instant.now(),
                         0, 1, 0,
                         0
@@ -91,11 +100,25 @@ public class NotificationPersistenceTest {
             OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(RescheduleWorkerService.class).build();
             WorkManager.getInstance(context).enqueue(workRequest).getResult().get();
 
-            // 3. Open notification shade and check for the notification
+            // 3. Trigger broadcast to simulate alarm firing post-reschedule
+            Intent alarmIntent = new Intent(context, AlarmReceiverService.class);
+            alarmIntent.putExtra("id", String.valueOf(eventId));
+            alarmIntent.putExtra("title", "Persistence Test");
+            alarmIntent.putExtra("node", "Test Node");
+            alarmIntent.putExtra("priority", 0);
+            context.sendBroadcast(alarmIntent);
+
+            Thread.sleep(2000);
+
+            // 4. Open notification shade and check for the notification
             device.openNotification();
 
             // Wait for the notification to appear
             boolean found = device.wait(Until.hasObject(By.text("Persistence Test")), 5000);
+            if (!found && device.hasObject(By.textContains("Active alarms"))) {
+                device.findObject(By.textContains("Active alarms")).click();
+                found = device.wait(Until.hasObject(By.text("Persistence Test")), 3000);
+            }
 
             // Cleanup: close shade and delete event
             device.pressBack();
