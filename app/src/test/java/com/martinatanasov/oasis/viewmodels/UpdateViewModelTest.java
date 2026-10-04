@@ -13,25 +13,38 @@
 package com.martinatanasov.oasis.viewmodels;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import android.app.Application;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
+
+import com.martinatanasov.oasis.models.AddEventDTO;
+import com.martinatanasov.oasis.services.EventService;
+import com.martinatanasov.oasis.services.EventServiceImpl;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.time.Instant;
+
 @RunWith(RobolectricTestRunner.class)
 public class UpdateViewModelTest {
 
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     private UpdateViewModel viewModel;
+    private Application application;
 
     @Before
     public void setUp() {
-        Application application = ApplicationProvider.getApplicationContext();
+        application = ApplicationProvider.getApplicationContext();
         viewModel = new UpdateViewModel(application);
     }
 
@@ -59,6 +72,33 @@ public class UpdateViewModelTest {
         assertEquals(false, viewModel.isExpanded.getValue());
         viewModel.toggleExpanded();
         assertEquals(true, viewModel.isExpanded.getValue());
+    }
+
+    @Test
+    public void testUpdateAndDeleteEvent() {
+        long id;
+        try (EventService eventService = new EventServiceImpl(application)) {
+            id = eventService.addEvent(new AddEventDTO(
+                    "Title", "Loc", "Input", 0, 0,
+                    2024, 1, 1, 10, 0,
+                    2024, 1, 1, 11, 0,
+                    Instant.now(), Instant.now(), 0, 0, 0, 0
+            ));
+        }
+
+        viewModel.id.setValue(String.valueOf(id));
+        viewModel.title.setValue("Updated Title");
+        viewModel.location.setValue("Updated Loc");
+        viewModel.input.setValue("Updated Input");
+        viewModel.version.setValue(0);
+
+        viewModel.updateEvent();
+        assertNotNull(viewModel.eventUpdatedEvent.getValue());
+        assertTrue(viewModel.eventUpdatedEvent.getValue());
+
+        viewModel.deleteEvent();
+        assertNotNull(viewModel.eventDeletedEvent.getValue());
+        assertTrue(viewModel.eventDeletedEvent.getValue());
     }
 
 }

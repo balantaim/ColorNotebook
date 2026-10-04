@@ -10,13 +10,14 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-package com.martinatanasov.oasis.services;
+package com.martinatanasov.oasis.utils.events;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.work.Data;
 import androidx.work.ListenableWorker;
 import androidx.work.testing.TestListenableWorkerBuilder;
 import androidx.work.testing.WorkManagerTestInitHelper;
@@ -28,7 +29,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
-public class RescheduleWorkerTest {
+public class SilentNotificationWorkerTest {
 
     private Context context;
 
@@ -44,10 +45,28 @@ public class RescheduleWorkerTest {
     }
 
     @Test
-    public void testRescheduleWorkerDoWork() {
-        RescheduleWorkerService worker = TestListenableWorkerBuilder.from(context, RescheduleWorkerService.class).build();
+    public void testWorkerDoWork() {
+        Data inputData = new Data.Builder()
+                .putString("id", "500")
+                .putString("title", "Silent Title")
+                .putString("note", "Silent Note long description text to test stripNote method properly")
+                .putInt("color", 2)
+                .putInt("priority", 1)
+                .build();
+
+        SilentNotificationWorker worker = TestListenableWorkerBuilder.from(context, SilentNotificationWorker.class)
+                .setInputData(inputData)
+                .build();
+
         ListenableWorker.Result result = worker.doWork();
-        assertEquals(ListenableWorker.Result.success(), result);
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testScheduleAndCancelSilentNotifications() {
+        SilentNotificationWorker.scheduleSilentNotification(context, "900", "Test", "Note", 1, 0, 1000L);
+        SilentNotificationWorker.cancelSilentNotification(context, "900");
+        SilentNotificationWorker.cancelAllSilentNotifications(context);
     }
 
 }

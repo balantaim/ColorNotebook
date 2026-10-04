@@ -14,13 +14,16 @@ package com.martinatanasov.oasis.viewmodels;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import android.app.Application;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -28,6 +31,8 @@ import org.robolectric.RobolectricTestRunner;
 @RunWith(RobolectricTestRunner.class)
 public class AddViewModelTest {
 
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     private AddViewModel viewModel;
 
     @Before
@@ -62,6 +67,20 @@ public class AddViewModelTest {
         assertEquals(true, viewModel.isExpanded.getValue());
         viewModel.toggleExpanded();
         assertEquals(false, viewModel.isExpanded.getValue());
+    }
+
+    @Test
+    public void testAddEvent() {
+        viewModel.title.setValue("Test Title");
+        viewModel.location.setValue("Test Location");
+        viewModel.input.setValue("Test Input");
+        viewModel.colorPicker.setValue(1);
+        viewModel.priorityPicker.setValue(0);
+
+        viewModel.addEvent();
+
+        assertNotNull(viewModel.eventAddedEvent.getValue());
+        assertTrue(viewModel.eventAddedEvent.getValue() > 0);
     }
 
 }

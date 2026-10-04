@@ -13,6 +13,7 @@
 package com.martinatanasov.oasis.repositories;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
@@ -30,10 +31,11 @@ import org.robolectric.RobolectricTestRunner;
 public class PreferencesManagerTest {
 
     private PreferencesManager preferencesManager;
+    private Context context;
 
     @Before
     public void setUp() {
-        Context context = ApplicationProvider.getApplicationContext();
+        context = ApplicationProvider.getApplicationContext();
         preferencesManager = new PreferencesManager(context);
     }
 
@@ -63,6 +65,23 @@ public class PreferencesManagerTest {
         // New instance should also have the value
         PreferencesManager newManager = new PreferencesManager(ApplicationProvider.getApplicationContext());
         assertEquals(PriorityFilter.IMPORTANT, newManager.getPriorityFilter());
+    }
+
+    @Test
+    public void testThemeAndTutorialAndDarkModePersistence() {
+        preferencesManager.setThemeOnDisc(1);
+        assertEquals(1, preferencesManager.getCurrentTheme());
+
+        preferencesManager.setTutorialOnDisc(true);
+        assertTrue(preferencesManager.getTutorialStatus());
+
+        preferencesManager.setForceDarkOnDisc(true);
+        assertTrue(preferencesManager.getForceDarkMode());
+
+        PreferencesManager altManager = new PreferencesManager(context, true, true);
+        assertEquals(1, altManager.getCurrentTheme());
+        assertTrue(altManager.getTutorialStatus());
+        assertTrue(altManager.getForceDarkMode());
     }
 
 }

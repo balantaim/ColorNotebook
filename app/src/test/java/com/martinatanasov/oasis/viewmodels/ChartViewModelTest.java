@@ -49,4 +49,13 @@ public class ChartViewModelTest {
         assertEquals(0.0f, viewModel.unimportantPercent.getValue(), 0.01f);
     }
 
+    @Test
+    public void testCalculatePieChartDataInvalidNumberFormat() {
+        viewModel.calculatePieChartData("abc", "invalid", "12");
+
+        assertEquals(0.0f, viewModel.importantPercent.getValue(), 0.01f);
+        assertEquals(0.0f, viewModel.regularPercent.getValue(), 0.01f);
+        assertEquals(0.0f, viewModel.unimportantPercent.getValue(), 0.01f);
+    }
+
 }

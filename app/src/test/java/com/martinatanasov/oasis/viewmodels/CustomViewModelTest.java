@@ -19,6 +19,7 @@ import android.app.Application;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.work.testing.WorkManagerTestInitHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,6 +38,7 @@ public class CustomViewModelTest {
     @Before
     public void setUp() {
         Application application = ApplicationProvider.getApplicationContext();
+        WorkManagerTestInitHelper.initializeTestWorkManager(application);
         viewModel = new CustomViewModel(application);
     }
 
@@ -45,6 +47,7 @@ public class CustomViewModelTest {
         if (viewModel != null) {
             viewModel.onCleared();
         }
+        WorkManagerTestInitHelper.closeWorkDatabase();
     }
 
     @Test
@@ -55,6 +58,16 @@ public class CustomViewModelTest {
     @Test
     public void testSetDone() {
         viewModel.setDone(true);
+        assertTrue(viewModel.isDone.getValue());
+    }
+
+    @Test
+    public void testCancelAlarm() {
+        viewModel.cancelAlarm("999");
+        assertTrue(viewModel.isDone.getValue());
+
+        // Repeated call should do nothing since isDone is true
+        viewModel.cancelAlarm("999");
         assertTrue(viewModel.isDone.getValue());
     }
 

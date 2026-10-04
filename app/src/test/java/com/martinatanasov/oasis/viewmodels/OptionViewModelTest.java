@@ -20,6 +20,8 @@ import android.app.Application;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.martinatanasov.oasis.views.option.AppLanguage;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,6 +45,7 @@ public class OptionViewModelTest {
     public void testInitialState() {
         assertNotNull(viewModel.currentTheme.getValue());
         assertNotNull(viewModel.forceDarkMode.getValue());
+        assertNotNull(viewModel.currentLanguage.getValue());
     }
 
     @Test
@@ -55,6 +58,12 @@ public class OptionViewModelTest {
     public void testSetForceDarkMode() {
         viewModel.setForceDarkMode(true);
         assertEquals(true, viewModel.forceDarkMode.getValue());
+    }
+
+    @Test
+    public void testSetLanguage() {
+        viewModel.setLanguage(AppLanguage.BULGARIAN);
+        assertEquals(AppLanguage.BULGARIAN, viewModel.currentLanguage.getValue());
     }
 
 }

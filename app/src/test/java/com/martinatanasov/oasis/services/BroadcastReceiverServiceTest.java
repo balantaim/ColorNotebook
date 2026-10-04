@@ -12,13 +12,10 @@
 
 package com.martinatanasov.oasis.services;
 
-import static org.junit.Assert.assertEquals;
-
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.work.ListenableWorker;
-import androidx.work.testing.TestListenableWorkerBuilder;
 import androidx.work.testing.WorkManagerTestInitHelper;
 
 import org.junit.After;
@@ -28,14 +25,16 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
-public class RescheduleWorkerTest {
+public class BroadcastReceiverServiceTest {
 
     private Context context;
+    private BroadcastReceiverService receiver;
 
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
         WorkManagerTestInitHelper.initializeTestWorkManager(context);
+        receiver = new BroadcastReceiverService();
     }
 
     @After
@@ -44,10 +43,15 @@ public class RescheduleWorkerTest {
     }
 
     @Test
-    public void testRescheduleWorkerDoWork() {
-        RescheduleWorkerService worker = TestListenableWorkerBuilder.from(context, RescheduleWorkerService.class).build();
-        ListenableWorker.Result result = worker.doWork();
-        assertEquals(ListenableWorker.Result.success(), result);
+    public void testOnReceiveBootCompleted() {
+        Intent intent = new Intent(Intent.ACTION_BOOT_COMPLETED);
+        receiver.onReceive(context, intent);
+    }
+
+    @Test
+    public void testOnReceiveOtherAction() {
+        Intent intent = new Intent("UNHANDLED_ACTION");
+        receiver.onReceive(context, intent);
     }
 
 }

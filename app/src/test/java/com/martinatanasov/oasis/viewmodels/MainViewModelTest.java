@@ -215,4 +215,31 @@ public class MainViewModelTest {
         assertEquals(1, (int) viewModel.soundNotificationsCount.getValue());
     }
 
+    @Test
+    public void testSearchQueryAndRemoveEventAndMisc() {
+        viewModel.init();
+        assertTrue(viewModel.shouldShowTutorial());
+
+        assertNotNull(viewModel.getWebsiteIntent());
+
+        viewModel.setSearchQuery("Test");
+        assertEquals("Test", viewModel.searchQuery.getValue());
+
+        long id;
+        try (EventService eventService = new EventServiceImpl(application)) {
+            id = eventService.addEvent(new AddEventDTO(
+                    "Search Target", "Loc", "Input", 0, 0,
+                    2024, 1, 1, 10, 0,
+                    2024, 1, 1, 11, 0,
+                    Instant.now(), Instant.now(), 0, 0, 0, 0
+            ));
+        }
+
+        viewModel.loadData();
+        assertEquals(1, viewModel.events.getValue().size());
+
+        viewModel.removeEvent(String.valueOf(id));
+        assertEquals(0, viewModel.events.getValue().size());
+    }
+
 }
