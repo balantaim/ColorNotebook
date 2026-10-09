@@ -52,6 +52,7 @@
                 android:id="@+id/txtEventTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:maxLines="2"
                 android:text="Event"
                 android:textColor="?attr/colorOnPrimary"

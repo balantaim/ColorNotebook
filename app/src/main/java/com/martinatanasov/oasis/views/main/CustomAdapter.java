@@ -45,14 +45,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private List<UserEventDTO> userModelList;
     private List<UserEventDTO> userModelListFiltered;
     private final Activity activity;
-    private final int maxTitleLength;
 
     public CustomAdapter(Activity activity, Context context, List<UserEventDTO> userModel) {
         this.userModelList = userModel;
         this.userModelListFiltered = userModel;
         this.context = context;
         this.activity = activity;
-        this.maxTitleLength = getMaxTitleLength(context);
     }
 
     @NonNull
@@ -65,32 +63,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.setIsRecyclable(false);
 
         return holder;
-    }
-
-    public static int getMaxTitleLength(Context context) {
-        if (context == null) {
-            return 20;
-        }
-
-        try {
-            android.content.res.Configuration config = context.getResources().getConfiguration();
-            boolean isLandscape = config.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-            double percentage = isLandscape ? 0.80 : 0.60;
-
-            android.util.DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-            int widthDp = metrics.density > 0 ? (int) (metrics.widthPixels / metrics.density) : 0;
-            if (widthDp <= 0) {
-                widthDp = config.screenWidthDp;
-            }
-            if (widthDp <= 0) {
-                widthDp = isLandscape ? 640 : 360;
-            }
-            // 2 lines capacity
-            int calculated = (int) ((widthDp * percentage * 2) / 11);
-            return Math.max(20, calculated);
-        } catch (Exception e) {
-            return 20;
-        }
     }
 
     @SuppressLint("NewApi")
@@ -223,11 +195,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         String title = userEventDTO.txtEventTitle();
 
         if (title != null) {
-            if (title.length() > maxTitleLength) {
-                holder.txtEventTitle.setText(title.substring(0, maxTitleLength - 2) + "..");
-            } else {
-                holder.txtEventTitle.setText(title);
-            }
+            holder.txtEventTitle.setText(title);
         }
         //SetUp background color
         if (userEventDTO.int_color_picker() != 0) {
