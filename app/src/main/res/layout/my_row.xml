@@ -50,9 +50,9 @@
 
             <TextView
                 android:id="@+id/txtEventTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="Event"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
