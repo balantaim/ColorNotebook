@@ -28,7 +28,7 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
 
-import com.martinatanasov.oasis.services.AlarmReceiverService;
+import com.martinatanasov.oasis.service.AlarmReceiverService;
 
 import org.junit.After;
 import org.junit.Before;

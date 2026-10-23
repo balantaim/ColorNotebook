@@ -18,7 +18,7 @@
     android:layout_height="match_parent"
     android:background="?attr/badgeStyle"
     android:fitsSystemWindows="true"
-    tools:context=".views.add.AddActivity">
+    tools:context=".view.add.AddActivity">
 
     <!--    Navigation bar -->
     <com.google.android.material.appbar.MaterialToolbar

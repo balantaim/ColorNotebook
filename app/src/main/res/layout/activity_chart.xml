@@ -17,7 +17,7 @@
     android:id="@+id/root_layout_chart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.chart.ChartActivity">
+    tools:context=".view.chart.ChartActivity">
 
     <!--    Navigation bar -->
     <com.google.android.material.appbar.MaterialToolbar

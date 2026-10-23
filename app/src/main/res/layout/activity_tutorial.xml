@@ -17,7 +17,7 @@
     android:id="@+id/root_layout_tutorial"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.tutorial.TutorialActivity"
+    tools:context=".view.tutorial.TutorialActivity"
     android:background="@color/white">
 
     <androidx.viewpager2.widget.ViewPager2

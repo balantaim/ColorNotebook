@@ -23,17 +23,17 @@
         android:theme="@style/Theme.DefaultColorNotebook"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".views.map.MapActivity"
+            android:name=".view.map.MapActivity"
             android:exported="false" />
         <activity
-            android:name=".views.details.DetailsActivity"
+            android:name=".view.details.DetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".views.custom.CustomActivity"
+            android:name=".view.custom.CustomActivity"
             android:exported="false"
             android:label="@string/alarm_information" />
         <activity
-            android:name=".views.main.MainActivity"
+            android:name=".view.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.DefaultColorNotebook">
@@ -44,41 +44,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.chart.ChartActivity"
+            android:name=".view.chart.ChartActivity"
             android:exported="false"
             android:label="@string/chart"
-            android:parentActivityName=".views.main.MainActivity" />
+            android:parentActivityName=".view.main.MainActivity" />
         <activity
-            android:name=".views.option.OptionActivity"
+            android:name=".view.option.OptionActivity"
             android:exported="true"
             android:label="@string/my_menu_options"
-            android:parentActivityName=".views.main.MainActivity"
+            android:parentActivityName=".view.main.MainActivity"
             android:theme="@style/Theme.DefaultColorNotebook" />
         <activity
-            android:name=".views.update.UpdateActivity"
-            android:parentActivityName=".views.main.MainActivity"
+            android:name=".view.update.UpdateActivity"
+            android:parentActivityName=".view.main.MainActivity"
             android:theme="@style/Theme.DefaultColorNotebook"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".views.add.AddActivity"
+            android:name=".view.add.AddActivity"
             android:label="@string/add_event"
-            android:parentActivityName=".views.main.MainActivity"
+            android:parentActivityName=".view.main.MainActivity"
             android:theme="@style/Theme.DefaultColorNotebook"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".views.tutorial.TutorialActivity"
+            android:name=".view.tutorial.TutorialActivity"
             android:exported="true"
             android:theme="@style/Theme.Tutorial" />
 
         <receiver
-            android:name=".services.BroadcastReceiverService"
+            android:name=".service.BroadcastReceiverService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".services.AlarmReceiverService"
+            android:name=".service.AlarmReceiverService"
             android:exported="false" />
 
         <!-- Expose language service -->

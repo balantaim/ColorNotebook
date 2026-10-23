@@ -14,8 +14,8 @@ android {
         applicationId "com.martinatanasov.oasis"
         minSdkVersion 24
         targetSdkVersion 37
-        versionCode 3
-        versionName "1.0.0-DEMO-3"
+        versionCode 4
+        versionName "1.0.0"
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
@@ -135,7 +135,7 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-wms:6.1.20'
 
     //LeakCanary
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
     //Junit
     testImplementation 'junit:junit:4.13.2'

@@ -35,9 +35,9 @@ import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
-import com.martinatanasov.oasis.services.EventService;
-import com.martinatanasov.oasis.services.EventServiceImpl;
-import com.martinatanasov.oasis.views.main.MainActivity;
+import com.martinatanasov.oasis.service.EventService;
+import com.martinatanasov.oasis.service.EventServiceImpl;
+import com.martinatanasov.oasis.view.main.MainActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

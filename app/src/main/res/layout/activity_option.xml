@@ -19,7 +19,7 @@
     android:layout_height="match_parent"
     android:background="?attr/badgeStyle"
     android:fillViewport="true"
-    tools:context=".views.option.OptionActivity">
+    tools:context=".view.option.OptionActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

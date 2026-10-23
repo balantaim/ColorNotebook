@@ -31,11 +31,11 @@ import androidx.test.uiautomator.Until;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.martinatanasov.oasis.models.AddEventDTO;
-import com.martinatanasov.oasis.services.AlarmReceiverService;
-import com.martinatanasov.oasis.services.EventService;
-import com.martinatanasov.oasis.services.EventServiceImpl;
-import com.martinatanasov.oasis.services.RescheduleWorkerService;
+import com.martinatanasov.oasis.model.AddEventDTO;
+import com.martinatanasov.oasis.service.AlarmReceiverService;
+import com.martinatanasov.oasis.service.EventService;
+import com.martinatanasov.oasis.service.EventServiceImpl;
+import com.martinatanasov.oasis.service.RescheduleWorkerService;
 
 import org.junit.After;
 import org.junit.Before;
