@@ -46,16 +46,15 @@ import com.martinatanasov.oasis.dialog_view.PriorityDialog;
 import com.martinatanasov.oasis.dialog_view.SelectColor;
 import com.martinatanasov.oasis.model.UserPermission;
 import com.martinatanasov.oasis.repository.PreferencesManager;
-import com.martinatanasov.oasis.util.ActionBarIconSetter;
 import com.martinatanasov.oasis.util.AppSettings;
 import com.martinatanasov.oasis.util.ConvertTimeToTxt;
 import com.martinatanasov.oasis.util.EventValidator;
 import com.martinatanasov.oasis.util.ScreenManager;
 import com.martinatanasov.oasis.util.event.AlarmEvent;
 import com.martinatanasov.oasis.util.event.SilentNotificationWorker;
-import com.martinatanasov.oasis.viewmodel.AddViewModel;
 import com.martinatanasov.oasis.view.main.MainActivity;
 import com.martinatanasov.oasis.view.map.MapActivity;
+import com.martinatanasov.oasis.viewmodel.AddViewModel;
 
 import java.util.Calendar;
 import java.util.List;
@@ -116,12 +115,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
         // Enable back button
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);// show back arrow
-//            Drawable arrow = getResources().getDrawable(R.drawable.ic_custom_arrow);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                arrow.setTint(getResources().getColor(R.color.white, getTheme())); // set color
-//            }
-//            getSupportActionBar().setHomeAsUpIndicator(arrow);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_custom_arrow);
         }
 
@@ -291,11 +285,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
             intent.putExtra(MapActivity.EXTRA_LOCATION, locationText);
         }
         mapActivityLauncher.launch(intent);
-    }
-
-    private void changeArrowBackBtn() {
-        ActionBarIconSetter actionBarIconSetter = new ActionBarIconSetter();
-        actionBarIconSetter.setArrowBackIcon(Objects.requireNonNull(getSupportActionBar()));
     }
 
     private void selectColor() {

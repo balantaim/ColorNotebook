@@ -14,7 +14,6 @@ package com.martinatanasov.oasis.util;
 
 import android.content.res.Configuration;
 import android.view.View;
-import android.view.Window;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
@@ -33,13 +32,6 @@ public class ScreenManager {
             EdgeToEdge.enable(activity);
             configureSystemBarIcons(activity);
         }
-        if (content != null) {
-            applyInsets(content);
-        }
-    }
-
-    @Deprecated
-    public ScreenManager(View content, Window window, final boolean decorFitsSystemWindows) {
         if (content != null) {
             applyInsets(content);
         }
