@@ -167,9 +167,7 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
     }
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.root_layout_option),
-                getWindow(),
-                false);
+        new ScreenManager(this, findViewById(R.id.root_layout_option));
     }
 
     private void initiateGlideResource() {

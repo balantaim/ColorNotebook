@@ -149,9 +149,7 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     AlertDialog confirmDialog;
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.root_layout_update),
-                getWindow(),
-                false);
+        new ScreenManager(this, findViewById(R.id.root_layout_update));
     }
 
     private void initObservers() {

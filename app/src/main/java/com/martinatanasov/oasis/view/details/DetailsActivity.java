@@ -17,6 +17,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.martinatanasov.oasis.R;
+import com.martinatanasov.oasis.util.ScreenManager;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -24,5 +25,6 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        new ScreenManager(this, findViewById(R.id.root_layout_details));
     }
 }

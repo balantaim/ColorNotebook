@@ -12,57 +12,117 @@
 
 package com.martinatanasov.oasis.util;
 
+import android.content.res.Configuration;
 import android.view.View;
 import android.view.Window;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.martinatanasov.oasis.R;
+
 public class ScreenManager {
 
-    public ScreenManager(View content, Window window, final boolean decorFitsSystemWindows) {
-        // Make application to be on full screen
-        setSystemBarsVisibility(window, decorFitsSystemWindows);
-        // Apply padding to avoid navigation bar overlap
-        setPaddingToRootLayout(content);
+    public ScreenManager(ComponentActivity activity, View content) {
+        if (activity != null) {
+            EdgeToEdge.enable(activity);
+            configureSystemBarIcons(activity);
+        }
+        if (content != null) {
+            applyInsets(content);
+        }
     }
 
-    private void setPaddingToRootLayout(View content) {
-        ViewCompat.setOnApplyWindowInsetsListener(content, (v, insets) -> {
-            Insets systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(
-                    systemInsets.left,
-                    systemInsets.top,
-                    systemInsets.right,
-                    systemInsets.bottom
+    @Deprecated
+    public ScreenManager(View content, Window window, final boolean decorFitsSystemWindows) {
+        if (content != null) {
+            applyInsets(content);
+        }
+    }
+
+    private void configureSystemBarIcons(ComponentActivity activity) {
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(
+                activity.getWindow(),
+                activity.getWindow().getDecorView()
+        );
+        // White/light status bar icons for high contrast against dark toolbar backgrounds
+        controller.setAppearanceLightStatusBars(false);
+
+        // Determine if dark theme is active for navigation bar icons
+        int nightMode = activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isDarkTheme = (nightMode == Configuration.UI_MODE_NIGHT_YES);
+
+        // Dark navigation icons on light theme, white navigation icons on dark theme
+        controller.setAppearanceLightNavigationBars(!isDarkTheme);
+    }
+
+    private void applyInsets(View root) {
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets systemInsets = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
             );
+
+            View toolbar = findToolbar(v);
+            if (toolbar != null) {
+                toolbar.setPadding(
+                        systemInsets.left,
+                        systemInsets.top,
+                        systemInsets.right,
+                        toolbar.getPaddingBottom()
+                );
+
+                View mainContainer = v.findViewById(R.id.mainContainer);
+                View containerToPad = (mainContainer != null) ? mainContainer : v;
+
+                if (containerToPad != v) {
+                    containerToPad.setPadding(
+                            systemInsets.left,
+                            0,
+                            systemInsets.right,
+                            systemInsets.bottom
+                    );
+                    v.setPadding(0, 0, 0, 0);
+                } else {
+                    v.setPadding(
+                            systemInsets.left,
+                            0,
+                            systemInsets.right,
+                            systemInsets.bottom
+                    );
+                }
+            } else {
+                v.setPadding(
+                        systemInsets.left,
+                        systemInsets.top,
+                        systemInsets.right,
+                        systemInsets.bottom
+                );
+            }
             return insets;
         });
     }
 
-    private void setSystemBarsVisibility(Window window, final boolean decorFitsSystemWindows) {
-        WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
-        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.getDecorView());
-        if (windowInsetsControllerCompat != null) {
-            // Hide the status bar
-            windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
-            // Ensure the navigation bar is visible
-            windowInsetsControllerCompat.show(WindowInsetsCompat.Type.navigationBars());
-            // Set behavior to allow showing hidden bars by swipe
-            windowInsetsControllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+    private View findToolbar(View root) {
+        int[] toolbarIds = new int[]{
+                R.id.toolbar,
+                R.id.toolbar_add,
+                R.id.toolbar_update,
+                R.id.toolbar_option,
+                R.id.toolbar_chart,
+                R.id.toolbar_search_map
+        };
+        for (int id : toolbarIds) {
+            View t = root.findViewById(id);
+            if (t != null) {
+                return t;
+            }
         }
+        return null;
     }
-
-//    private void setApplicationFullscreenMode(Window window, final boolean decorFitsSystemWindows) {
-//        WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
-//        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.getDecorView());
-//        if (windowInsetsControllerCompat != null) {
-//            windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.systemBars());
-//            windowInsetsControllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-//        }
-//    }
 
 }

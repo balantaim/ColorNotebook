@@ -60,9 +60,7 @@ public class TutorialActivity extends AppCompatActivity {
     }
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.root_layout_tutorial),
-                getWindow(),
-                false);
+        new ScreenManager(this, findViewById(R.id.root_layout_tutorial));
     }
 
 }

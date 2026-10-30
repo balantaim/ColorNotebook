@@ -281,9 +281,7 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.root_layout_add),
-                getWindow(),
-                false);
+        new ScreenManager(this, findViewById(R.id.root_layout_add));
     }
 
     private void launchMapActivity() {

@@ -64,9 +64,7 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
     }
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.root_layout_custom),
-                getWindow(),
-                false);
+        new ScreenManager(this, findViewById(R.id.root_layout_custom));
     }
 
     private void updateTextFields(String title, String node, int priority, int color) {

@@ -14,8 +14,8 @@ android {
         applicationId "com.martinatanasov.oasis"
         minSdkVersion 24
         targetSdkVersion 37
-        versionCode 4
-        versionName "1.0.0"
+        versionCode 5
+        versionName "1.0.1"
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
@@ -127,7 +127,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:2.11.0"
 
     //Http client
-    implementation("com.squareup.okhttp3:okhttp:5.5.0")
+    implementation("com.squareup.okhttp3:okhttp:5.5.1")
 
     //Maps alternative for Android
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
