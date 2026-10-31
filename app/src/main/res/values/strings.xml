@@ -104,7 +104,7 @@
     <string name="scroll_top">Scroll to the top</string>
     <string name="fragThreeHeader">Add location to your event</string>
     <string name="fragTwoHeader">Create you own event</string>
-    <string name="fragOneHeader">Welcome to tutorial guide</string>
+    <string name="fragOneHeader">Welcome to Oasis. Would you like a quick tour?</string>
     <string name="skip">Skip</string>
     <string name="checkInfoDev">About application</string>
     <!--    Description-->

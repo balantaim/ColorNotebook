@@ -64,7 +64,7 @@
 
     <style name="Theme.DarkColorNotebook" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/gray_new</item>
         <item name="colorPrimaryVariant">@color/gray</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -77,12 +77,12 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/black</item>
-        <item name="badgeStyle">@color/purple_900</item>
-        <item name="customColorValue">@color/black</item>
+        <item name="badgeStyle">@color/gray</item>
+        <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error_night</item>
         <item name="cardBackgroundColor">@color/gray</item>
         <item name="addUpdateToolbarBackground">@android:color/transparent</item>
-        <item name="addUpdateToolbarTextColor">?attr/colorOnPrimary</item>
+        <item name="addUpdateToolbarTextColor">@color/white</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -123,7 +123,7 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error_night</item>
         <item name="addUpdateToolbarBackground">@android:color/transparent</item>
-        <item name="addUpdateToolbarTextColor">?attr/colorOnPrimary</item>
+        <item name="addUpdateToolbarTextColor">@color/white</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.BottomSheetDialog">
