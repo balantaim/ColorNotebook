@@ -114,7 +114,7 @@
             android:id="@+id/txtHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="60dp"
             android:text="@string/creator"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="22sp"
