@@ -25,7 +25,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.martinatanasov.oasis.R;
 
-public class ScreenManager {
+public final class ScreenManager {
 
     public ScreenManager(ComponentActivity activity, View content) {
         if (activity != null) {

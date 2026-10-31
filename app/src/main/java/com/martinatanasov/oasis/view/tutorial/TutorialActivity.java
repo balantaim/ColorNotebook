@@ -45,6 +45,7 @@ public class TutorialActivity extends AppCompatActivity {
         //set viewPager2 animation for the transition
         viewPager2.setPageTransformer(new ZoomOutPageTransformer());
         viewPager2.setAdapter(introAdapter);
+        viewPager2.setUserInputEnabled(true);
 
         OnBackPressedCallback backCallback = new OnBackPressedCallback(true) {
             @Override

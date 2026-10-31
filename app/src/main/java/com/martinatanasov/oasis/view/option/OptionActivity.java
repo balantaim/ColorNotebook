@@ -172,6 +172,7 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
 
     private void initiateGlideResource() {
         final String imgUrl = BuildConfig.LOADING_IMAGE;
+        int sizeInPx = (int) (120 * getResources().getDisplayMetrics().density);
         Glide.with(OptionActivity.this)
                 .load(imgUrl)
                 .listener(new RequestListener<Drawable>() {
@@ -193,8 +194,10 @@ public class OptionActivity extends AppCompatActivity implements AppSettings {
                 })
                 .timeout(8000)
                 .fitCenter()
-                //reload image every time
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                //Set fixed image size
+                .override(sizeInPx, sizeInPx)
+                //Apply cache strategy
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .error(R.drawable.ic_logo)
                 .into(loadImage);
     }
