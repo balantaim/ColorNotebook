@@ -22,15 +22,17 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor" >@color/teal_700</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/teal_200</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -45,15 +47,17 @@
         <item name="colorSecondaryVariant">@color/blue_200</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor" >@color/blue_300</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/blue_200</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -68,15 +72,17 @@
         <item name="colorSecondaryVariant">@color/gray</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor" >@color/black</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/gray_new</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -93,6 +99,11 @@
         <item name="android:textColorPrimary">?attr/customColorValue</item>
     </style>
 
+    <style name="ToolbarThemeAddUpdate" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="actionMenuTextColor">?attr/addUpdateToolbarTextColor</item>
+        <item name="android:textColorPrimary">?attr/addUpdateToolbarTextColor</item>
+    </style>
+
     <style name="Theme.Tutorial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/teal_700</item>
@@ -103,14 +114,16 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- Navigation bar color. -->
-        <item name="android:navigationBarColor" >@color/teal_700</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/teal_200</item>
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">

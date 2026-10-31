@@ -32,6 +32,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.martinatanasov.oasis.R;
+import com.martinatanasov.oasis.util.ColorUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -161,16 +162,7 @@ public class SilentNotificationWorker extends Worker {
     }
 
     private int getEventColor(int colorIndex) {
-        return switch (colorIndex) {
-            case 1 -> R.color.pick_sky_blue;
-            case 2 -> R.color.pick_green;
-            case 3 -> R.color.pick_yellow;
-            case 4 -> R.color.pick_orange;
-            case 5 -> R.color.error;
-            case 6 -> R.color.pick_blue;
-            case 7 -> R.color.pick_purple;
-            default -> R.color.gray_new;
-        };
+        return ColorUtil.getEventColorRes(colorIndex);
     }
 
 }

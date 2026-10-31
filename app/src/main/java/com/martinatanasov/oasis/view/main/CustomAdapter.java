@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinatanasov.oasis.R;
 import com.martinatanasov.oasis.model.UserEventDTO;
+import com.martinatanasov.oasis.util.ColorUtil;
 import com.martinatanasov.oasis.view.update.UpdateActivity;
 
 import java.util.ArrayList;
@@ -114,16 +115,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     private int getCurrentBackgroundColor(int color) {
-        return switch (color) {
-            case 1 -> R.color.pick_sky_blue;
-            case 2 -> R.color.pick_green;
-            case 3 -> R.color.pick_yellow;
-            case 4 -> R.color.pick_orange;
-            case 5 -> R.color.error;
-            case 6 -> R.color.pick_blue;
-            case 7 -> R.color.pick_purple;
-            default -> R.color.gray_new;
-        };
+        return ColorUtil.getEventColorRes(color);
     }
 
     @Override

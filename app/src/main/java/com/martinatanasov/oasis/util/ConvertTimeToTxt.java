@@ -12,7 +12,7 @@
 
 package com.martinatanasov.oasis.util;
 
-public class ConvertTimeToTxt {
+public final class ConvertTimeToTxt {
 
     public String intToTxtTime(int h, int m) {
         String s = "";

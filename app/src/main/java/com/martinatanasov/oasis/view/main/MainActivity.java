@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -194,9 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.layoutDrawer),
-                getWindow(),
-                true);
+        new ScreenManager(this, findViewById(R.id.layoutDrawer));
     }
 
     private void addClickListeners() {
@@ -526,7 +523,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 2 -> setTheme(R.style.Theme_DarkColorNotebook);
             default -> setTheme(R.style.Theme_DefaultColorNotebook);
         }
-        EdgeToEdge.enable(this);
     }
 
     private void initViews() {

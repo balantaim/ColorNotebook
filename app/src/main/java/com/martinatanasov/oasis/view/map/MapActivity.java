@@ -15,7 +15,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -68,7 +67,6 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
         updateAppSettings();
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_map);
 
         initScreenManager();
@@ -211,9 +209,7 @@ public class MapActivity extends AppCompatActivity implements AppSettings {
     }
 
     private void initScreenManager() {
-        new ScreenManager(findViewById(R.id.root_layout_map),
-                getWindow(),
-                false);
+        new ScreenManager(this, findViewById(R.id.root_layout_map));
     }
 
     private void setOnClickListeners() {

@@ -12,21 +12,26 @@
 
 package com.martinatanasov.oasis.view.tutorial;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.martinatanasov.oasis.R;
+import com.martinatanasov.oasis.repository.PreferencesManager;
+import com.martinatanasov.oasis.view.main.MainActivity;
 
 
 public class SecondFragment extends Fragment {
 
     Button btnNext, btnPrevious;
+    TextView tvSkip;
     ViewPager2 viewPager2;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -78,7 +83,10 @@ public class SecondFragment extends Fragment {
         //Initialize viewPager2 from MainActivity
         btnNext = view.findViewById(R.id.btnNext);
         btnPrevious = view.findViewById(R.id.btnPrevious);
+        tvSkip = view.findViewById(R.id.tvSkip);
         viewPager2 = getActivity().findViewById(R.id.viewPager);
+
+        PreferencesManager preferencesManager = new PreferencesManager(getActivity(), false, true);
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +99,16 @@ public class SecondFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 viewPager2.setCurrentItem(0);
+            }
+        });
+
+        tvSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferencesManager.setTutorialOnDisc(true);
+                Intent intent = new Intent(getActivity().getApplication(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
 

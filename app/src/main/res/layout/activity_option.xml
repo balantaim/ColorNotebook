@@ -29,30 +29,15 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_option"
             android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
             android:theme="@style/ToolbarTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIconTint="?attr/customColorValue"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
+            app:navigationIconTint="?attr/colorOnPrimary"
             app:title="@string/my_menu_options"
-            app:titleTextColor="?attr/customColorValue" />
-
-        <TextView
-            android:id="@+id/txtHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/creator"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:titleTextColor="?attr/colorOnPrimary" />
 
         <Spinner
             android:id="@+id/spinnerSkins"
@@ -86,11 +71,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="48dp"
             android:text="@string/forceDarkMode"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_option" />
 
         <TextView
             android:id="@+id/txtColorSkin"
@@ -125,6 +110,19 @@
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@+id/txtLanguage" />
 
+        <TextView
+            android:id="@+id/txtHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="@string/creator"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerLanguage" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -148,7 +146,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerLanguage"
+            app:layout_constraintTop_toBottomOf="@+id/txtHeader"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -160,7 +158,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerLanguage"
+            app:layout_constraintTop_toBottomOf="@+id/txtHeader"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_chainStyle="packed"
             app:shimmer_auto_start="true"

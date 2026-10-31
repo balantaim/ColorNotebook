@@ -13,7 +13,7 @@
 <resources>
     <string name="app_name">Oasis</string>
     <string name="app_name_full">Oasis - Цветные события</string>
-    <string name="creator">Создано Rainbow Infinium</string>
+    <string name="creator">При поддержке Rainbow Infinium</string>
     <string name="app_logo">Логотип приложения</string>
     <string name="developer_name">Мартин Атанасов</string>
 
@@ -30,14 +30,35 @@
     </string-array>
     <string-array name="color_picker_array">
         <item>По умолчанию</item>
-        <item>Небесно-голубой</item>
-        <item>Зеленый</item>
-        <item>Желтый</item>
-        <item>Оранжевый</item>
         <item>Красный</item>
+        <item>Бордовый</item>
+        <item>Розовый бутон</item>
+        <item>Розовый</item>
+        <item>Темно-оранжевый</item>
+        <item>Оранжевый</item>
+        <item>Персиковый</item>
+        <item>Янтарный</item>
+        <item>Желтый</item>
+        <item>Лаймовый</item>
+        <item>Светло-зеленый</item>
+        <item>Зеленый</item>
+        <item>Мятный</item>
+        <item>Оливковый</item>
+        <item>Бирюзовый</item>
+        <item>Циановый</item>
+        <item>Небесно-голубой</item>
         <item>Синий</item>
+        <item>Темно-синий</item>
+        <item>Индиго</item>
+        <item>Темно-фиолетовый</item>
         <item>Фиолетовый</item>
+        <item>Лавандовый</item>
+        <item>Сливовый</item>
+        <item>Пурпурный</item>
+        <item>Коричневый</item>
+        <item>Бронзовый</item>
         <item>Серый</item>
+        <item>Угольный</item>
     </string-array>
     <!--    My Menu-->
     <string name="my_menu_options">Опции</string>
@@ -83,7 +104,8 @@
     <string name="scroll_top">Прокрутить вверх</string>
     <string name="fragThreeHeader">Добавьте местоположение к событию</string>
     <string name="fragTwoHeader">Создайте свое событие</string>
-    <string name="fragOneHeader">Добро пожаловать в руководство</string>
+    <string name="fragOneHeader">Добро пожаловать в Оазис. Хотите небольшую экскурсию?</string>
+    <string name="skip">Пропустить</string>
     <string name="checkInfoDev">О приложении</string>
     <!--    Description-->
     <string name="startDate">Дата начала события</string>
