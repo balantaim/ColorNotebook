@@ -20,7 +20,7 @@ import android.content.SharedPreferences;
 import com.martinatanasov.oasis.view.main.OrderFilter;
 import com.martinatanasov.oasis.view.main.PriorityFilter;
 
-public class PreferencesManager {
+public final class PreferencesManager {
 
     private static final String SHARED_PREF = "sharedPref";
     private static final String THEME = "theme";

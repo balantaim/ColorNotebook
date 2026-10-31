@@ -105,6 +105,7 @@
     <string name="fragThreeHeader">Add location to your event</string>
     <string name="fragTwoHeader">Create you own event</string>
     <string name="fragOneHeader">Welcome to tutorial guide</string>
+    <string name="skip">Skip</string>
     <string name="checkInfoDev">About application</string>
     <!--    Description-->
     <string name="startDate">Event start date</string>

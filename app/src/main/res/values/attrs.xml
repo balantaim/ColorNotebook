@@ -11,4 +11,6 @@
   -->
 <resources>
     <attr name="badgeStyle" format="reference|color" />
+    <attr name="addUpdateToolbarBackground" format="reference|color" />
+    <attr name="addUpdateToolbarTextColor" format="reference|color" />
 </resources>

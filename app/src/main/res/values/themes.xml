@@ -31,6 +31,8 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -54,6 +56,8 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -77,6 +81,8 @@
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
         <item name="cardBackgroundColor">@color/white</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
         <!-- Transition Animation -->
         <item name="android:windowAnimationStyle">@style/CustomAnimation</item>
     </style>
@@ -91,6 +97,11 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="actionMenuTextColor">?attr/customColorValue</item>
         <item name="android:textColorPrimary">?attr/customColorValue</item>
+    </style>
+
+    <style name="ToolbarThemeAddUpdate" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="actionMenuTextColor">?attr/addUpdateToolbarTextColor</item>
+        <item name="android:textColorPrimary">?attr/addUpdateToolbarTextColor</item>
     </style>
 
     <style name="Theme.Tutorial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -111,6 +122,8 @@
         <item name="badgeStyle">@color/white</item>
         <item name="customColorValue">@color/white</item>
         <item name="colorError">@color/error</item>
+        <item name="addUpdateToolbarBackground">@android:color/transparent</item>
+        <item name="addUpdateToolbarTextColor">@color/black</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">

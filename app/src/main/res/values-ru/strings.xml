@@ -105,6 +105,7 @@
     <string name="fragThreeHeader">Добавьте местоположение к событию</string>
     <string name="fragTwoHeader">Создайте свое событие</string>
     <string name="fragOneHeader">Добро пожаловать в руководство</string>
+    <string name="skip">Пропустить</string>
     <string name="checkInfoDev">О приложении</string>
     <!--    Description-->
     <string name="startDate">Дата начала события</string>

@@ -26,12 +26,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme"
+        android:background="?attr/addUpdateToolbarBackground"
+        android:theme="@style/ToolbarThemeAddUpdate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIconTint="?attr/colorOnPrimary"
-        app:titleTextColor="?attr/colorOnPrimary" />
+        app:navigationIconTint="?attr/addUpdateToolbarTextColor"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
+        app:titleTextColor="?attr/addUpdateToolbarTextColor" />
 
     <ScrollView
         android:layout_width="0dp"
