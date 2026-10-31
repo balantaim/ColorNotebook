@@ -13,7 +13,7 @@
 <resources>
     <string name="app_name">Oasis</string>
     <string name="app_name_full">Oasis - Color Events</string>
-    <string name="creator">Created by Rainbow Infinium</string>
+    <string name="creator">Powered by Rainbow Infinium</string>
     <string name="app_logo">Application logo</string>
     <string name="developer_name">Martin Atanasov</string>
 
