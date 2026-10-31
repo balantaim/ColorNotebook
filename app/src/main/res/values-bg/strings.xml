@@ -30,14 +30,35 @@
     </string-array>
     <string-array name="color_picker_array">
         <item>По подразбиране</item>
-        <item>Небесно синьо</item>
-        <item>Зелено</item>
-        <item>Жълто</item>
-        <item>Оранжево</item>
         <item>Червено</item>
+        <item>Бордо</item>
+        <item>Роза</item>
+        <item>Розово</item>
+        <item>Тъмно оранжево</item>
+        <item>Оранжево</item>
+        <item>Праскова</item>
+        <item>Кехлибар</item>
+        <item>Жълто</item>
+        <item>Лайм</item>
+        <item>Светло зелено</item>
+        <item>Зелено</item>
+        <item>Мента</item>
+        <item>Маслина</item>
+        <item>Тъмнотюркоазено</item>
+        <item>Циан</item>
+        <item>Небесно синьо</item>
         <item>Синьо</item>
+        <item>Тъмносиньо</item>
+        <item>Индиго</item>
+        <item>Тъмно лилаво</item>
         <item>Лилаво</item>
+        <item>Лавандула</item>
+        <item>Слива</item>
+        <item>Магента</item>
+        <item>Кафяво</item>
+        <item>Бронз</item>
         <item>Сиво</item>
+        <item>Въглен</item>
     </string-array>
     <!--    My Menu-->
     <string name="my_menu_options">Опции</string>

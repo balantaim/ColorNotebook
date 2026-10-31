@@ -87,9 +87,10 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     SwitchCompat allDaySw, soundNotSw, silentNotSw;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private AddViewModel viewModel;
-    private SelectColor selectColor = new SelectColor();
     private Calendar calendar, calendar1;
     private boolean firstTimeFocusText = true;
+    private boolean is24HourFormat = true;
+    private boolean isDateUpdatePending = false;
     TimePickerDialog timePickerDialog;
 
     @Override
@@ -134,8 +135,31 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
         calendar.set(Calendar.SECOND, 0);
         calendar1.set(Calendar.SECOND, 0);
 
-        initObservers();
+        is24HourFormat = DateFormat.is24HourFormat(this);
+
         initClickListeners();
+        initObservers();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        is24HourFormat = DateFormat.is24HourFormat(this);
+    }
+
+    private void scheduleDateAndTimeUpdate() {
+        if (!isDateUpdatePending) {
+            isDateUpdatePending = true;
+            if (dateStart != null) {
+                dateStart.post(() -> {
+                    isDateUpdatePending = false;
+                    manageDateAndTime();
+                });
+            } else {
+                isDateUpdatePending = false;
+                manageDateAndTime();
+            }
+        }
     }
 
     private void initObservers() {
@@ -193,17 +217,47 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
             }
         });
 
-        viewModel.startYear.observe(this, year -> calendar.set(Calendar.YEAR, year));
-        viewModel.startMonth.observe(this, month -> calendar.set(Calendar.MONTH, month));
-        viewModel.startDay.observe(this, day -> calendar.set(Calendar.DATE, day));
-        viewModel.startHour.observe(this, hour -> calendar.set(Calendar.HOUR_OF_DAY, hour));
-        viewModel.startMinutes.observe(this, minutes -> calendar.set(Calendar.MINUTE, minutes));
+        viewModel.startYear.observe(this, year -> {
+            calendar.set(Calendar.YEAR, year);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startMonth.observe(this, month -> {
+            calendar.set(Calendar.MONTH, month);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startDay.observe(this, day -> {
+            calendar.set(Calendar.DATE, day);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startHour.observe(this, hour -> {
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startMinutes.observe(this, minutes -> {
+            calendar.set(Calendar.MINUTE, minutes);
+            scheduleDateAndTimeUpdate();
+        });
 
-        viewModel.endYear.observe(this, year -> calendar1.set(Calendar.YEAR, year));
-        viewModel.endMonth.observe(this, month -> calendar1.set(Calendar.MONTH, month));
-        viewModel.endDay.observe(this, day -> calendar1.set(Calendar.DATE, day));
-        viewModel.endHour.observe(this, hour -> calendar1.set(Calendar.HOUR_OF_DAY, hour));
-        viewModel.endMinutes.observe(this, minutes -> calendar1.set(Calendar.MINUTE, minutes));
+        viewModel.endYear.observe(this, year -> {
+            calendar1.set(Calendar.YEAR, year);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endMonth.observe(this, month -> {
+            calendar1.set(Calendar.MONTH, month);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endDay.observe(this, day -> {
+            calendar1.set(Calendar.DATE, day);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endHour.observe(this, hour -> {
+            calendar1.set(Calendar.HOUR_OF_DAY, hour);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endMinutes.observe(this, minutes -> {
+            calendar1.set(Calendar.MINUTE, minutes);
+            scheduleDateAndTimeUpdate();
+        });
 
         viewModel.eventAddedEvent.observe(this, newId -> {
             if (newId != -1) {
@@ -217,18 +271,6 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
                 finish();
             }
         });
-
-        // Update Date/Time displays when any date/time component changes
-        viewModel.startYear.observe(this, v -> manageDateAndTime());
-        viewModel.startMonth.observe(this, v -> manageDateAndTime());
-        viewModel.startDay.observe(this, v -> manageDateAndTime());
-        viewModel.startHour.observe(this, v -> manageDateAndTime());
-        viewModel.startMinutes.observe(this, v -> manageDateAndTime());
-        viewModel.endYear.observe(this, v -> manageDateAndTime());
-        viewModel.endMonth.observe(this, v -> manageDateAndTime());
-        viewModel.endDay.observe(this, v -> manageDateAndTime());
-        viewModel.endHour.observe(this, v -> manageDateAndTime());
-        viewModel.endMinutes.observe(this, v -> manageDateAndTime());
     }
 
     private void initClickListeners() {
@@ -290,11 +332,9 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     private void selectColor() {
         String tag = String.valueOf(R.string.pickColor);
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            if (selectColor == null) {
-                selectColor = new SelectColor();
-            }
-            selectColor.colorInit(viewModel.colorPicker.getValue());
-            selectColor.show(getSupportFragmentManager(), tag);
+            SelectColor selectColorDialog = new SelectColor();
+            selectColorDialog.colorInit(viewModel.colorPicker.getValue());
+            selectColorDialog.show(getSupportFragmentManager(), tag);
         }
     }
 
@@ -403,13 +443,11 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
     }
 
     private void manageDateAndTime() {
-        boolean is24format = DateFormat.is24HourFormat(this);
-
         CharSequence charSequenceStart = DateFormat.format("MMM d, yyyy", calendar);
         CharSequence charSequenceEnd = DateFormat.format("MMM d, yyyy", calendar1);
         dateStart.setText(charSequenceStart);
         dateEnd.setText(charSequenceEnd);
-        if (is24format) {
+        if (is24HourFormat) {
             timeStart.setText(timeToString.intToTxtTime(viewModel.startHour.getValue(), viewModel.startMinutes.getValue()));
             timeEnd.setText(timeToString.intToTxtTime(viewModel.endHour.getValue(), viewModel.endMinutes.getValue()));
         } else {
@@ -601,7 +639,11 @@ public class AddActivity extends AppCompatActivity implements ApplyColor, ApplyP
 
     private void updateColorText(int color) {
         String[] stringArray = getResources().getStringArray(R.array.color_picker_array);
-        eventColor.setText(stringArray[color]);
+        if (color >= 0 && color < stringArray.length) {
+            eventColor.setText(stringArray[color]);
+        } else {
+            eventColor.setText(stringArray[0]);
+        }
     }
 
     @Override

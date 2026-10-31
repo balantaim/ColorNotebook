@@ -30,14 +30,35 @@
     </string-array>
     <string-array name="color_picker_array">
         <item>Default</item>
-        <item>Sky blue</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Orange</item>
         <item>Red</item>
+        <item>Maroon</item>
+        <item>Rose</item>
+        <item>Pink</item>
+        <item>Deep Orange</item>
+        <item>Orange</item>
+        <item>Peach</item>
+        <item>Amber</item>
+        <item>Yellow</item>
+        <item>Lime</item>
+        <item>Light Green</item>
+        <item>Green</item>
+        <item>Mint</item>
+        <item>Olive</item>
+        <item>Teal</item>
+        <item>Cyan</item>
+        <item>Sky blue</item>
         <item>Blue</item>
+        <item>Navy</item>
+        <item>Indigo</item>
+        <item>Deep Purple</item>
         <item>Purple</item>
+        <item>Lavender</item>
+        <item>Plum</item>
+        <item>Magenta</item>
+        <item>Brown</item>
+        <item>Bronze</item>
         <item>Gray</item>
+        <item>Charcoal</item>
     </string-array>
     <!--    My Menu-->
     <string name="my_menu_options">Options</string>

@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.martinatanasov.oasis.R;
 import com.martinatanasov.oasis.repository.PreferencesManager;
 import com.martinatanasov.oasis.util.AppSettings;
+import com.martinatanasov.oasis.util.ColorUtil;
 import com.martinatanasov.oasis.util.ScreenManager;
 import com.martinatanasov.oasis.viewmodel.CustomViewModel;
 
@@ -79,18 +80,7 @@ public class CustomActivity extends AppCompatActivity implements AppSettings {
     }
 
     private int getCurrentIconColor(int color) {
-        return switch (color) {
-            case 1 -> R.color.pick_sky_blue;
-            case 2 -> R.color.pick_green;
-            case 3 -> R.color.pick_yellow;
-            case 4 -> R.color.pick_orange;
-            case 5 -> R.color.error;
-            case 6 -> R.color.pick_blue;
-            case 7 -> R.color.pick_purple;
-            case 8 -> R.color.gray_new;
-            //We don't use brown yet
-            default -> R.color.brown;
-        };
+        return ColorUtil.getEventColorRes(color);
     }
 
     private void darkModeChecker(PreferencesManager preferencesManager) {

@@ -84,8 +84,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     private Calendar calendar, calendar1;
     private final ConvertTimeToTxt timeToString = new ConvertTimeToTxt();
     private UpdateViewModel viewModel;
-    private SelectColor selectColor = new SelectColor();
     private VibrationUtil vibration;
+    private boolean is24HourFormat = true;
+    private boolean isDateUpdatePending = false;
     private final ActivityResultLauncher<Intent> mapActivityLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -135,15 +136,37 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         calendar.set(Calendar.SECOND, 0);
         calendar1.set(Calendar.SECOND, 0);
 
+        is24HourFormat = DateFormat.is24HourFormat(this);
+
+        initClickListeners();
         initObservers();
 
         if (savedInstanceState == null) {
             getAndSetIntentData();
         }
 
-        initClickListeners();
-
         btnLocation.setOnClickListener(v -> launchMapActivity());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        is24HourFormat = DateFormat.is24HourFormat(this);
+    }
+
+    private void scheduleDateAndTimeUpdate() {
+        if (!isDateUpdatePending) {
+            isDateUpdatePending = true;
+            if (dateStart != null) {
+                dateStart.post(() -> {
+                    isDateUpdatePending = false;
+                    manageDataAndTime();
+                });
+            } else {
+                isDateUpdatePending = false;
+                manageDataAndTime();
+            }
+        }
     }
 
     AlertDialog confirmDialog;
@@ -187,30 +210,48 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
             }
         });
 
-        viewModel.startYear.observe(this, year -> calendar.set(Calendar.YEAR, year));
-        viewModel.startMonth.observe(this, month -> calendar.set(Calendar.MONTH, month));
-        viewModel.startDay.observe(this, day -> calendar.set(Calendar.DATE, day));
-        viewModel.startHour.observe(this, hour -> calendar.set(Calendar.HOUR_OF_DAY, hour));
-        viewModel.startMinutes.observe(this, minutes -> calendar.set(Calendar.MINUTE, minutes));
+        viewModel.startYear.observe(this, year -> {
+            calendar.set(Calendar.YEAR, year);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startMonth.observe(this, month -> {
+            calendar.set(Calendar.MONTH, month);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startDay.observe(this, day -> {
+            calendar.set(Calendar.DATE, day);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startHour.observe(this, hour -> {
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.startMinutes.observe(this, minutes -> {
+            calendar.set(Calendar.MINUTE, minutes);
+            scheduleDateAndTimeUpdate();
+        });
 
-        viewModel.endYear.observe(this, year -> calendar1.set(Calendar.YEAR, year));
-        viewModel.endMonth.observe(this, month -> calendar1.set(Calendar.MONTH, month));
-        viewModel.endDay.observe(this, day -> calendar1.set(Calendar.DATE, day));
-        viewModel.endHour.observe(this, hour -> calendar1.set(Calendar.HOUR_OF_DAY, hour));
-        viewModel.endMinutes.observe(this, minutes -> calendar1.set(Calendar.MINUTE, minutes));
-
-        // Update displays
-        viewModel.startYear.observe(this, v -> manageDataAndTime());
-        viewModel.startMonth.observe(this, v -> manageDataAndTime());
-        viewModel.startDay.observe(this, v -> manageDataAndTime());
-        viewModel.startHour.observe(this, v -> manageDataAndTime());
-        viewModel.startMinutes.observe(this, v -> manageDataAndTime());
-        viewModel.endYear.observe(this, v -> manageDataAndTime());
-        viewModel.endMonth.observe(this, v -> manageDataAndTime());
-        viewModel.endDay.observe(this, v -> manageDataAndTime());
-        viewModel.endHour.observe(this, v -> manageDataAndTime());
-        viewModel.endMinutes.observe(this, v -> manageDataAndTime());
-        viewModel.createdDate.observe(this, v -> manageDataAndTime());
+        viewModel.endYear.observe(this, year -> {
+            calendar1.set(Calendar.YEAR, year);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endMonth.observe(this, month -> {
+            calendar1.set(Calendar.MONTH, month);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endDay.observe(this, day -> {
+            calendar1.set(Calendar.DATE, day);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endHour.observe(this, hour -> {
+            calendar1.set(Calendar.HOUR_OF_DAY, hour);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.endMinutes.observe(this, minutes -> {
+            calendar1.set(Calendar.MINUTE, minutes);
+            scheduleDateAndTimeUpdate();
+        });
+        viewModel.createdDate.observe(this, v -> scheduleDateAndTimeUpdate());
 
         viewModel.eventUpdatedEvent.observe(this, updated -> {
             if (updated) {
@@ -473,8 +514,6 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
     private void manageDataAndTime() {
         //Import data to calendar 1 and 2
-        boolean is24format = DateFormat.is24HourFormat(this);
-
         CharSequence charSequence = DateFormat.format("MMM d, yyyy", calendar);
         CharSequence charSequence1 = DateFormat.format("MMM d, yyyy", calendar1);
         dateStart.setText(charSequence);
@@ -482,9 +521,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
         //Set color picker text
         updateColorText(viewModel.colorPicker.getValue());
         //Update create/modified date
-        createdDate.setText(instantToDate(viewModel.createdDate.getValue(), is24format));
-        modifiedDate.setText(instantToDate(viewModel.modifiedDate.getValue(), is24format));
-        if (is24format) {
+        createdDate.setText(instantToDate(viewModel.createdDate.getValue(), is24HourFormat));
+        modifiedDate.setText(instantToDate(viewModel.modifiedDate.getValue(), is24HourFormat));
+        if (is24HourFormat) {
             timeStart.setText(timeToString.intToTxtTime(viewModel.startHour.getValue(), viewModel.startMinutes.getValue()));
             timeEnd.setText(timeToString.intToTxtTime(viewModel.endHour.getValue(), viewModel.endMinutes.getValue()));
         } else {
@@ -498,11 +537,9 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
     private void selectColor() {
         String tag = String.valueOf(R.string.pickColor);
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            if (selectColor == null) {
-                selectColor = new SelectColor();
-            }
-            selectColor.colorInit(viewModel.colorPicker.getValue());
-            selectColor.show(getSupportFragmentManager(), tag);
+            SelectColor selectColorDialog = new SelectColor();
+            selectColorDialog.colorInit(viewModel.colorPicker.getValue());
+            selectColorDialog.show(getSupportFragmentManager(), tag);
         }
     }
 
@@ -751,7 +788,11 @@ public class UpdateActivity extends AppCompatActivity implements ApplyColor, App
 
     private void updateColorText(int color) {
         String[] stringArray = getResources().getStringArray(R.array.color_picker_array);
-        eventColor.setText(stringArray[color]);
+        if (color >= 0 && color < stringArray.length) {
+            eventColor.setText(stringArray[color]);
+        } else {
+            eventColor.setText(stringArray[0]);
+        }
     }
 
     @Override
